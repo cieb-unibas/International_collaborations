@@ -67,4 +67,7 @@ rm(list = ls())
   
  #SAVING THE FINAL DATASET
   saveRDS(object=int_collab_dat_final, file = "/scicore/home/weder/GROUP/Innovation/01_patent_data/created data/int_collab_dat_final.rds")
+
   
+# Test commit MN/30.11.2020
+    
