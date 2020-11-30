@@ -65,6 +65,6 @@ rm(list = ls())
   
   int_collab_dat_final <-subset(int_collab_dat, select = c("p_key","patent_id", "ipc_main", "tech_field", "ctry_inventor", "ctry_leg_owner", "world_class_90", "world_class_99"))
   
-#SAVING THE FINAL DATASET
+ #SAVING THE FINAL DATASET
   saveRDS(object=int_collab_dat_final, file = "/scicore/home/weder/GROUP/Innovation/01_patent_data/created data/int_collab_dat_final.rds")
   
