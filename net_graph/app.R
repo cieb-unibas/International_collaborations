@@ -32,7 +32,7 @@ network_data_foreign <- readRDS("/scicore/home/weder/GROUP/Innovation/01_patent_
     visNetworkOutput("coolplot"),
     selectizeInput("tech_name", "Choose technology",
                    options = list(placeholder = 'select technology'),
-                   choices = c(network_data_foreign$tech_name), multiple = FALSE, selected ="Pharmaceuticals")
+                   choices = c(network_data_foreign$tech_name), multiple = FALSE)
     
   )
   
