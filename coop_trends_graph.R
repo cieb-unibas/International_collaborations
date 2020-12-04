@@ -159,11 +159,19 @@ rm(list = ls())
   
   trends_data <- readRDS("/scicore/home/weder/GROUP/Innovation/01_patent_data/created data/coll_trends_final.rds")
   
-  # Inserting labels for technology fields
+# Inserting labels for technology fields
   techlab <- readRDS("/scicore/home/weder/GROUP/Innovation/02_section_I_data/oecd_tech_field.RDS")
   colnames(techlab) <- c("tech_field", "tech_name")
   
   trends_data<-merge(trends_data, techlab)
+  
+#   Creating broader tech groups
+  
+ setDT(trends_data)[tech_field>=1 & tech_field<=8, techbroad := "Electrical engineering"]
+ setDT(trends_data)[tech_field>=9 & tech_field<=13, techbroad := "Instruments"]
+ setDT(trends_data)[tech_field>=14 & tech_field<=24, techbroad := "Chemistry"]
+ setDT(trends_data)[tech_field>=25 & tech_field<=32, techbroad := "Mechanical engineering"]
+ setDT(trends_data)[tech_field>=33 & tech_field<=35, techbroad := "Other fields"]
   
   
   #Filter data, Year is filtered from 1990 to 2015.
@@ -171,20 +179,25 @@ rm(list = ls())
     filter(p_year >=1990 & p_year <2015)
   
   setDT(trends_data_graph)[p_year>=1990 & p_year<1995, interval := "1990-1995"]
-  trends_data_graph[p_year>=1995 & p_year<2000, interval := "1995-2000"]
-  trends_data_graph[p_year>=2000 & p_year<2005, interval := "2000-2005"]
-  trends_data_graph[p_year>=2005 & p_year<2010, interval := "2005-2010"]
-  trends_data_graph[p_year>=2010 & p_year<2015, interval := "2010-2015"]
+  setDT(trends_data_graph)[p_year>=1995 & p_year<2000, interval := "1995-2000"]
+  setDT(trends_data_graph)[p_year>=2000 & p_year<2005, interval := "2000-2005"]
+  setDT(trends_data_graph)[p_year>=2005 & p_year<2010, interval := "2005-2010"]
+  setDT(trends_data_graph)[p_year>=2010 & p_year<2015, interval := "2010-2015"]
   
   worldclass <- trends_data_graph %>% 
     filter(p_year ==1990 | p_year ==1995 | p_year ==2000 | p_year ==2005 | p_year ==2010)
-  worldclass <- subset(worldclass, select = c("owner_ctry", "tech_name", "share_wc", "interval"))
+  worldclass <- subset(worldclass, select = c("owner_ctry", "techbroad", "share_wc", "interval"))
+  
+  worldclass<-worldclass%>%
+    group_by(owner_ctry,techbroad,interval)%>%
+    summarise(share_wc=mean(share_wc,na.rm=TRUE))
+  
   
   trends_data_graph<-trends_data_graph%>%
-    group_by(owner_ctry, tech_name,interval)%>%
+    group_by(owner_ctry,techbroad,interval)%>%
     summarise(share_foreign=mean(share_foreign,na.rm=TRUE))
   
-  trends_data_graph <- subset(trends_data_graph, select = c("owner_ctry", "tech_name", "share_foreign", "interval"))
+  trends_data_graph <- subset(trends_data_graph, select = c("owner_ctry", "techbroad", "share_foreign", "interval"))
   
   trends_data_graph <-merge(trends_data_graph,worldclass)        
   

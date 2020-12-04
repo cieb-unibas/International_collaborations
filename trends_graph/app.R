@@ -25,9 +25,9 @@ trends_data_graph <- readRDS("/scicore/home/weder/GROUP/Innovation/01_patent_dat
   ui <- fluidPage(
     
     plotlyOutput("coolplot"),
-    selectizeInput("tech_name", "Choose a technology field",
+    selectizeInput("techbroad", "Choose a technology field",
                    options = list(placeholder = 'select technology'),
-                   choices = c(trends_data_graph$tech_name), multiple = FALSE)
+                   choices = c(trends_data_graph$techbroad), multiple = FALSE)
     
   )
   
@@ -38,7 +38,7 @@ trends_data_graph <- readRDS("/scicore/home/weder/GROUP/Innovation/01_patent_dat
       dr <- reactive({
         filtered <- trends_data_graph %>%
           filter(
-            tech_name %in% input$tech_name
+            techbroad %in% input$techbroad
           )
       }) 
       

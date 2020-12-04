@@ -21,24 +21,24 @@ library(tidyverse)
 # Preparing inventors data
 ################################################################################
 
-trends_data <- readRDS("/scicore/home/weder/GROUP/Innovation/01_patent_data/created data/coll_trends_final.rds")
+#trends_data <- readRDS("/scicore/home/weder/GROUP/Innovation/01_patent_data/created data/coll_trends_final.rds")
 
 #trends_data[is.na(trends_data)] = 0
 
 #Filter data,vYear is filtered from 1990.
-trends_data_graph<-trends_data %>%
-  filter(p_year >=1990 & p_year <2015)
+#trends_data_graph<-trends_data %>%
+# filter(p_year >=1990 & p_year <2015)
 
-setDT(trends_data_graph)[p_year>=1990 & p_year<1995, interval := "1990-1995"]
-trends_data_graph[p_year>=1995 & p_year<2000, interval := "1995-2000"]
-trends_data_graph[p_year>=2000 & p_year<2005, interval := "2000-2005"]
-trends_data_graph[p_year>=2005 & p_year<2010, interval := "2005-2010"]
-trends_data_graph[p_year>=2010 & p_year<2015, interval := "2010-2015"]
+#setDT(trends_data_graph)[p_year>=1990 & p_year<1995, interval := "1990-1995"]
+#trends_data_graph[p_year>=1995 & p_year<2000, interval := "1995-2000"]
+#trends_data_graph[p_year>=2000 & p_year<2005, interval := "2000-2005"]
+#trends_data_graph[p_year>=2005 & p_year<2010, interval := "2005-2010"]
+#trends_data_graph[p_year>=2010 & p_year<2015, interval := "2010-2015"]
 
 
-trends_data_graph <- trends_data_graph %>%
-  group_by(owner_ctry, interval) %>% 
-  summarise_at(vars("share_foreign", "share_wc"), mean,na.rm=TRUE)
+#trends_data_graph <- trends_data_graph %>%
+# group_by(owner_ctry, interval) %>% 
+# summarise_at(vars("share_foreign", "share_wc"), mean,na.rm=TRUE)
 
 
 #worldclass <- trends_data_graph %>% 
@@ -56,6 +56,8 @@ trends_data_graph <- trends_data_graph %>%
 
 #trends_data_graph <- trends_data_graph %>%
 #  filter(tech_field==1)
+
+trends_data_graph <- readRDS("/scicore/home/weder/GROUP/Innovation/01_patent_data/created data/trends_data_graph.rds")
 
 
 r3 <- plot_ly(
