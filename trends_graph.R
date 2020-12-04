@@ -54,8 +54,8 @@ trends_data_graph <- trends_data_graph %>%
 
 #trends_data_graph <-merge(trends_data_graph,worldclass)        
 
-trends_data_graph <- trends_data_graph %>%
-  filter(tech_field==1)
+#trends_data_graph <- trends_data_graph %>%
+#  filter(tech_field==1)
 
 
 r3 <- plot_ly(

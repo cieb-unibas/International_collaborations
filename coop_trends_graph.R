@@ -1,5 +1,5 @@
 print("International collaborations and quality of patents COOPERATION TRENDS GRAPH")
-# Last modified 03.12.2020 / DF
+# Last modified 04.12.2020 / DF
 
 require(data.table)
 require(plyr)
@@ -121,13 +121,14 @@ rm(list = ls())
 ################################################################################
   
   coll_trends_invshare <- readRDS("/scicore/home/weder/GROUP/Innovation/01_patent_data/created data/coll_trends_invshare.rds")
+  forcit_data <- readRDS("/scicore/home/weder/GROUP/Innovation/01_patent_data/created data/forcit_data.rds")
   
    coll_trends_f <- merge(coll_trends_invshare,forcit_data)
   
-# Calculating total number of patents, per technology, year and owner
+# Calculating total number of patents, per technology, year and NOT owner
   
   coll_trends_final <- coll_trends_f %>% 
-    group_by(tech_field, owner_ctry, p_year) %>% 
+     group_by(tech_field, owner_ctry, p_year) %>%
     mutate(totnumber_pat = n()) %>%
     ungroup()
   
@@ -151,4 +152,41 @@ rm(list = ls())
   # coll_trends_final <-melt(setDT(coll_trends_final), id.vars = c("p_year", "tech_field", "owner_ctry"), measure.vars = c("share_foreign", "tot_cit"))
   
   saveRDS(object=coll_trends_final2, file = "/scicore/home/weder/GROUP/Innovation/01_patent_data/created data/coll_trends_final.rds")
+  
+################################################################################
+ # PREP FOR GRAPH
+################################################################################
+  
+  trends_data <- readRDS("/scicore/home/weder/GROUP/Innovation/01_patent_data/created data/coll_trends_final.rds")
+  
+  # Inserting labels for technology fields
+  techlab <- readRDS("/scicore/home/weder/GROUP/Innovation/02_section_I_data/oecd_tech_field.RDS")
+  colnames(techlab) <- c("tech_field", "tech_name")
+  
+  trends_data<-merge(trends_data, techlab)
+  
+  
+  #Filter data, Year is filtered from 1990 to 2015.
+  trends_data_graph<-trends_data %>%
+    filter(p_year >=1990 & p_year <2015)
+  
+  setDT(trends_data_graph)[p_year>=1990 & p_year<1995, interval := "1990-1995"]
+  trends_data_graph[p_year>=1995 & p_year<2000, interval := "1995-2000"]
+  trends_data_graph[p_year>=2000 & p_year<2005, interval := "2000-2005"]
+  trends_data_graph[p_year>=2005 & p_year<2010, interval := "2005-2010"]
+  trends_data_graph[p_year>=2010 & p_year<2015, interval := "2010-2015"]
+  
+  worldclass <- trends_data_graph %>% 
+    filter(p_year ==1990 | p_year ==1995 | p_year ==2000 | p_year ==2005 | p_year ==2010)
+  worldclass <- subset(worldclass, select = c("owner_ctry", "tech_name", "share_wc", "interval"))
+  
+  trends_data_graph<-trends_data_graph%>%
+    group_by(owner_ctry, tech_name,interval)%>%
+    summarise(share_foreign=mean(share_foreign,na.rm=TRUE))
+  
+  trends_data_graph <- subset(trends_data_graph, select = c("owner_ctry", "tech_name", "share_foreign", "interval"))
+  
+  trends_data_graph <-merge(trends_data_graph,worldclass)        
+  
+  saveRDS(object=trends_data_graph, file = "/scicore/home/weder/GROUP/Innovation/01_patent_data/created data/trends_data_graph.rds")
   
