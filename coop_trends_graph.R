@@ -1,5 +1,5 @@
 print("International collaborations and quality of patents COOPERATION TRENDS GRAPH")
-# Last modified 02.12.2020 / DF
+# Last modified 03.12.2020 / DF
 
 require(data.table)
 require(plyr)
@@ -110,9 +110,9 @@ rm(list = ls())
 ################################################################################
 
   forcit_data <- readRDS("/scicore/home/weder/GROUP/Innovation/01_patent_data/created data/pat_dat.rds")
-  forcit_data <-subset(forcit_data, select = c("p_key","pub_nbr_oecd","p_year", "fwd_cits7"))
-  colnames(forcit_data) <- c("p_key", "patent_id","p_year", "fwd_cits7")
-  forcit_data <-subset(forcit_data, select = c("p_key", "patent_id", "fwd_cits7"))
+  forcit_data <-subset(forcit_data, select = c("p_key","pub_nbr_oecd","p_year", "world_class_90"))
+  colnames(forcit_data) <- c("p_key", "patent_id","p_year", "world_class_90")
+  forcit_data <-subset(forcit_data, select = c("p_key", "patent_id", "world_class_90"))
   
   saveRDS(object=forcit_data, file = "/scicore/home/weder/GROUP/Innovation/01_patent_data/created data/forcit_data.rds")
   
@@ -120,19 +120,35 @@ rm(list = ls())
 # Merging cit data with prepared inventors data
 ################################################################################
   
+  coll_trends_invshare <- readRDS("/scicore/home/weder/GROUP/Innovation/01_patent_data/created data/coll_trends_invshare.rds")
+  
    coll_trends_f <- merge(coll_trends_invshare,forcit_data)
   
-# Calculating citations of patents, per technology and owner
+# Calculating total number of patents, per technology, year and owner
   
   coll_trends_final <- coll_trends_f %>% 
     group_by(tech_field, owner_ctry, p_year) %>% 
-    mutate(tot_cit =sum(fwd_cits7)) %>%
+    mutate(totnumber_pat = n()) %>%
     ungroup()
   
-  coll_trends_final <-subset(coll_trends_final, select = c("p_year", "tech_field", "owner_ctry", "share_foreign", "tot_cit"))
+  # Calculating share of world class patents, per technology, year and owner
+  
+  coll_trends_final2 <- coll_trends_final %>% 
+    group_by(tech_field, owner_ctry, p_year) %>% 
+    mutate(totnumber_wcpat = sum(world_class_90 == 1)) %>%
+    ungroup()
+  
+  
+  setDT(coll_trends_final2)[,share_wc:=totnumber_wcpat/totnumber_pat,by=list(tech_field, owner_ctry, p_year)]
+  options(scipen=999)
+  
+  coll_trends_final2$share_wc <- coll_trends_final2$share_wc*100 
+  
+  
+  coll_trends_final2 <-subset(coll_trends_final2, select = c("p_year", "tech_field", "owner_ctry", "share_foreign", "share_wc"))
   
 #Transforming into long format  
   # coll_trends_final <-melt(setDT(coll_trends_final), id.vars = c("p_year", "tech_field", "owner_ctry"), measure.vars = c("share_foreign", "tot_cit"))
   
-  saveRDS(object=coll_trends_final, file = "/scicore/home/weder/GROUP/Innovation/01_patent_data/created data/coll_trends_final.rds")
+  saveRDS(object=coll_trends_final2, file = "/scicore/home/weder/GROUP/Innovation/01_patent_data/created data/coll_trends_final.rds")
   
