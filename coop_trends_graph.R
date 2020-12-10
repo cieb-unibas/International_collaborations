@@ -184,9 +184,9 @@ rm(list = ls())
   setDT(trends_data_graph)[p_year>=2005 & p_year<2010, interval := "2005-2010"]
   setDT(trends_data_graph)[p_year>=2010 & p_year<2015, interval := "2010-2015"]
   
-  worldclass <- trends_data_graph %>% 
-    filter(p_year ==1990 | p_year ==1995 | p_year ==2000 | p_year ==2005 | p_year ==2010)
-  worldclass <- subset(worldclass, select = c("owner_ctry", "techbroad", "share_wc", "interval"))
+  #worldclass <- trends_data_graph %>% 
+    #filter(p_year ==1990 | p_year ==1995 | p_year ==2000 | p_year ==2005 | p_year ==2010)
+  worldclass <- subset(trends_data_graph, select = c("owner_ctry", "techbroad", "share_wc", "interval"))
   
   worldclass<-worldclass%>%
     group_by(owner_ctry,techbroad,interval)%>%

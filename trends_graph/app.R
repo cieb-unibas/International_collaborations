@@ -10,6 +10,7 @@ library(data.table)
 library(tidyverse)
 library(shiny)
 library(shinyWidgets)
+library(plotly)
 
 rm(list = ls())
 
