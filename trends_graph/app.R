@@ -28,7 +28,7 @@ trends_data_graph <- readRDS("/scicore/home/weder/GROUP/Innovation/01_patent_dat
     plotlyOutput("coolplot"),
     selectizeInput("techbroad", "Choose a technology field",
                    options = list(placeholder = 'select technology'),
-                   choices = c(trends_data_graph$techbroad), multiple = FALSE)
+                   choices = c(trends_data_graph$techbroad), multiple = TRUE)
     
   )
   
@@ -49,20 +49,20 @@ trends_data_graph <- readRDS("/scicore/home/weder/GROUP/Innovation/01_patent_dat
   plot_ly(
     dr(), x = ~share_foreign, y = ~share_wc,
     frame=~interval,
-    color=~`owner_ctry`, type = "scatter",
-    mode="markers", size=~share_wc,
+    color=~owner_ctry, type = "scatter",
+    mode="markers", size=~totnumber_wcpat,
     marker = list(symbol = 'circle', sizemode = 'diameter',
-                  line = list(width = 2, color = '#FFFFFF'), opacity=0.4),
-    text = ~paste(sep='','share_foreign:', round(`share_foreign`,1),'%',
-                  '<br>Share WC patents:',round(`share_wc`,1),'%',
-                  '%', '<br>Owner:', `owner_ctry`)) %>%
+                  line = list(width = 2, color = '#FFFFFF'), opacity=0.3),
+    text = ~paste(sep='','<br>Share of foreign inventors:', round(`share_foreign`,1),'%',
+                  '<br>Share of WC patents:',round(`share_wc`,1),'%',
+                  '%', '<br>Country owner:', `owner_ctry`)) %>%
     layout(
       title="Foreign collaboration and citation",
       
       xaxis = list(title = '% Foreign scientists',
                    gridcolor = 'rgb(255, 255, 255)',
                    
-                   range=c(0,80),
+                   range=c(0,35),
                    zerolinewidth = 1,
                    ticklen = 5,
                    gridwidth = 2),
@@ -78,7 +78,7 @@ trends_data_graph <- readRDS("/scicore/home/weder/GROUP/Innovation/01_patent_dat
     animation_opts(
       2000, redraw = FALSE
     ) %>%
-    
+
     animation_slider(
       currentvalue = list(prefix = "YEAR ", font = list(color="red"))
         )
