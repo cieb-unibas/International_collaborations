@@ -16,32 +16,32 @@ library(dotwhisker)
 library(broom)
 rm(list = ls())
 
-# datareg <- readRDS("/scicore/home/weder/GROUP/Innovation/01_patent_data/created data/collab_reg_data.rds")
-# 
-# colnames(datareg)
-# 
-# # LEAVE ONLY THOSE PATENTS WHERE THERE IS AT LEAST 1 INVENTOR FROM OWNER COUNTRY
-# datareg <- datareg %>%
-#   dplyr::mutate(inv_foreign = str_detect(ctry_inventor, datareg$ctry_leg_owner))
-# 
-# datareg <- datareg %>%
-#   filter(inv_foreign ==TRUE)
-# 
-# # Variable capturing number of domestic scientist involved
-# datareg$num_dom_scient <- str_count(datareg$ctry_inventor, datareg$ctry_leg_owner)
-# 
-# # Variable capturing number of scientist involved
-# datareg$num_tot_scient <- str_count(datareg$ctry_inventor, '_')
-# datareg$num_tot_scient <- datareg$num_tot_scient+1
-# 
-# # Calculate "foreign" scientists
-# datareg$num_for_scient <- datareg$num_tot_scient-datareg$num_dom_scient
-# 
-# # Create "foreign scientists" dummy
-# datareg$foreign <- ifelse(datareg$num_for_scient>0,1,0)
-# 
-# # Saving data for regression
-# saveRDS(object=datareg, file = "/scicore/home/weder/GROUP/Innovation/01_patent_data/created data/datareg.rds")
+datareg <- readRDS("/scicore/home/weder/GROUP/Innovation/01_patent_data/created data/collab_reg_data.rds")
+
+colnames(datareg)
+
+# LEAVE ONLY THOSE PATENTS WHERE THERE IS AT LEAST 1 INVENTOR FROM OWNER COUNTRY
+datareg <- datareg %>%
+  dplyr::mutate(inv_foreign = str_detect(ctry_inventor, datareg$ctry_leg_owner))
+
+#datareg <- datareg %>%
+#filter(inv_foreign ==TRUE)
+
+# Variable capturing number of domestic scientist involved
+datareg$num_dom_scient <- str_count(datareg$ctry_inventor, datareg$ctry_leg_owner)
+
+# Variable capturing number of scientist involved
+datareg$num_tot_scient <- str_count(datareg$ctry_inventor, '_')
+datareg$num_tot_scient <- datareg$num_tot_scient+1
+
+# Calculate "foreign" scientists
+datareg$num_for_scient <- datareg$num_tot_scient-datareg$num_dom_scient
+
+# Create "foreign scientists" dummy
+datareg$foreign <- ifelse(datareg$num_for_scient>0,1,0)
+
+# Saving data for regression
+saveRDS(object=datareg, file = "/scicore/home/weder/GROUP/Innovation/01_patent_data/created data/datareg.rds")
 
 datareg <- readRDS("/scicore/home/weder/GROUP/Innovation/01_patent_data/created data/datareg.rds")
 
@@ -60,14 +60,15 @@ dataregNoNA <- na.exclude(datareg)
 # Run model on subsets of data, save results as tidy df, make a model variable, and relabel predictors
   by_tech <- dataregNoNA %>% 
     group_by(techbroad) %>%                                             # group data by tech field
-    do(tidy(lm(world_class_99 ~ foreign + claims_log + uni + p_year + ctry_leg_owner + ctry_leg_owner*p_year, data = .))) %>% # run model on each grp
+    do(tidy(lm(world_class_99 ~ foreign + num_dom_scient_log + claims_log + uni + p_year + ctry_leg_owner + ctry_leg_owner*p_year, data = .))) %>% # run model on each grp
     rename(model=techbroad) %>%                                         # make model variable
     relabel_predictors(c(foreign = "At least 1 foreign scientist",      # relabel predictors
+                         num_dom_scient_log = "Size of the team",
                          claims_log = "Number of claims",
                          uni = "University participation")) 
 
 by_tech <- by_tech %>%
- filter(term =="At least 1 foreign scientist" | term =="Number of claims" | term =="University participation")        # drop fe from subset for plotting   
+ filter(term =="At least 1 foreign scientist" | term =="Size of the team" | term =="Number of claims" | term =="University participation")        # drop fe from subset for plotting   
 
 dwplot(by_tech, 
        vline = geom_vline(xintercept = 0, colour = "grey60", linetype = 2)) + # plot line at zero _behind_ coefs
