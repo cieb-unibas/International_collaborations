@@ -45,22 +45,21 @@ saveRDS(object=datareg, file = "/scicore/home/weder/GROUP/Innovation/01_patent_d
 
 datareg <- readRDS("/scicore/home/weder/GROUP/Innovation/01_patent_data/created data/datareg.rds")
 
-
-# A. Results for each broad tech field
-######################################
-colnames(datareg)
-
-
 datareg$claims_log <- log(datareg$claims+1)
 datareg$num_tot_scient_log <- log(datareg$num_tot_scient+1)
 datareg$num_dom_scient_log <- log(datareg$num_dom_scient+1)
 
 dataregNoNA <- na.exclude(datareg)
 
+
+######################################
+# A. Results for each broad tech field
+######################################
+
 # Run model on subsets of data, save results as tidy df, make a model variable, and relabel predictors
   by_tech <- dataregNoNA %>% 
     group_by(techbroad) %>%                                             # group data by tech field
-    do(tidy(lm(world_class_99 ~ foreign + num_dom_scient_log + claims_log + uni + p_year + ctry_leg_owner + ctry_leg_owner*p_year, data = .))) %>% # run model on each grp
+    do(tidy(lm(world_class_90 ~ foreign + num_dom_scient_log + claims_log + uni + p_year + ctry_leg_owner + ctry_leg_owner*p_year, data = .))) %>% # run model on each grp
     rename(model=techbroad) %>%                                         # make model variable
     relabel_predictors(c(foreign = "At least 1 foreign scientist",      # relabel predictors
                          num_dom_scient_log = "Size of the team",
@@ -74,6 +73,72 @@ dwplot(by_tech,
        vline = geom_vline(xintercept = 0, colour = "grey60", linetype = 2)) + # plot line at zero _behind_ coefs
   theme_bw() + xlab("Coefficient Estimate") + ylab("") +
   ggtitle("Quality of patents across technological fields by various factors") +
+  theme(plot.title = element_text(face="bold"),
+        legend.position = "bottom",
+        legend.justification = c(0, 0),
+        legend.background = element_rect(colour="grey80"),
+        legend.title = element_blank()) 
+
+######################################
+# B. Results for certain patent owners
+######################################
+colnames(datareg)
+
+dataregNoNA_patown <- dataregNoNA %>% 
+  filter(ctry_leg_owner =="CN" | ctry_leg_owner =="US" | ctry_leg_owner =="DE" | ctry_leg_owner =="CH" | ctry_leg_owner =="JP" | ctry_leg_owner =="AU" | ctry_leg_owner =="GB" | ctry_leg_owner =="FR" | ctry_leg_owner =="ES" | ctry_leg_owner =="IT")
+
+# Run model on subsets of data, save results as tidy df, make a model variable, and relabel predictors
+by_owner <- dataregNoNA_patown %>% 
+  group_by(ctry_leg_owner) %>%                                             # group data by tech field
+  do(tidy(lm(world_class_90 ~ foreign + num_dom_scient_log + claims_log + uni + tri_pat_fam + originality + p_year + tech_name + tech_name*p_year, data = .))) %>% # run model on each grp
+  rename(model=ctry_leg_owner) %>%                                         # make model variable
+  relabel_predictors(c(foreign = "At least 1 foreign scientist",      # relabel predictors
+                       num_dom_scient_log = "Size of the team",
+                       claims_log = "Number of claims",
+                       uni = "University participation",
+                       tri_pat_fam="Triadic"))
+
+
+by_owner <- by_owner %>%
+  filter(term =="At least 1 foreign scientist" | term =="Size of the team" | term =="Number of claims" | term =="University participation" | term =="Triadic")        # drop fe from subset for plotting   
+
+dwplot(by_owner, 
+       vline = geom_vline(xintercept = 0, colour = "grey60", linetype = 2)) + # plot line at zero _behind_ coefs
+  theme_bw() + xlab("Coefficient Estimate") + ylab("") +
+  ggtitle("Quality of patents across patent owner countries") +
+  theme(plot.title = element_text(face="bold"),
+        legend.position = "bottom",
+        legend.justification = c(0, 0),
+        legend.background = element_rect(colour="grey80"),
+        legend.title = element_blank()) 
+
+######################################
+# C. Results for CH as a patent owner
+######################################
+colnames(datareg)
+
+dataregNoNA_patown <- dataregNoNA %>% 
+  filter(ctry_leg_owner =="CN" | ctry_leg_owner =="US" | ctry_leg_owner =="DE" | ctry_leg_owner =="CH" | ctry_leg_owner =="JP" | ctry_leg_owner =="AU" | ctry_leg_owner =="GB" | ctry_leg_owner =="FR" | ctry_leg_owner =="ES" | ctry_leg_owner =="IT")
+
+# Run model on subsets of data, save results as tidy df, make a model variable, and relabel predictors
+by_owner <- dataregNoNA_patown %>% 
+  group_by(ctry_leg_owner) %>%                                             # group data by tech field
+  do(tidy(lm(world_class_90 ~ foreign + num_dom_scient_log + claims_log + uni + tri_pat_fam + originality + p_year + tech_name + tech_name*p_year, data = .))) %>% # run model on each grp
+  rename(model=ctry_leg_owner) %>%                                         # make model variable
+  relabel_predictors(c(foreign = "At least 1 foreign scientist",      # relabel predictors
+                       num_dom_scient_log = "Size of the team",
+                       claims_log = "Number of claims",
+                       uni = "University participation",
+                       tri_pat_fam="Triadic"))
+
+
+by_owner <- by_owner %>%
+  filter(term =="At least 1 foreign scientist" | term =="Size of the team" | term =="Number of claims" | term =="University participation" | term =="Triadic")        # drop fe from subset for plotting   
+
+dwplot(by_owner, 
+       vline = geom_vline(xintercept = 0, colour = "grey60", linetype = 2)) + # plot line at zero _behind_ coefs
+  theme_bw() + xlab("Coefficient Estimate") + ylab("") +
+  ggtitle("Quality of patents across patent owner countries") +
   theme(plot.title = element_text(face="bold"),
         legend.position = "bottom",
         legend.justification = c(0, 0),
