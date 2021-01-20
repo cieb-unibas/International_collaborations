@@ -1,5 +1,5 @@
 print("International collaborations and quality of patents PREPARING DATA FOR REGRESSIONS")
-# Last modified 15.01.2021 / DF
+# Last modified 20.01.2021 / DF
 
 require(data.table)
 library(dplyr)
@@ -21,11 +21,17 @@ datareg <- readRDS("/scicore/home/weder/GROUP/Innovation/01_patent_data/created 
 colnames(datareg)
 
 # LEAVE ONLY THOSE PATENTS WHERE THERE IS AT LEAST 1 INVENTOR FROM OWNER COUNTRY
-  datareg <- datareg %>%
-    dplyr::mutate(inv_foreign = str_detect(ctry_inventor, datareg$ctry_leg_owner))
+#datareg <- datareg %>%
+  #dplyr::mutate(inv_foreign = str_detect(ctry_inventor, datareg$ctry_leg_owner))
   
-  #datareg <- datareg %>%
-  #filter(inv_foreign ==TRUE)
+#datareg <- datareg %>%
+#filter(inv_foreign ==TRUE)
+
+# LEAVE ONLY TRIADIC PATENTS
+
+#datareg <- datareg %>%
+#filter(tri_pat_fam ==1)
+
 
 # Variable capturing number of domestic scientist involved
   datareg$num_dom_scient <- str_count(datareg$ctry_inventor, datareg$ctry_leg_owner)
@@ -41,9 +47,9 @@ colnames(datareg)
   datareg$foreign <- ifelse(datareg$num_for_scient>0,1,0)
 
 # Saving data for regression
-  saveRDS(object=datareg, file = "/scicore/home/weder/GROUP/Innovation/01_patent_data/created data/datareg.rds")
+  #saveRDS(object=datareg, file = "/scicore/home/weder/GROUP/Innovation/01_patent_data/created data/datareg.rds")
 
-  datareg <- readRDS("/scicore/home/weder/GROUP/Innovation/01_patent_data/created data/datareg.rds")
+  #datareg <- readRDS("/scicore/home/weder/GROUP/Innovation/01_patent_data/created data/datareg.rds")
   
   datareg$claims_log <- log(datareg$claims+1)
   datareg$num_tot_scient_log <- log(datareg$num_tot_scient+1)
@@ -59,7 +65,7 @@ colnames(datareg)
 # Run model on subsets of data, save results as tidy df, make a model variable, and relabel predictors
     by_tech <- dataregNoNA %>% 
       group_by(techbroad) %>%                                             # group data by tech field
-      do(tidy(lm(world_class_90 ~ foreign + num_tot_scient_log + claims_log + uni + tri_pat_fam + originality + p_year + ctry_leg_owner + ctry_leg_owner:p_year + tech_name + tech_name:p_year, data = .))) %>% # run model on each grp
+      do(tidy(lm(world_class_90 ~ foreign + num_tot_scient_log + claims_log + uni + originality + p_year + ctry_leg_owner + ctry_leg_owner:p_year + tech_name + tech_name:p_year, data = .))) %>% # run model on each grp
       rename(model=techbroad) %>%                                         # make model variable
       relabel_predictors(c(foreign = "At least 1 foreign scientist",      # relabel predictors
                            num_tot_scient_log = "Size of the team",
@@ -89,17 +95,16 @@ dataregNoNA_patown <- dataregNoNA %>%
 # Run model on subsets of data, save results as tidy df, make a model variable, and relabel predictors
 by_owner <- dataregNoNA_patown %>% 
   group_by(ctry_leg_owner) %>%                                             # group data by tech field
-  do(tidy(lm(world_class_90 ~ foreign + num_tot_scient_log + claims_log + uni + tri_pat_fam + originality + p_year + tech_name + tech_name*p_year, data = .))) %>% # run model on each grp
+  do(tidy(lm(world_class_90 ~ foreign + num_tot_scient_log + claims_log + uni + originality + p_year + tech_name + tech_name:p_year, data = .))) %>% # run model on each grp
   rename(model=ctry_leg_owner) %>%                                         # make model variable
   relabel_predictors(c(foreign = "At least 1 foreign scientist",      # relabel predictors
-                       num_dom_scient_log = "Size of the team",
+                       num_tot_scient_log = "Size of the team",
                        claims_log = "Number of claims",
-                       uni = "University participation",
-                       tri_pat_fam="Triadic"))
+                       uni = "University participation"))
 
 
 by_owner <- by_owner %>%
-  filter(term =="At least 1 foreign scientist" | term =="Size of the team" | term =="Number of claims" | term =="University participation" | term =="Triadic")        # drop fe from subset for plotting   
+  filter(term =="At least 1 foreign scientist" | term =="Size of the team" | term =="Number of claims" | term =="University participation")        # drop fe from subset for plotting   
 
 dwplot(by_owner, 
        vline = geom_vline(xintercept = 0, colour = "grey60", linetype = 2)) + # plot line at zero _behind_ coefs
@@ -131,7 +136,7 @@ dataregNoNA_patownCH$foreignIT <- as.integer(str_detect(dataregNoNA_patownCH$ctr
 # Run model on subsets of data, save results as tidy df, make a model variable, and relabel predictors
 by_techCH <- dataregNoNA_patownCH %>% 
   group_by(techbroad) %>%                                             # group data by tech field
-  do(tidy(lm(world_class_90 ~ foreignUS + foreignGB + foreignJP + foreignDE + foreignFR + foreignIT + num_tot_scient_log + claims_log + uni + tri_pat_fam + originality + p_year + tech_name + tech_name:p_year
+  do(tidy(lm(world_class_90 ~ foreignUS + foreignGB + foreignJP + foreignDE + foreignFR + foreignIT + num_tot_scient_log + claims_log + uni + originality + p_year + tech_name + tech_name:p_year
                 , data = .))) %>% # run model on each grp
   rename(model=techbroad) %>%                                         
   relabel_predictors(c(foreignUS = "At least 1 scientist US",
@@ -142,8 +147,7 @@ by_techCH <- dataregNoNA_patownCH %>%
                        foreignIT = "At least 1 scientist IT",
                        num_tot_scient_log = "Size of the team",
                        claims_log = "Number of claims",
-                       uni = "University participation",
-                       tri_pat_fam="Triadic"))
+                       uni = "University participation"))
 
 
 by_techCH <- by_techCH %>%
