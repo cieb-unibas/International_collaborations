@@ -18,8 +18,6 @@ rm(list = ls())
 
 datareg <- readRDS("/scicore/home/weder/GROUP/Innovation/01_patent_data/created data/collab_reg_data.rds")
 
-colnames(datareg)
-
 # LEAVE ONLY THOSE PATENTS WHERE THERE IS AT LEAST 1 INVENTOR FROM OWNER COUNTRY
 #datareg <- datareg %>%
   #dplyr::mutate(inv_foreign = str_detect(ctry_inventor, datareg$ctry_leg_owner))
@@ -32,7 +30,34 @@ colnames(datareg)
 #datareg <- datareg %>%
 #filter(tri_pat_fam ==1)
 
+# LEAVE ONLY PATENTS WITH MORE THAN ONE OWNERS AND WITH ONE OWNER
+datareg$num_owners <- str_count(datareg$ctry_leg_owner, '_')
+datareg$num_owners <- datareg$num_owners+1
 
+ datareg_more_owners <- datareg %>%
+  filter(num_owners>1)
+ 
+ datareg_one_owner <- datareg %>%
+   filter(num_owners==1)
+ 
+ # FUNCTION THAT DETECTS THE MOST COMMON INVETORS COUNTRY FOR EACH PATENT
+ most_common_word <- function(s){
+   which.max(table(s %>% str_split(boundary("word"))))
+ }
+ 
+ most_common_word2 <- function(string){
+   string1 <- str_split(string, pattern = " ")[[1]] # Split the string
+   string2 <- str_trim(string1) # Remove white space
+   string3 <- str_replace_all(string2, fixed("_"), "") # Remove dot
+   string4 <- tolower(string3) # Convert to lower case
+   word_count <- table(string4) # Count the word number
+   return(names(word_count[which.max(word_count)][1])) # Report the most common word
+ }
+ 
+ datareg_more_owners$ctry_inventor_mc <- most_common_word2(datareg_more_owners$ctry_inventor)
+ 
+ 
+ 
 # Variable capturing number of domestic scientist involved
   datareg$num_dom_scient <- str_count(datareg$ctry_inventor, datareg$ctry_leg_owner)
 
@@ -65,7 +90,7 @@ colnames(datareg)
 # Run model on subsets of data, save results as tidy df, make a model variable, and relabel predictors
     by_tech <- dataregNoNA %>% 
       group_by(techbroad) %>%                                             # group data by tech field
-      do(tidy(lm(world_class_90 ~ foreign + num_tot_scient_log + claims_log + uni + originality + p_year + ctry_leg_owner + ctry_leg_owner:p_year + tech_name + tech_name:p_year, data = .))) %>% # run model on each grp
+      do(tidy(lm(world_class_90 ~ foreign + num_tot_scient_log + claims_log + uni + originality + p_year + tech_name + tech_name:p_year, data = .))) %>% # run model on each grp
       rename(model=techbroad) %>%                                         # make model variable
       relabel_predictors(c(foreign = "At least 1 foreign scientist",      # relabel predictors
                            num_tot_scient_log = "Size of the team",
