@@ -44,7 +44,7 @@ datareg$num_owners <- datareg$num_owners+1
 
  datareg_more_owners$inv_main <- substr(datareg_more_owners$ctry_inventor, start = 1, stop = 2)
   
- datareg_more_owners$ctry_leg_owner <- datareg_more_owners$inv_main
+ datareg_more_owners$ctry_leg_owner <- datareg_more_owners$inv_main #CR: why overwriting country of legal owner by country of first inventor?
  
  datareg_more_owners=subset(datareg_more_owners,select = -c(inv_main))
  datareg_more_owners=subset(datareg_more_owners,select = -c(num_owners))
@@ -57,7 +57,11 @@ datareg$num_owners <- datareg$num_owners+1
  datareg <- rbind(datareg_one_owner,datareg_more_owners)
 
 # Variable capturing number of domestic scientist involved
-  datareg$num_dom_scient <- str_count(datareg$ctry_inventor, datareg$ctry_leg_owner)
+  datareg$num_dom_scient <- str_count(datareg$ctry_inventor, datareg$ctry_leg_owner) 
+  
+  #CR: Problematic, since we use only first applicant. What if there are two firms located in two different countries and the inventors of a particular firm are all from the same country as the firm. 
+  #In this case, we would count some as foreign, although they aren't...
+  
 
 # Variable capturing number of scientist involved
   datareg$num_tot_scient <- str_count(datareg$ctry_inventor, '_')
