@@ -41,22 +41,9 @@ datareg$num_owners <- datareg$num_owners+1
    filter(num_owners==1)
  
  # FUNCTION THAT DETECTS THE MOST COMMON INVETORS COUNTRY FOR EACH PATENT
- most_common_word <- function(s){
-   which.max(table(s %>% str_split(boundary("word"))))
- }
- 
- most_common_word2 <- function(string){
-   string1 <- str_split(string, pattern = " ")[[1]] # Split the string
-   string2 <- str_trim(string1) # Remove white space
-   string3 <- str_replace_all(string2, fixed("_"), "") # Remove dot
-   string4 <- tolower(string3) # Convert to lower case
-   word_count <- table(string4) # Count the word number
-   return(names(word_count[which.max(word_count)][1])) # Report the most common word
- }
- 
- datareg_more_owners$ctry_inventor_mc <- most_common_word2(datareg_more_owners$ctry_inventor)
- 
- 
+
+
+  
  
 # Variable capturing number of domestic scientist involved
   datareg$num_dom_scient <- str_count(datareg$ctry_inventor, datareg$ctry_leg_owner)
