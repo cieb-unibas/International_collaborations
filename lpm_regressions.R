@@ -40,11 +40,22 @@ datareg$num_owners <- datareg$num_owners+1
  datareg_one_owner <- datareg %>%
    filter(num_owners==1)
  
- # FUNCTION THAT DETECTS THE MOST COMMON INVETORS COUNTRY FOR EACH PATENT
+ # SETTING LEGAL OWNER COUNTRY TO EQUAL COUNTRY OF THE FIRST APPLICANT
 
-
+ datareg_more_owners$inv_main <- substr(datareg_more_owners$ctry_inventor, start = 1, stop = 2)
   
+ datareg_more_owners$ctry_leg_owner <- datareg_more_owners$inv_main
  
+ datareg_more_owners=subset(datareg_more_owners,select = -c(inv_main))
+ datareg_more_owners=subset(datareg_more_owners,select = -c(num_owners))
+ 
+ datareg_one_owner=subset(datareg_one_owner,select = -c(num_owners))
+ 
+ 
+ # COMBINE THE TWO SAMPLES (ONE AND MORE THAN ONE OWNERS)
+ 
+ datareg <- rbind(datareg_one_owner,datareg_more_owners)
+
 # Variable capturing number of domestic scientist involved
   datareg$num_dom_scient <- str_count(datareg$ctry_inventor, datareg$ctry_leg_owner)
 
@@ -77,7 +88,7 @@ datareg$num_owners <- datareg$num_owners+1
 # Run model on subsets of data, save results as tidy df, make a model variable, and relabel predictors
     by_tech <- dataregNoNA %>% 
       group_by(techbroad) %>%                                             # group data by tech field
-      do(tidy(lm(world_class_90 ~ foreign + num_tot_scient_log + claims_log + uni + originality + p_year + tech_name + tech_name:p_year, data = .))) %>% # run model on each grp
+      do(tidy(lm(world_class_90 ~ foreign + num_tot_scient_log + claims_log + uni + originality + p_year + tech_name + tech_name:p_year + ctry_leg_owner + ctry_leg_owner:p_year, data = .))) %>% # run model on each grp
       rename(model=techbroad) %>%                                         # make model variable
       relabel_predictors(c(foreign = "At least 1 foreign scientist",      # relabel predictors
                            num_tot_scient_log = "Size of the team",
