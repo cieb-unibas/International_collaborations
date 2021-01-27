@@ -21,8 +21,12 @@ rm(list = ls())
 # Preparing inventor data
 ################################################################################
   inventors_data <- readRDS("/scicore/home/weder/GROUP/Innovation/01_patent_data/created data/inv_reg_CHcommute_adj.rds")
-  inventors_data2 <-subset(inventors_data, select = c("p_key", "patent_id", "regio_inv", "ctry_inv", "ipc_main", "tech_field"))
-
+#CR: Use ctry_pat and regio_pat in order to consider Swiss cross-border commuters 
+  inventors_data2 <-subset(inventors_data, select = c("p_key", "patent_id", "regio_pat", "ctry_pat", "ipc_main", "tech_field"))
+#CR: I rename ctry_pat and regio_pat in order to keep the rest of the code unchanged
+  inventors_data2 <- dplyr::rename(inventors_data2, ctry_inv = ctry_pat, regio_inv = regio_pat)
+  
+  
 # Making var containing all inventor countries by patents
   inventors_data3 <- inventors_data2 %>%
                       group_by(p_key, patent_id) %>%
