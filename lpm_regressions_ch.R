@@ -16,6 +16,8 @@ library(dotwhisker)
 library(broom)
 library(dummies)
 library(tidyr)
+library(lmtest)
+library(sandwich)
 library(fixest)
 rm(list = ls())
 
@@ -94,7 +96,6 @@ dataregNoNA <- separate_rows(dataregNoNA, ctry_inventor_clean)
 dataregNoNA <- distinct(dataregNoNA, patent_id, ctry_inventor_clean, .keep_all = T) %>% 
                mutate(ctry_inventor_clean = ifelse(ctry_inventor_clean == ctry_leg_owner, "", ctry_inventor_clean)) 
 
-
 dummies <- dummy(dataregNoNA$ctry_inventor_clean)
 colnames(dummies) <- substr(colnames(dummies), nchar(colnames(dummies))-1, nchar(colnames(dummies)))
 dummies <- dummies[, 2:ncol(dummies)]
@@ -106,12 +107,12 @@ dataregNoNA <- distinct(dataregNoNA, patent_id, .keep_all = T)
 dataregNoNA <- left_join(dataregNoNA, dummies, by = "patent_id")
   
 # Saving data for regression
-dataregNoNA %>% saveRDS(object=datareg, file = "/scicore/home/weder/GROUP/Innovation/01_patent_data/created data/datareg_ch.rds")
+dataregNoNA %>% saveRDS(file = "/scicore/home/weder/GROUP/Innovation/01_patent_data/created data/datareg_ch.rds")
 dataregNoNA <- readRDS("/scicore/home/weder/GROUP/Innovation/01_patent_data/created data/datareg_ch.rds")
 
-# Use only subset of industrial countries as patent owners -> for policy advise to Switzerland I guess only such a rather homogenous sub-sample is meaningful 
+# Use only subset of industrial countries as patent owners -> for policy advise to Switzerland I guess only such a rather homogeneous sub-sample is meaningful 
 dataregNoNA <- filter(dataregNoNA, ctry_leg_owner %in% c("AT", "CH", "IL", "DK", "BE", "FI", "CA", "US", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG"))  
-dataregNoNA <- dplyr::select(dataregNoNA, world_class_90, techbroad, tech_field, df_inv, f_inv, num_tot_scient_log, claims_log, originality, p_year, tech_name, ctry_leg_owner, AT,CH, CN, IL, DK, BE, FI, CA, US, SE, IT, KR, GB, DE, FR, JP, NO, ES, NL, IE, SG)  
+dataregNoNA <- dplyr::select(dataregNoNA, world_class_90, techbroad, tech_field, df_inv, f_inv, num_tot_scient_log, claims_log, originality, p_year, tech_name, ctry_leg_owner, AT, CH, IL, DK, BE, FI, CA, US, SE, IT, KR, GB, DE, FR, JP, NO, ES, NL, IE, SG)  
 
 
 # Create model: I have tried it with the previous (broom/tidy) approach, however I could not create clustered standard errors (the 
@@ -124,12 +125,12 @@ model_estim <- function(t_field, years, data, model_form, model_name = "no_name"
   df <- filter(df, p_year %in% years & techbroad %in% t_field) 
   model_obj <- femlm(model_form, data = df, family = "gaussian", cluster = c("ctry_leg_owner"))
   model_obj <- summary(model_obj, se = "cluster")
-  coef <- data.frame(model_obj$coeftable, model_obj$n)
+  coef <- data.frame(model_obj$coeftable)
   coef$term <- row.names(coef)
-  conf <- data.frame(confint(model_obj, level = 0.95, se = "cluster"))
+  conf <- data.frame(confint(model_obj, level = 0.95, cluster = c("ctry_leg_owner"), se = "cluster"))
   conf$term <- row.names(conf)
   result   <- merge(coef, conf, by = "term")
-  colnames(result) <- c("term", "estimate", "std.error", "statistic", "p.value", "n", "conf.low", "conf.high")
+  colnames(result) <- c("term", "estimate", "std.error", "statistic", "p.value", "conf.low", "conf.high")
   result$model     <- model_name
   result <- as_tibble(result)
   return(result)
