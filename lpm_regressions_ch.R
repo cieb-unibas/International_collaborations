@@ -14,8 +14,6 @@ library(splitstackshape)
 library(stringr)
 library(dotwhisker)
 library(broom)
-library(lmtest)
-library(sandwich)
 library(dummies)
 library(tidyr)
 library(fixest)
@@ -60,7 +58,7 @@ datareg$num_owners <- datareg$num_owners+1
 # datareg <- rbind(datareg_one_owner,datareg_more_owners)
 
 # FOCUS ONLY ON 1 ASSIGNEE
-datareg <- rbind(datareg_one_owner)
+datareg <- datareg_one_owner
  
 # CREATE VARIABLE of inventors d_inv (only domestic); df_inv (domestic and foreign) or f_inv (only foreign)
 datareg <- mutate(datareg, ctry_inventor_clean = gsub("_", " ", ctry_inventor)) 
@@ -92,7 +90,10 @@ datareg <- mutate(datareg, d_inv  = ifelse(str_detect(ctry_inventor_clean, ctry_
 
 # Create dummies for foreign inventor countries  
 dataregNoNA <- separate_rows(dataregNoNA, ctry_inventor_clean)  
-dataregNoNA <- mutate(dataregNoNA, ctry_inventor_clean = ifelse(ctry_inventor_clean == ctry_leg_owner, "", ctry_inventor_clean))
+## Set domestic country to NA and keep only one foreign country -> dummy only for foreign countries 
+dataregNoNA <- distinct(dataregNoNA, patent_id, ctry_inventor_clean, .keep_all = T) %>% 
+               mutate(ctry_inventor_clean = ifelse(ctry_inventor_clean == ctry_leg_owner, "", ctry_inventor_clean)) 
+
 
 dummies <- dummy(dataregNoNA$ctry_inventor_clean)
 colnames(dummies) <- substr(colnames(dummies), nchar(colnames(dummies))-1, nchar(colnames(dummies)))
@@ -113,7 +114,9 @@ dataregNoNA <- filter(dataregNoNA, ctry_leg_owner %in% c("AT", "CH", "IL", "DK",
 dataregNoNA <- dplyr::select(dataregNoNA, world_class_90, techbroad, tech_field, df_inv, f_inv, num_tot_scient_log, claims_log, originality, p_year, tech_name, ctry_leg_owner, AT,CH, CN, IL, DK, BE, FI, CA, US, SE, IT, KR, GB, DE, FR, JP, NO, ES, NL, IE, SG)  
 
 
-# Run model on subsets of data, save results as tidy df, make a model variable, and relabel predictors
+# Create model: I have tried it with the previous (broom/tidy) approach, however I could not create clustered standard errors (the 
+#function femlm is not compatible, with lm I don't know how to get clustered standard errors at a particular level. I also tried plm leading to an 
+#error. Thus, I created a estimation function delivering the same output as before so it can be used e.g. with dwplot.
 base::set.seed(27)
 
 model_estim <- function(t_field, years, data, model_form, model_name = "no_name"){
