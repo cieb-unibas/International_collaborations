@@ -112,7 +112,7 @@ dataregNoNA <- readRDS("/scicore/home/weder/GROUP/Innovation/01_patent_data/crea
 
 # Use only subset of industrial countries as patent owners -> for policy advise to Switzerland I guess only such a rather homogeneous sub-sample is meaningful 
 dataregNoNA <- filter(dataregNoNA, ctry_leg_owner %in% c("AT", "CH", "IL", "DK", "BE", "FI", "CA", "US", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG"))  
-dataregNoNA <- dplyr::select(dataregNoNA, world_class_90, techbroad, tech_field, df_inv, f_inv, num_tot_scient_log, claims_log, originality, p_year, tech_name, ctry_leg_owner, AT, CH, IL, DK, BE, FI, CA, US, SE, IT, KR, GB, DE, FR, JP, NO, ES, NL, IE, SG)  
+dataregNoNA <- dplyr::select(dataregNoNA, world_class_90, techbroad, tech_field, df_inv, f_inv, num_tot_scient_log, claims_log, originality, p_year, tech_name, ctry_leg_owner, AT, CH, IL, DK, BE, FI, CA, US, SE, IT, KR, GB, DE, FR, JP, NO, ES, NL, IE, SG, CN)  
 
 
 # Create model: I have tried it with the previous (broom/tidy) approach, however I could not create clustered standard errors (the 
@@ -171,7 +171,7 @@ right_var <- c("df_inv", "f_inv", "num_tot_scient_log", "claims_log", "originali
                paste0(c("AT", "IL", "DK", "BE", "FI", "CA", "US", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG", "CN", "CH"), ":df_inv"))
 m_1 <- as.formula(paste("world_class_90", paste(paste(c(right_var), collapse = "+")), sep=" ~ "))
 
-by_tech_ctry <- do.call(rbind, lapply(unique(dataregNoNA$techbroad), function(x) model_estim(x, years = seq(1990, 2015), data = dataregNoNA, model_form = m_1)))
+by_tech_ctry <- do.call(rbind, lapply(unique(dataregNoNA$techbroad), function(x) model_estim(x, years = seq(1990, 2015), data = dataregNoNA, model_form = m_1, model_name = x)))
 
 # drop fe from subset for plotting    
 by_tech_ctry_plot <- by_tech_ctry %>%
@@ -181,7 +181,7 @@ by_tech_ctry_plot <- by_tech_ctry %>%
     paste0("f_inv:", c("CA", "US", "IT", "KR", "GB", "DE", "FR", "JP", "CN", "CH")),
     paste0("df_inv:", c("CA", "US", "IT", "KR", "GB", "DE", "FR", "JP","CN", "CH"))))        
 
-dwplot(arrange(by_tech_ctry_plot, model),
+dwplot(by_tech_ctry_plot,
        vline = geom_vline(xintercept = 0, colour = "grey60", linetype = 2)) + # plot line at zero _behind_ coefs
   theme_bw() + xlab("Coefficient Estimate") + ylab("") +
   ggtitle("Quality of patents across technological fields by various factors") +
@@ -194,12 +194,12 @@ dwplot(arrange(by_tech_ctry_plot, model),
 ############################
 # C. By partnering country #
 ############################
-right_var <- c("df_inv", "f_inv", "num_tot_scient_log", "claims_log", "originality", "p_year", "tech_name", "tech_name:p_year", "ctry_leg_owner:p_year",
+right_var <- c("df_inv", "f_inv", "num_tot_scient_log", "claims_log", "originality", "p_year", "tech_name:p_year", "ctry_leg_owner:p_year",
                paste0(c("AT", "IL", "DK", "BE", "FI", "CA", "US", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG", "CN", "CH"), ":f_inv"),
                paste0(c("AT", "IL", "DK", "BE", "FI", "CA", "US", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG", "CN", "CH"), ":df_inv"))
 m_1 <- as.formula(paste("world_class_90", paste(paste(c(right_var), collapse = "+")), sep=" ~ "))
 
-by_ctry <- model_estim(unique(dataregNoNA$techbroad), years = seq(1990, 2015), data = dataregNoNA, model_form = m_1)
+by_ctry <- model_estim(unique(dataregNoNA$techbroad), years = seq(1990, 2015), data = dataregNoNA, model_form = m_1, model_name = "by_ctry")
 
 by_ctry_plot <- by_ctry %>%
   filter(term %in% c(
