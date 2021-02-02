@@ -68,23 +68,26 @@ inv_col <- data.frame(ctry_inventor_clean = sapply(lapply(strsplit(datareg$ctry_
 datareg <- dplyr::select(datareg, -ctry_inventor_clean)
 datareg <- cbind(datareg, inv_col)
 
-datareg <- datareg[is.na(datareg$ctry_inventor_clean) != T & nchar(datareg$ctry_inventor_clean) > 0, ]
+# datareg <- datareg[is.na(datareg$ctry_inventor_clean) != T & nchar(datareg$ctry_inventor_clean) > 0, ]
+# datareg <- mutate(datareg, d_inv  = ifelse(str_detect(ctry_inventor_clean, ctry_leg_owner) & nchar(ctry_inventor_clean) == 2, 1, 0),
+                           # df_inv = ifelse(str_detect(ctry_inventor_clean, ctry_leg_owner) & nchar(ctry_inventor_clean) > 2, 1, 0),
+                           # f_inv  = ifelse(str_detect(ctry_inventor_clean, ctry_leg_owner) != T, 1, 0))
+
 datareg <- mutate(datareg, d_inv  = ifelse(str_detect(ctry_inventor_clean, ctry_leg_owner) & nchar(ctry_inventor_clean) == 2, 1, 0),
-                           df_inv = ifelse(str_detect(ctry_inventor_clean, ctry_leg_owner) & nchar(ctry_inventor_clean) > 2, 1, 0),
-                           f_inv  = ifelse(str_detect(ctry_inventor_clean, ctry_leg_owner) != T, 1, 0))
+                  df_inv = ifelse(str_detect(ctry_inventor_clean, ctry_leg_owner) & nchar(ctry_inventor_clean) > 2 | str_detect(ctry_inventor_clean, ctry_leg_owner) != T, 1, 0))
 
 # Variable capturing number of scientist involved
   datareg$num_tot_scient <- str_count(datareg$ctry_inventor, '_')
   datareg$num_tot_scient <- datareg$num_tot_scient+1
 
 # Variable capturing number of domestic scientist involved
-  datareg$num_dom_scient <- str_count(datareg$ctry_inventor, datareg$ctry_leg_owner) 
+  # datareg$num_dom_scient <- str_count(datareg$ctry_inventor, datareg$ctry_leg_owner) 
   
 # Calculate "foreign" scientists
-  datareg$num_for_scient <- datareg$num_tot_scient-datareg$num_dom_scient
+  # datareg$num_for_scient <- datareg$num_tot_scient-datareg$num_dom_scient
 
 # Create "foreign scientists" dummy
-  datareg$foreign <- ifelse(datareg$num_for_scient>0,1,0)
+  # datareg$foreign <- ifelse(datareg$num_for_scient>0,1,0)
   datareg$claims_log <- log(datareg$claims+1)
   datareg$num_tot_scient_log <- log(datareg$num_tot_scient+1)
   # datareg$num_dom_scient_log <- log(datareg$num_dom_scient+1)
@@ -110,14 +113,18 @@ dataregNoNA <- left_join(dataregNoNA, dummies, by = "patent_id")
 dataregNoNA %>% saveRDS(file = "/scicore/home/weder/GROUP/Innovation/01_patent_data/created data/datareg_ch.rds")
 dataregNoNA <- readRDS("/scicore/home/weder/GROUP/Innovation/01_patent_data/created data/datareg_ch.rds")
 
+# Subset of data according as discussed with dragan
+dataregNoNA <- filter(dataregNoNA, substr(patent_id, 1, 2) == "US")
+
+
 # Use only subset of industrial countries as patent owners -> for policy advise to Switzerland I guess only such a rather homogeneous sub-sample is meaningful 
 dataregNoNA <- filter(dataregNoNA, ctry_leg_owner %in% c("AT", "CH", "IL", "DK", "BE", "FI", "CA", "US", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG"))  
-dataregNoNA <- dplyr::select(dataregNoNA, world_class_90, techbroad, tech_field, df_inv, f_inv, num_tot_scient_log, claims_log, originality, p_year, tech_name, ctry_leg_owner, AT, CH, IL, DK, BE, FI, CA, US, SE, IT, KR, GB, DE, FR, JP, NO, ES, NL, IE, SG, CN)  
+dataregNoNA <- dplyr::select(dataregNoNA, world_class_90, techbroad, tech_field, df_inv, num_tot_scient_log, claims_log, originality, p_year, tech_name, ctry_leg_owner, AT, CH, IL, DK, BE, FI, CA, US, SE, IT, KR, GB, DE, FR, JP, NO, ES, NL, IE, SG, CN)  
 
 
-# Create model: I have tried it with the previous (broom/tidy) approach, however I could not create clustered standard errors (the 
-#function femlm is not compatible, with lm I don't know how to get clustered standard errors at a particular level. I also tried plm leading to an 
-#error. Thus, I created a estimation function delivering the same output as before so it can be used e.g. with dwplot.
+
+
+# Create model
 base::set.seed(27)
 
 model_estim <- function(t_field, years, data, model_form, model_name = "no_name"){
@@ -141,7 +148,7 @@ model_estim <- function(t_field, years, data, model_form, model_name = "no_name"
 ######################################
 # A. Results for each broad tech field
 ######################################
-right_var <- c("df_inv", "f_inv", "num_tot_scient_log", "claims_log", "originality", "p_year", "tech_name", "tech_name:p_year", "ctry_leg_owner:p_year")
+right_var <- c("df_inv", "num_tot_scient_log", "claims_log", "originality", "p_year", "tech_name", "tech_name:p_year", "ctry_leg_owner:p_year")
 m_1 <- as.formula(paste("world_class_90", paste(paste(c(right_var), collapse = "+")), sep=" ~ "))
 
 by_tech <- do.call(rbind, lapply(unique(dataregNoNA$techbroad), function(x) model_estim(x, years = seq(1990, 2015), data = dataregNoNA, model_form = m_1, model_name = x)))
@@ -151,7 +158,7 @@ by_tech_plot <- by_tech %>%
   filter(term %in% c(
     # "domestic", "domestic and foreign", "foreign", 
     # "Size of the team", "Number of claims", "University participation", 
-    "f_inv", "df_inv", paste0("df_inv:techbroad", unique(dataregNoNA$techbroad)), paste0("f_inv:techbroad", unique(dataregNoNA$techbroad))))        
+    "df_inv", paste0("df_inv:techbroad", unique(dataregNoNA$techbroad))))        
 
 dwplot(by_tech_plot,
        vline = geom_vline(xintercept = 0, colour = "grey60", linetype = 2)) + # plot line at zero _behind_ coefs
