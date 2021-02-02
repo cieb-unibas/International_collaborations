@@ -42,7 +42,7 @@ datareg$num_owners <- datareg$num_owners+1
  # datareg_more_owners <- datareg %>%
   # filter(num_owners>1)
  
- datareg_one_owner <- datareg %>%
+datareg_one_owner <- datareg %>%
    filter(num_owners==1)
  
  # SETTING LEGAL OWNER COUNTRY TO EQUAL COUNTRY OF THE FIRST APPLICANT
@@ -96,30 +96,26 @@ datareg <- mutate(datareg, d_inv  = ifelse(str_detect(ctry_inventor_clean, ctry_
 # Create dummies for foreign inventor countries  
 dataregNoNA <- separate_rows(dataregNoNA, ctry_inventor_clean)  
 ## Set domestic country to NA and keep only one foreign country -> dummy only for foreign countries 
-dataregNoNA <- distinct(dataregNoNA, patent_id, ctry_inventor_clean, .keep_all = T) %>% 
+dataregNoNA <- distinct(dataregNoNA, p_key, ctry_inventor_clean, .keep_all = T) %>% 
                mutate(ctry_inventor_clean = ifelse(ctry_inventor_clean == ctry_leg_owner, "", ctry_inventor_clean)) 
 
 dummies <- dummy(dataregNoNA$ctry_inventor_clean)
 colnames(dummies) <- substr(colnames(dummies), nchar(colnames(dummies))-1, nchar(colnames(dummies)))
 dummies <- dummies[, 2:ncol(dummies)]
 dummy_names <- colnames(dummies)
-dummies <- cbind(dataregNoNA[, "patent_id"], dummies)
-dummies <- setDT(dummies)[, lapply(.SD, sum), by = patent_id]
+dummies <- cbind(dataregNoNA[, "p_key"], dummies)
+dummies <- setDT(dummies)[, lapply(.SD, sum), by = p_key]
 
-dataregNoNA <- distinct(dataregNoNA, patent_id, .keep_all = T)
-dataregNoNA <- left_join(dataregNoNA, dummies, by = "patent_id")
+dataregNoNA <- distinct(dataregNoNA, p_key, .keep_all = T)
+dataregNoNA <- left_join(dataregNoNA, dummies, by = "p_key")
   
 # Saving data for regression
 dataregNoNA %>% saveRDS(file = "/scicore/home/weder/GROUP/Innovation/01_patent_data/created data/datareg_ch.rds")
 dataregNoNA <- readRDS("/scicore/home/weder/GROUP/Innovation/01_patent_data/created data/datareg_ch.rds")
 
-# Subset of data according as discussed with dragan
-dataregNoNA <- filter(dataregNoNA, substr(patent_id, 1, 2) == "US")
-
-
 # Use only subset of industrial countries as patent owners -> for policy advise to Switzerland I guess only such a rather homogeneous sub-sample is meaningful 
 dataregNoNA <- filter(dataregNoNA, ctry_leg_owner %in% c("AT", "CH", "IL", "DK", "BE", "FI", "CA", "US", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG"))  
-dataregNoNA <- dplyr::select(dataregNoNA, world_class_90, techbroad, tech_field, df_inv, num_tot_scient_log, claims_log, originality, p_year, tech_name, ctry_leg_owner, AT, CH, IL, DK, BE, FI, CA, US, SE, IT, KR, GB, DE, FR, JP, NO, ES, NL, IE, SG, CN)  
+dataregNoNA <- dplyr::select(dataregNoNA, world_class_90, techbroad, tech_field, df_inv, num_tot_scient_log, claims_log, originality, p_year, tech_name, ctry_leg_owner, uni, uni_priv, AT, CH, IL, DK, BE, FI, CA, US, SE, IT, KR, GB, DE, FR, JP, NO, ES, NL, IE, SG, CN)  
 
 
 
@@ -148,8 +144,9 @@ model_estim <- function(t_field, years, data, model_form, model_name = "no_name"
 ######################################
 # A. Results for each broad tech field
 ######################################
+left_var  <- c("world_class_90")
 right_var <- c("df_inv", "num_tot_scient_log", "claims_log", "originality", "p_year", "tech_name", "tech_name:p_year", "ctry_leg_owner:p_year")
-m_1 <- as.formula(paste("world_class_90", paste(paste(c(right_var), collapse = "+")), sep=" ~ "))
+m_1 <- as.formula(paste(left_var, paste(paste(c(right_var), collapse = "+")), sep=" ~ "))
 
 by_tech <- do.call(rbind, lapply(unique(dataregNoNA$techbroad), function(x) model_estim(x, years = seq(1990, 2015), data = dataregNoNA, model_form = m_1, model_name = x)))
 
@@ -173,10 +170,11 @@ dwplot(by_tech_plot,
 #####################################
 # B. By tech and partnering country #
 #####################################
-right_var <- c("df_inv", "f_inv", "num_tot_scient_log", "claims_log", "originality", "p_year", "tech_name", "tech_name:p_year", "ctry_leg_owner:p_year",
-               paste0(c("AT", "IL", "DK", "BE", "FI", "CA", "US", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG", "CN", "CH"), ":f_inv"),
+left_var  <- c("world_class_90")
+right_var <- c("df_inv", "num_tot_scient_log", "claims_log", "originality", "p_year", "tech_name", "tech_name:p_year", "ctry_leg_owner:p_year",
+               #"f_inv", paste0(c("AT", "IL", "DK", "BE", "FI", "CA", "US", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG", "CN", "CH"), ":f_inv"),
                paste0(c("AT", "IL", "DK", "BE", "FI", "CA", "US", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG", "CN", "CH"), ":df_inv"))
-m_1 <- as.formula(paste("world_class_90", paste(paste(c(right_var), collapse = "+")), sep=" ~ "))
+m_1 <- as.formula(paste(left_var, paste(paste(c(right_var), collapse = "+")), sep=" ~ "))
 
 by_tech_ctry <- do.call(rbind, lapply(unique(dataregNoNA$techbroad), function(x) model_estim(x, years = seq(1990, 2015), data = dataregNoNA, model_form = m_1, model_name = x)))
 
@@ -185,7 +183,7 @@ by_tech_ctry_plot <- by_tech_ctry %>%
   filter(term %in% c(
     # "domestic", "domestic and foreign", "foreign", 
     # "Size of the team", "Number of claims", "University participation", 
-    paste0("f_inv:", c("CA", "US", "IT", "KR", "GB", "DE", "FR", "JP", "CN", "CH")),
+    # paste0("f_inv:", c("CA", "US", "IT", "KR", "GB", "DE", "FR", "JP", "CN", "CH")),
     paste0("df_inv:", c("CA", "US", "IT", "KR", "GB", "DE", "FR", "JP","CN", "CH"))))        
 
 dwplot(by_tech_ctry_plot,
@@ -201,18 +199,19 @@ dwplot(by_tech_ctry_plot,
 ############################
 # C. By partnering country #
 ############################
-right_var <- c("df_inv", "f_inv", "num_tot_scient_log", "claims_log", "originality", "p_year", "tech_name:p_year", "ctry_leg_owner:p_year",
-               paste0(c("AT", "IL", "DK", "BE", "FI", "CA", "US", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG", "CN", "CH"), ":f_inv"),
+left_var  <- c("world_class_90")
+right_var <- c("df_inv", "num_tot_scient_log", "claims_log", "originality", "p_year", "tech_name:p_year", "ctry_leg_owner:p_year",
+               # "f_inv", paste0(c("AT", "IL", "DK", "BE", "FI", "CA", "US", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG", "CN", "CH"), ":f_inv"),
                paste0(c("AT", "IL", "DK", "BE", "FI", "CA", "US", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG", "CN", "CH"), ":df_inv"))
-m_1 <- as.formula(paste("world_class_90", paste(paste(c(right_var), collapse = "+")), sep=" ~ "))
+m_1 <- as.formula(paste(left_var, paste(paste(c(right_var), collapse = "+")), sep=" ~ "))
 
-by_ctry <- model_estim(unique(dataregNoNA$techbroad), years = seq(1990, 2015), data = dataregNoNA, model_form = m_1, model_name = "by_ctry")
+by_ctry <- model_estim(unique(dataregNoNA$techbroad), years = seq(1990, 2015), data = filter(dataregNoNA), model_form = m_1, model_name = "by_ctry")
 
 by_ctry_plot <- by_ctry %>%
   filter(term %in% c(
     # "domestic", "domestic and foreign", "foreign", 
     # "Size of the team", "Number of claims", "University participation", 
-    paste0("f_inv:", c("CA", "US", "IT", "KR", "GB", "DE", "FR", "JP", "CN", "CH")),
+    # paste0("f_inv:", c("CA", "US", "IT", "KR", "GB", "DE", "FR", "JP", "CN", "CH")),
     paste0("df_inv:", c("CA", "US", "IT", "KR", "GB", "DE", "FR", "JP","CN", "CH"))))        
 
 dwplot(by_ctry_plot,
@@ -224,3 +223,29 @@ dwplot(by_ctry_plot,
         legend.justification = c(0, 0),
         legend.background = element_rect(colour="grey80"),
         legend.title = element_blank()) 
+
+## Without US legal_owners
+left_var  <- c("world_class_90")
+right_var <- c("df_inv", "num_tot_scient_log", "claims_log", "originality", "p_year", "tech_name:p_year", "ctry_leg_owner:p_year",
+               # "f_inv", paste0(c("AT", "IL", "DK", "BE", "FI", "CA", "US", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG", "CN", "CH"), ":f_inv"),
+               paste0(c("AT", "IL", "DK", "BE", "FI", "CA", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG", "CN", "CH"), ":df_inv"))
+m_1 <- as.formula(paste(left_var, paste(paste(c(right_var), collapse = "+")), sep=" ~ "))
+
+by_ctry <- model_estim(unique(dataregNoNA$techbroad), years = seq(1990, 2015), data = filter(dataregNoNA, US != 1 & ctry_leg_owner != "US"), model_form = m_1, model_name = "by_ctry")
+by_ctry_plot <- by_ctry %>%
+  filter(term %in% c(
+    # "domestic", "domestic and foreign", "foreign", 
+    # "Size of the team", "Number of claims", "University participation", 
+    # paste0("f_inv:", c("CA", "US", "IT", "KR", "GB", "DE", "FR", "JP", "CN", "CH")),
+    paste0("df_inv:", c("CA", "IT", "KR", "GB", "DE", "FR", "JP","CN", "CH"))))        
+
+dwplot(by_ctry_plot,
+       vline = geom_vline(xintercept = 0, colour = "grey60", linetype = 2)) + # plot line at zero _behind_ coefs
+  theme_bw() + xlab("Coefficient Estimate") + ylab("") +
+  ggtitle("Quality of patents across technological fields by various factors") +
+  theme(plot.title = element_text(face="bold"),
+        legend.position = "bottom",
+        legend.justification = c(0, 0),
+        legend.background = element_rect(colour="grey80"),
+        legend.title = element_blank()) 
+ 

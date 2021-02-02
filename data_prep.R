@@ -92,7 +92,7 @@ rm(list = ls())
   inv_owner_dat <- dplyr::select(inv_owner_dat, -tech_field)
   int_collab_dat <- merge(inv_owner_dat, forcit_data2, by = "p_key")  
   
-  int_collab_dat_final <-subset(int_collab_dat, select = c("p_key", "p_year", "ipc_main", "tech_field", "ctry_inventor", "ctry_leg_owner", "world_class_50", "world_class_75", "world_class_90", "world_class_99", "claims", "tri_pat_fam", "originality", "radicalness", "techbroad", "uni", "uni_priv"))
+  int_collab_dat_final <-subset(int_collab_dat, select = c("p_key", "p_year", "ipc_main", "tech_field", "ctry_inventor", "ctry_leg_owner", "world_class_50", "world_class_75", "world_class_90", "world_class_99", "claims", "tri_pat_fam", "originality", "radicalness", "techbroad", "tech_name", "uni", "uni_priv"))
 
 # Saving data for regression
   int_collab_dat_final %>% saveRDS(file = "/scicore/home/weder/GROUP/Innovation/01_patent_data/created data/collab_reg_data.rds")
