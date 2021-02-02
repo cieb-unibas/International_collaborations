@@ -1,5 +1,5 @@
 print("International collaborations and quality of patents")
-# Last modified 30.11.2020 / DF
+# Last modified 01.02.2020 / DF
 
 require(data.table)
 require(plyr)
@@ -30,13 +30,19 @@ rm(list = ls())
 # Making var containing all inventor countries by patents
   inventors_data3 <- inventors_data2 %>%
                       group_by(p_key, patent_id) %>%
-                      mutate(ctry_inventor = paste(ctry_inv, collapse = "_")) 
+                      mutate(ctry_inventor = paste(ctry_inv, collapse = "_")) %>%
+                      mutate(regio_inventor = paste(regio_inv, collapse = "_"))
 
 # Keeping only first observation
   inventors_data_final <- inventors_data3 %>% 
                         group_by(p_key, patent_id) %>% 
                         slice(1) %>%
                         ungroup()
+  
+  # drop data on region of inventor
+  
+  inventors_data_final=subset(inventors_data_final,select=-c(regio_inv,regio_inventor))
+  
 
 # Preparing legal owner data
 ################################################################################
@@ -58,8 +64,8 @@ rm(list = ls())
 # Preparing citation data
 ################################################################################
   forcit_data <- readRDS("/scicore/home/weder/GROUP/Innovation/01_patent_data/created data/pat_dat.rds")
-  forcit_data2 <-subset(forcit_data, select = c("p_key","pub_nbr_oecd", "world_class_90", "world_class_99"))
-  colnames(forcit_data2) <- c("p_key", "patent_id", "world_class_90", "world_class_99")
+  forcit_data2 <-subset(forcit_data, select = c("p_key","pub_nbr_oecd", "world_class_50", "world_class_75", "world_class_90", "world_class_99"))
+  colnames(forcit_data2) <- c("p_key", "patent_id", "world_class_50", "world_class_75", "world_class_90", "world_class_99")
   
 # Merging all three datasets together
 ################################################################################
@@ -67,7 +73,7 @@ rm(list = ls())
   inv_owner_dat <- merge(inventors_data_final, owner_data_final)  
   int_collab_dat <- merge(inv_owner_dat, forcit_data2)  
   
-  int_collab_dat_final <-subset(int_collab_dat, select = c("p_key","patent_id", "ipc_main", "tech_field", "ctry_inventor", "ctry_leg_owner", "world_class_90", "world_class_99"))
+  int_collab_dat_final <-subset(int_collab_dat, select = c("p_key","patent_id", "ipc_main", "tech_field", "ctry_inventor", "ctry_leg_owner", "world_class_50", "world_class_75", "world_class_90", "world_class_99"))
   
  #SAVING THE FINAL DATASET
   saveRDS(object=int_collab_dat_final, file = "/scicore/home/weder/GROUP/Innovation/01_patent_data/created data/int_collab_dat_final.rds")

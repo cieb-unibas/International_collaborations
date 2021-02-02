@@ -20,7 +20,7 @@ rm(list = ls())
 
 inv_data <- readRDS("/scicore/home/weder/GROUP/Innovation/01_patent_data/created data/int_collab_dat_final.rds")
 colnames(inv_data)
-inv_data <- subset(inv_data, select = c("p_key", "patent_id", "ipc_main", "tech_field", "ctry_inventor", "world_class_90", "world_class_99"))
+inv_data <- subset(inv_data, select = c("p_key", "patent_id", "ipc_main", "tech_field", "ctry_inventor", "world_class_50", "world_class_75", "world_class_90", "world_class_99"))
 
 # Isolating years and uni indicator for each patent from another data set and leave only one observation per patent
 owner_data <- readRDS("/scicore/home/weder/GROUP/Innovation/01_patent_data/created data/firm_reg.rds")
@@ -49,7 +49,8 @@ pyear_data <- subset(pyear_data, select = c("p_key", "patent_id", "p_year", "ctr
 
 # Merging years with main sample
 inv_data_year <- merge(pyear_data, inv_data)
-colnames(inv_data_year) <- c("p_key", "patent_id", "ctry_leg_owner", "p_year", "uni" ,"ipc_main","tech_field","ctry_inventor","world_class_90","world_class_99")
+colnames(inv_data_year)
+colnames(inv_data_year) <- c("p_key", "patent_id", "p_year", "ctry_leg_owner", "uni" ,"ipc_main","tech_field","ctry_inventor", "world_class_50", "world_class_75", "world_class_90","world_class_99")
 
 # Saving data where a patent is separately visible for each legal owner country (in case of more than 1 owners)
 saveRDS(object=inv_data_year, file = "/scicore/home/weder/GROUP/Innovation/01_patent_data/created data/inv_data_year.rds")
