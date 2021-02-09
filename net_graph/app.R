@@ -25,7 +25,7 @@ network_data_foreign <- readRDS("/scicore/home/weder/GROUP/Innovation/01_patent_
   network_data_foreign$origin <- "CH"  
 
 # Drooping countries with less than 1%
-  network_data_foreign <- filter(network_data_foreign, share_foreign > 0.5)
+  network_data_foreign <- filter(network_data_foreign, share_foreign > 1)
   
   ui <- fluidPage(
     
@@ -57,13 +57,27 @@ network_data_foreign <- readRDS("/scicore/home/weder/GROUP/Innovation/01_patent_
       edges <- subset(dr(), select = c("ctry_inventor" , "origin","share_foreign"))
       colnames(edges) <- c("from", "to", "value")
       
+      edges$title <- paste0('Share inventors:', round(edges$value, 1),'%')
+      
       #Creating Network Plot    
       visNetwork(nodes, edges, width = "100%")%>%
+        visIgraphLayout(layout = "layout_nicely") %>%
+        visEvents(type = "once", startStabilizing = "function() {
+              this.moveTo({scale:0.5})}") %>%
+        visPhysics(stabilization = FALSE) %>%
+        visNodes(
+          fixed = TRUE,
+          shape = "dot",
+          color = "grey80",
+          shadow = list(enabled = F, size = 20)
+        ) %>%
         visEdges(
           value="value",
           shadow = FALSE,
-          selfReferenceSize = F
-        )
+          selfReferenceSize = F,
+          smooth = FALSE
+        ) %>%
+      visOptions(highlightNearest = list(enabled = F, degree = 1, hover = T))
     })
     
   }

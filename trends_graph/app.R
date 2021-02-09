@@ -27,8 +27,11 @@ trends_data_graph <- readRDS("/scicore/home/weder/GROUP/Innovation/01_patent_dat
     
     plotlyOutput("coolplot"),
     selectizeInput("techbroad", "Choose a technology field",
-                   options = list(placeholder = 'select technology'),
-                   choices = c(trends_data_graph$techbroad), multiple = TRUE)
+                   options = list(placeholder = 'select a technology'),
+                   choices = c(trends_data_graph$techbroad), multiple = TRUE, selected = "Chemistry"),
+    selectizeInput("ctry_leg_owner", "Choose a country",
+                   options = list(placeholder = 'select a country'),
+                   choices = c(trends_data_graph$ctry_leg_owner), multiple = TRUE, selected = list("CH", "DE", "US"))
     
   )
   
@@ -39,49 +42,52 @@ trends_data_graph <- readRDS("/scicore/home/weder/GROUP/Innovation/01_patent_dat
       dr <- reactive({
         filtered <- trends_data_graph %>%
           filter(
-            techbroad %in% input$techbroad
+            techbroad %in% input$techbroad,
+            ctry_leg_owner %in% input$ctry_leg_owner
           )
       }) 
       
       output$coolplot <- renderPlotly({
         
 
-  plot_ly(
-    dr(), x = ~share_foreign, y = ~share_wc,
-    frame=~interval,
-    color=~owner_ctry, type = "scatter",
-    mode="markers", size=~totnumber_wcpat,
-    marker = list(symbol = 'circle', sizemode = 'diameter',
-                  line = list(width = 2, color = '#FFFFFF'), opacity=0.3),
-    text = ~paste(sep='','<br>Share of foreign inventors:', round(`share_foreign`,1),'%',
-                  '<br>Share of WC patents:',round(`share_wc`,1),'%',
-                  '%', '<br>Country owner:', `owner_ctry`)) %>%
-    layout(
-      title="Foreign collaboration and citation",
-      
-      xaxis = list(title = '% Foreign scientists',
-                   gridcolor = 'rgb(255, 255, 255)',
-                   
-                   range=c(0,35),
-                   zerolinewidth = 1,
-                   ticklen = 5,
-                   gridwidth = 2),
-      yaxis = list(title = '% World class patents',
-                   gridcolor = 'rgb(255, 255, 255)',
-                   range=c(0,30),
-                   zerolinewidth = 1,
-                   ticklen = 5,
-                   gridwith = 2),
-      paper_bgcolor = 'rgb(243, 243, 243)',
-      plot_bgcolor = 'rgb(243, 243, 243)'
-    )%>%
-    animation_opts(
-      2000, redraw = FALSE
-    ) %>%
-
-    animation_slider(
-      currentvalue = list(prefix = "YEAR ", font = list(color="red"))
-        )
+fig <- plot_ly(
+          dr(), x = ~foreign, y = ~world_class_90,
+          frame=~interval,
+          color=~`ctry_leg_owner`, type = "scatter",
+          mode="markers", size=0.1,
+          marker = list(symbol = 'circle', sizemode = 'diameter', opacity=0.4),
+          text = ~paste(sep='','<br>Share foreign:', round(`foreign`,1),'%',
+                        '<br>Share WC patents:',round(`world_class_90`,1),
+                        '%', '<br>Owner:', `ctry_leg_owner`)) %>%
+          layout(
+            title="Foreign collaboration and citation",
+            
+            xaxis = list(title = '% with foreign inventors',
+                         gridcolor = 'rgb(255, 255, 255)',
+                         
+                         range=c(0,80),
+                         zerolinewidth = 1,
+                         ticklen = 5,
+                         gridwidth = 2),
+            yaxis = list(title = '% world class patents',
+                         gridcolor = 'rgb(255, 255, 255)',
+                         range=c(0,20),
+                         zerolinewidth = 1,
+                         ticklen = 5,
+                         gridwith = 2),
+            paper_bgcolor = 'rgb(243, 243, 243)',
+            plot_bgcolor = 'rgb(243, 243, 243)'
+          )%>%
+          animation_opts(
+            2000, redraw = FALSE
+          ) %>%
+          
+          animation_slider(
+            currentvalue = list(prefix = "YEAR ", font = list(color="black"))
+          )
+    fig <- fig %>% layout(title = 'Foreign collaboration and citation',
+                      xaxis = list(showgrid = FALSE),
+                      yaxis = list(showgrid = FALSE))
       })
     })  
   }

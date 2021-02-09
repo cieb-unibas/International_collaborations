@@ -1,5 +1,5 @@
 print("International collaborations and quality of patents COOPERATION TRENDS GRAPH")
-# Last modified 03.12.2020 / DF
+# Last modified 09.02.2021 / DF
 
 require(data.table)
 require(plyr)
@@ -59,30 +59,35 @@ library(tidyverse)
 
 trends_data_graph <- readRDS("/scicore/home/weder/GROUP/Innovation/01_patent_data/created data/trends_data_graph.rds")
 
+trends_data_graph <- filter(trends_data_graph, techbroad %in% c("Chemistry"))
+
+#trends_data_graph <- trends_data_graph %>% 
+# filter(interval =="1990-1995" | interval =="1995-2000" | interval =="2000-2005" | interval =="2005-2010" | interval =="2010-2015")
+
 
 r3 <- plot_ly(
-  trends_data_graph, x = ~share_foreign, y = ~share_wc,
+  trends_data_graph, x = ~foreign, y = ~world_class_75,
   frame=~interval,
-  color=~`owner_ctry`, type = "scatter",
-  mode="markers", size=~share_wc,
+  color=~`ctry_leg_owner`, type = "scatter",
+  mode="markers", size=~world_class_75,
   marker = list(symbol = 'circle', sizemode = 'diameter',
                 line = list(width = 2, color = '#FFFFFF'), opacity=0.4),
-  text = ~paste(sep='','share_foreign:', round(`share_foreign`,1),'%',
-                '<br>Share WC patents:',round(`share_wc`,1),'%',
-                '%', '<br>Owner:', `owner_ctry`)) %>%
+  text = ~paste(sep='','foreign:', round(`foreign`,1),'%',
+                '<br>Share WC patents:',round(`world_class_75`,1),'%',
+                '%', '<br>Owner:', `ctry_leg_owner`)) %>%
   layout(
     title="Foreign collaboration and citation",
     
-    xaxis = list(title = '% Foreign scientists',
+    xaxis = list(title = '% with foreign inventors',
                  gridcolor = 'rgb(255, 255, 255)',
                  
                  range=c(0,80),
                  zerolinewidth = 1,
                  ticklen = 5,
                  gridwidth = 2),
-    yaxis = list(title = '% World class patents',
+    yaxis = list(title = '% world class patents',
                  gridcolor = 'rgb(255, 255, 255)',
-                 range=c(0,30),
+                 range=c(0,25),
                  zerolinewidth = 1,
                  ticklen = 5,
                  gridwith = 2),
