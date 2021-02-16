@@ -45,17 +45,17 @@ datareg$num_tot_scient <- datareg$num_tot_scient+1
  datareg<-datareg %>%
    filter(p_year >=1990 & p_year <2015)
  
- #setDT(datareg)[p_year>=1980 & p_year<1985, interval := "1980-1985"]
- #setDT(datareg)[p_year>=1985 & p_year<1990, interval := "1985-1990"]
- setDT(datareg)[p_year>=1990 & p_year<1995, interval := "1990-1995"]
- setDT(datareg)[p_year>=1995 & p_year<2000, interval := "1995-2000"]
- setDT(datareg)[p_year>=2000 & p_year<2005, interval := "2000-2005"]
- setDT(datareg)[p_year>=2005 & p_year<2010, interval := "2005-2010"]
- setDT(datareg)[p_year>=2010 & p_year<2015, interval := "2010-2015"]
+ # #setDT(datareg)[p_year>=1980 & p_year<1985, interval := "1980-1985"]
+ # #setDT(datareg)[p_year>=1985 & p_year<1990, interval := "1985-1990"]
+ # setDT(datareg)[p_year>=1990 & p_year<1995, interval := "1990-1995"]
+ # setDT(datareg)[p_year>=1995 & p_year<2000, interval := "1995-2000"]
+ # setDT(datareg)[p_year>=2000 & p_year<2005, interval := "2000-2005"]
+ # setDT(datareg)[p_year>=2005 & p_year<2010, interval := "2005-2010"]
+ # setDT(datareg)[p_year>=2010 & p_year<2015, interval := "2010-2015"]
  
 
 # Use only subset of industrial countries as patent owners -> for policy advise to Switzerland I guess only such a rather homogeneous sub-sample is meaningful 
- datareg <- filter(datareg, ctry_leg_owner %in% c("AT", "CH", "IL", "DK", "BE", "FI", "CA", "US", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG"))  
+  datareg <- filter(datareg, ctry_leg_owner %in% c("AT", "CH", "IL", "DK", "BE", "FI", "CA", "US", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG"))  
 
 # Aggregating data (collapsing) to technology, year and owner country and taking means
  #datareg_agregated <- datareg %>%
@@ -63,7 +63,7 @@ datareg$num_tot_scient <- datareg$num_tot_scient+1
  #summarise_at(vars("foreign", "world_class_90"), mean, na.rm = TRUE) 
  
  datareg_agregated <- datareg %>%
-    group_by(techbroad, ctry_leg_owner, interval) %>% 
+    group_by(techbroad, ctry_leg_owner) %>% 
     summarise_at(vars("foreign", "world_class_90"), mean, na.rm = TRUE) 
  
  
