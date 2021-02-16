@@ -34,11 +34,20 @@ datareg$num_tot_scient <- datareg$num_tot_scient+1
 # Variable capturing number of domestic scientist involved
  datareg$num_dom_scient <- str_count(datareg$ctry_inventor, datareg$ctry_leg_owner) 
 
+ # Variable capturing number of domestic scientist involved
+ datareg$num_US_scient <- str_count(datareg$ctry_inventor, "US") 
+ 
 # Calculate "foreign" scientists
  datareg$num_for_scient <- datareg$num_tot_scient-datareg$num_dom_scient
 
+ # Calculate share of "foreign" scientists
+ datareg$share_foreign <- datareg$num_for_scient/datareg$num_tot_scient
+ 
 # Create "foreign scientists" dummy
  datareg$foreign <- ifelse(datareg$num_for_scient>0,1,0)
+ 
+ # Create "foreign scientists" dummy
+ datareg$foreignUS <- ifelse(datareg$num_US_scient>0,1,0)
  
 ## Create time periods
  # Filter data, Year is filtered from 1980 to 2015 and creating 5 year intervals
@@ -55,7 +64,7 @@ datareg$num_tot_scient <- datareg$num_tot_scient+1
  
 
 # Use only subset of industrial countries as patent owners -> for policy advise to Switzerland I guess only such a rather homogeneous sub-sample is meaningful 
-  datareg <- filter(datareg, ctry_leg_owner %in% c("AT", "CH", "IL", "DK", "BE", "FI", "CA", "US", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG"))  
+ #datareg <- filter(datareg, ctry_leg_owner %in% c("AT", "CH", "IL", "DK", "BE", "FI", "CA", "US", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG"))  
 
 # Aggregating data (collapsing) to technology, year and owner country and taking means
  #datareg_agregated <- datareg %>%
@@ -63,11 +72,11 @@ datareg$num_tot_scient <- datareg$num_tot_scient+1
  #summarise_at(vars("foreign", "world_class_90"), mean, na.rm = TRUE) 
  
  datareg_agregated <- datareg %>%
-    group_by(techbroad, ctry_leg_owner) %>% 
-    summarise_at(vars("foreign", "world_class_90"), mean, na.rm = TRUE) 
+    group_by(ctry_leg_owner) %>% 
+    summarise_at(vars("foreignUS", "world_class_90"), mean, na.rm = TRUE) 
  
  
- datareg_agregated$foreign <- datareg_agregated$foreign*100 
+ datareg_agregated$foreignUS <- datareg_agregated$foreignUS*100 
  datareg_agregated$world_class_90 <- datareg_agregated$world_class_90*100 
  
 
