@@ -21,14 +21,13 @@ rm(list = ls())
 
 trends_data_graph <- readRDS("/scicore/home/weder/GROUP/Innovation/01_patent_data/created data/trends_data_graph.rds")
 
+trends_data_graph <- filter(trends_data_graph, foreignUS > 0)
+trends_data_graph <- filter(trends_data_graph, world_class_90 > 0)
 
-  
+
   ui <- fluidPage(
     
-    plotlyOutput("coolplot"),
-    selectizeInput("techbroad", "Choose a technology field",
-                   options = list(placeholder = 'select technology'),
-                   choices = c(trends_data_graph$techbroad), multiple = TRUE)
+    plotlyOutput("coolplot")
     
   )
   
@@ -37,51 +36,16 @@ trends_data_graph <- readRDS("/scicore/home/weder/GROUP/Innovation/01_patent_dat
     output$coolplot <- renderPlotly({
       
       dr <- reactive({
-        filtered <- trends_data_graph %>%
-          filter(
-            techbroad %in% input$techbroad
-          )
+        filtered <- trends_data_graph 
       }) 
       
       output$coolplot <- renderPlotly({
         
 
-  plot_ly(
-    dr(), x = ~share_foreign, y = ~share_wc,
-    frame=~interval,
-    color=~owner_ctry, type = "scatter",
-    mode="markers", size=~totnumber_wcpat,
-    marker = list(symbol = 'circle', sizemode = 'diameter',
-                  line = list(width = 2, color = '#FFFFFF'), opacity=0.3),
-    text = ~paste(sep='','<br>Share of foreign inventors:', round(`share_foreign`,1),'%',
-                  '<br>Share of WC patents:',round(`share_wc`,1),'%',
-                  '%', '<br>Country owner:', `owner_ctry`)) %>%
-    layout(
-      title="Foreign collaboration and citation",
-      
-      xaxis = list(title = '% Foreign scientists',
-                   gridcolor = 'rgb(255, 255, 255)',
-                   
-                   range=c(0,35),
-                   zerolinewidth = 1,
-                   ticklen = 5,
-                   gridwidth = 2),
-      yaxis = list(title = '% World class patents',
-                   gridcolor = 'rgb(255, 255, 255)',
-                   range=c(0,30),
-                   zerolinewidth = 1,
-                   ticklen = 5,
-                   gridwith = 2),
-      paper_bgcolor = 'rgb(243, 243, 243)',
-      plot_bgcolor = 'rgb(243, 243, 243)'
-    )%>%
-    animation_opts(
-      2000, redraw = FALSE
-    ) %>%
-
-    animation_slider(
-      currentvalue = list(prefix = "YEAR ", font = list(color="red"))
-        )
+fig <- ggplot(dr(), aes(x = foreignUS, y = world_class_90)) + 
+    geom_point(aes(color = ctry_leg_owner), alpha = 0.5) +
+     theme(legend.position = "none") +
+  geom_abline() +  xlim(0, 30) +  ylim(0, 30)
       })
     })  
   }
