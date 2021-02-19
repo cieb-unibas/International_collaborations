@@ -1,0 +1,73 @@
+---
+output:
+  html_document:
+    self_contained: false
+    theme: null
+    css: "https://innoscape.de/internat_collab/style.css"
+    highlight: null
+    mathjax: null
+---
+<head>
+<script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.2.1/math.min.js"></script>
+</head>
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" type="text/css" rel="stylesheet">
+<link rel="stylesheet" href="style.css" type="text/css" />
+
+
+<!-- START with text -->
+
+## **Working Title: International collaboration in R&D**
+<br>
+
+*March 2021* by <a href="https://wwz.unibas.ch/de/personen/dragan-filimonovic/" target = "_blank">Dragan Filimonovic</a> and <a href="https://wwz.unibas.ch/de/personen/christian-rutzer/" target = "_blank">Christian Rutzer</a> 
+<br>
+
+![](){width=100%} 
+
+<a href="XXX" target = "_blank">XXX | XXX</a> 
+
+<br>
+
+**ABSTRACT** 
+
+ 
+
+<br>
+
+<hr class="hr_red">
+#### **Figure 1: XXX**
+<iframe width="100%" height="480" scrolling="no" frameBorder="0" style="overflow: hidden" src="XXX">
+<p>Your browser does not support iframes</p>
+</iframe>
+<span style="font-size:0.8em">*Source: The data used for this plot is available on <a href= XXX target = “_blank”>GitHub</a>.*</span>
+
+
+<br>
+
+<div class=bloc_div>
+<blockquote>***TEST***</blockquote>
+</div>
+<br>
+
+<hr class="hr_red">
+#### **Figure 2: XXX**
+```{r, echo=FALSE}
+# htmltools::includeHTML("xxx.html")
+```
+<span style="font-size:0.8em">*Source: CIEBs’ own estimations based on data from the <a href=https://www.patentsview.org/download/ target = “_blank”>USPTO</a> and the <a href=https://stats.oecd.org/index.aspx?queryid=79486# target = “_blank”>OECD</a>. We use information for the period 2005-2015 and aggregate the data of this 10-year period to smooth out yearly fluctuations. The data used for this plot is available on <a href= https://github.com/cieb-unibas/female_inventors/tree/main/Data target = “_blank”>GitHub</a>.*</span>
+
+<br>
+
+### **Section title**
+<br>
+
+**Are you interested in** XXX Then check out our article <a href=XXX target=”_blank”> XXX</a>.
+
+<br>
+
+<span style="font-size:0.8em">*This report was written using <a href = https://rmarkdown.rstudio.com/ target = “_blank”>R Markdown</a> and <a href = https://shiny.rstudio.com/ target = “_blank”>R shiny</a>. Data and code to reproduce the figures presented in this article are available on <a href=ADDGITHUBLINK="_blank"> ADDGITHUBLINK </a>.*</span>
+<br>
+<br>
+<br>
+<br>
