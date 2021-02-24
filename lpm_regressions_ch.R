@@ -119,7 +119,7 @@ dataregNoNA <- mutate(dataregNoNA, time = case_when(p_year %in% seq(1990, 1994, 
                                                     p_year %in% seq(2010, 2015, 1) ~ "2010_2015"))
 
 ## Create country dummy for rest
-dataregNoNA <- mutate(dataregNoNA, REST = ifelse(AT + CH + IL + DK + BE + FI + CA + US + SE + IT + KR + GB + DE + FR + JP + NO + ES + NL + IE + SG + CN == 0, 1, 0))
+dataregNoNA <- mutate(dataregNoNA, REST = ifelse(AT + CH + IL + DK + BE + FI + CA + US + SE + IT + KR + GB + DE + FR + JP + NO + ES + NL + IE + SG + CN == 0 & df_inv == 1, 1, 0))
 
 # Saving data for regression
 dataregNoNA %>% saveRDS(file = "/scicore/home/weder/GROUP/Innovation/01_patent_data/created data/datareg_ch.rds")
