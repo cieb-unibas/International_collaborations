@@ -187,8 +187,9 @@ dwplot(by_tech_plot,
 ############################
 # B. By partnering country #
 ############################
+dataregNoNA<-mutate(dataregNoNA, p_year=as.factor(p_year))
 left_var  <- c("world_class_90")
-right_var <- c("df_inv", "claims_log", "originality", "num_tot_scient_log",
+right_var <- c("df_inv", "claims_log", "originality", "num_for_scient_log",
                # "f_inv", paste0(c("AT", "IL", "DK", "BE", "FI", "CA", "US", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG", "CN", "CH"), ":f_inv"),
                paste0(c("AT", "IL", "DK", "BE", "FI", "CA", "US", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG", "CN", "CH", "REST"), ":df_inv"))
 fe        <- c("p_year + tech_name + tech_name^p_year + ctry_leg_owner + ctry_leg_owner^p_year")
@@ -276,13 +277,14 @@ dwplot(by_tech_ctry_plot,
 ###########################
 left_var  <- c("world_class_90")
 
-right_var <- c("num_tot_scient_log", "claims_log", "originality", "df_inv",
+right_var <- c("num_for_scient_log", "claims_log", "originality", "df_inv",
                # "f_inv", paste0(c("AT", "IL", "DK", "BE", "FI", "CA", "US", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG", "CN", "CH"), ":f_inv"),
                paste0(c("AT", "IL", "DK", "BE", "FI", "CA", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG", "CN", "US", "REST"), ":df_inv"))
 fe        <- c("p_year + tech_name + tech_name^p_year")
 m_1 <- as.formula(paste(left_var, paste(paste(c(right_var), collapse = "+"), "|", fe), sep=" ~ "))
 
 by_ctry <- model_estim(unique(dataregNoNA$techbroad), years = seq(1990, 2015), data = filter(dataregNoNA, ctry_leg_owner == "CH"), model_form = m_1, model_name = "by_ctry", cluster_level = "tech_name")
+
 by_ctry_plot <- by_ctry %>%
   filter(term %in% c(
     # "domestic", "domestic and foreign", "foreign", 

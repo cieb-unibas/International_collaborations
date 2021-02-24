@@ -14,6 +14,7 @@ library(splitstackshape)
 library(stringr)
 library(dotwhisker)
 library(broom)
+require(foreign)
 rm(list = ls())
 
 datareg <- readRDS("/scicore/home/weder/GROUP/Innovation/01_patent_data/created data/collab_reg_data.rds")
@@ -105,6 +106,7 @@ datareg$num_owners <- datareg$num_owners+1
   
   dataregNoNA <- na.exclude(datareg)
 
+  #export(dataregNoNA, "/scicore/home/weder/GROUP/Innovation/01_patent_data/created data/dataregNoNA_stata.dta")
 
 ######################################
 # A.i) Results for each broad tech field
