@@ -73,18 +73,22 @@ datareg <- cbind(datareg, inv_col)
                            # df_inv = ifelse(str_detect(ctry_inventor_clean, ctry_leg_owner) & nchar(ctry_inventor_clean) > 2, 1, 0),
                            # f_inv  = ifelse(str_detect(ctry_inventor_clean, ctry_leg_owner) != T, 1, 0))
 
-datareg <- mutate(datareg, d_inv  = ifelse(str_detect(ctry_inventor_clean, ctry_leg_owner) & nchar(ctry_inventor_clean) == 2, 1, 0),
-                  df_inv = ifelse(str_detect(ctry_inventor_clean, ctry_leg_owner) & nchar(ctry_inventor_clean) > 2 | str_detect(ctry_inventor_clean, ctry_leg_owner) != T, 1, 0))
+#CHANGED************** 
+#datareg <- mutate(datareg, d_inv  = ifelse(str_detect(ctry_inventor_clean, ctry_leg_owner) & nchar(ctry_inventor_clean) == 2, 1, 0),
+#df_inv = ifelse(str_detect(ctry_inventor_clean, ctry_leg_owner) & nchar(ctry_inventor_clean) > 2 | str_detect(ctry_inventor_clean, ctry_leg_owner) != T, 1, 0))
 
 # Variable capturing number of scientist involved
-  datareg$num_tot_scient <- str_count(datareg$ctry_inventor, '_')
-  datareg$num_tot_scient <- datareg$num_tot_scient+1
+datareg$num_tot_scient <- str_count(datareg$ctry_inventor, '_')
+datareg$num_tot_scient <- datareg$num_tot_scient+1
 
 # Variable capturing number of domestic scientist involved
-  datareg$num_dom_scient <- str_count(datareg$ctry_inventor, datareg$ctry_leg_owner)
-  
+datareg$num_dom_scient <- str_count(datareg$ctry_inventor, datareg$ctry_leg_owner)
+
 # Calculate "foreign" scientists
-  datareg$num_for_scient <- datareg$num_tot_scient-datareg$num_dom_scient
+datareg$num_for_scient <- datareg$num_tot_scient-datareg$num_dom_scient
+
+# Create "foreign scientists" dummy
+datareg$df_inv <- ifelse(datareg$num_for_scient>0,1,0)
 
 # Create "foreign scientists" dummy
   # datareg$foreign <- ifelse(datareg$num_for_scient>0,1,0)
@@ -119,7 +123,7 @@ dataregNoNA <- mutate(dataregNoNA, time = case_when(p_year %in% seq(1990, 1994, 
                                                     p_year %in% seq(2010, 2015, 1) ~ "2010_2015"))
 
 ## Create country dummy for rest
-dataregNoNA <- mutate(dataregNoNA, REST = ifelse(AT + CH + IL + DK + BE + FI + CA + US + SE + IT + KR + GB + DE + FR + JP + NO + ES + NL + IE + SG + CN == 0 & df_inv == 1, 1, 0))
+dataregNoNA <- mutate(dataregNoNA, REST = ifelse(AT + CH + IL + DK + BE + FI + CA + US + SE + IT + KR + GB + DE + FR + JP + NO + ES + NL + IE + SG + CN == 0, 1, 0))
 
 # Saving data for regression
 dataregNoNA %>% saveRDS(file = "/scicore/home/weder/GROUP/Innovation/01_patent_data/created data/datareg_ch.rds")
@@ -189,9 +193,9 @@ dwplot(by_tech_plot,
 ############################
 dataregNoNA<-mutate(dataregNoNA, p_year=as.factor(p_year))
 left_var  <- c("world_class_90")
-right_var <- c("claims_log", "originality", "num_for_scient_log",
-               # "f_inv", paste0(c("AT", "IL", "DK", "BE", "FI", "CA", "US", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG", "CN", "CH"), ":f_inv"),
-               paste0(c("AT", "IL", "DK", "BE", "FI", "CA", "US", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG", "CN", "CH", "REST")))
+right_var <- c("claims_log", "originality", "df_inv", "num_for_scient_log",
+               #"f_inv", paste0(c("AT", "IL", "DK", "BE", "FI", "CA", "US", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG", "CN", "CH"), ":f_inv"),
+               paste0(c("AT", "IL", "DK", "BE", "FI", "CA", "US", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG", "CN", "CH", "REST"), ":df_inv"))
 fe        <- c("p_year + tech_name + tech_name^p_year + ctry_leg_owner + ctry_leg_owner^p_year")
 m_1 <- as.formula(paste(left_var, paste(paste(c(right_var), collapse = "+"), "|", fe), sep=" ~ "))
 by_ctry <- model_estim(unique(dataregNoNA$techbroad), years = seq(1990, 2015), data = filter(dataregNoNA), model_form = m_1, model_name = "Overall")
@@ -200,7 +204,7 @@ by_ctry_plot <- by_ctry %>%
   filter(term %in% c(
     # "domestic", "domestic and foreign", "foreign", 
     # "Size of the team", "Number of claims", "University participation", 
-    paste0(c("CA", "US", "IT", "KR", "GB", "DE", "FR", "JP","CN", "CH", "REST"))))        
+    paste0("df_inv:", c("CA", "US", "IT", "KR", "GB", "DE", "FR", "JP","CN", "CH", "REST"))))        
 
 dwplot(by_ctry_plot,
        vline = geom_vline(xintercept = 0, colour = "grey60", linetype = 2)) + # plot line at zero _behind_ coefs
