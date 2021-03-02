@@ -19,6 +19,8 @@ library(tidyr)
 library(lmtest)
 library(sandwich)
 library(fixest)
+
+
 rm(list = ls())
 
 datareg <- readRDS("/scicore/home/weder/GROUP/Innovation/01_patent_data/created data/collab_reg_data.rds")
@@ -193,12 +195,14 @@ dwplot(by_tech_plot,
 ############################
 dataregNoNA<-mutate(dataregNoNA, p_year=as.factor(p_year))
 left_var  <- c("world_class_90")
-right_var <- c("claims_log", "originality", "df_inv", "num_for_scient_log",
+right_var <- c("claims_log", "originality", "df_inv", "num_tot_scient_log",
                #"f_inv", paste0(c("AT", "IL", "DK", "BE", "FI", "CA", "US", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG", "CN", "CH"), ":f_inv"),
                paste0(c("AT", "IL", "DK", "BE", "FI", "CA", "US", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG", "CN", "CH", "REST"), ":df_inv"))
 fe        <- c("p_year + tech_name + tech_name^p_year + ctry_leg_owner + ctry_leg_owner^p_year")
 m_1 <- as.formula(paste(left_var, paste(paste(c(right_var), collapse = "+"), "|", fe), sep=" ~ "))
-by_ctry <- model_estim(unique(dataregNoNA$techbroad), years = seq(1990, 2015), data = filter(dataregNoNA), model_form = m_1, model_name = "Overall")
+by_ctry <- model_estim(unique(dataregNoNA$techbroad), years = seq(1990, 2015), data = filter(dataregNoNA, !(ctry_leg_owner %in% c("US"))), model_form = m_1, model_name = "Overall")
+
+#by_ctry <- deltaMethod(by_ctry, paste0(c("AT", "IL", "DK", "BE", "FI", "CA", "US", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG", "CN", "CH", "REST"), ":df_inv")+"df_inv")
 
 by_ctry_plot <- by_ctry %>%
   filter(term %in% c(
