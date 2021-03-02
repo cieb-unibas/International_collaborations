@@ -281,7 +281,7 @@ dwplot(by_tech_ctry_plot,
 ###########################
 left_var  <- c("world_class_90")
 
-right_var <- c("num_for_scient_log", "claims_log", "originality",
+right_var <- c("num_for_scient_log", "claims_log", "originality", "df_inv",
                # "f_inv", paste0(c("AT", "IL", "DK", "BE", "FI", "CA", "US", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG", "CN", "CH"), ":f_inv"),
                paste0(c("AT", "IL", "DK", "BE", "FI", "CA", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG", "CN", "US", "REST")))
 fe        <- c("p_year + tech_name + tech_name^p_year")
@@ -293,7 +293,7 @@ by_ctry_plot <- by_ctry %>%
   filter(term %in% c(
     # "domestic", "domestic and foreign", "foreign", 
     # "Size of the team", "Number of claims", "University participation", 
-    paste0(c("CA", "IT", "KR", "GB", "DE", "FR", "JP","CN", "CH", "US", "REST"))))        
+    paste0(c("CA", "IT", "KR", "GB", "DE", "FR", "JP","CN", "US", "REST"))))        
 
 dwplot(by_ctry_plot,
        vline = geom_vline(xintercept = 0, colour = "grey60", linetype = 2)) + # plot line at zero _behind_ coefs
@@ -305,6 +305,38 @@ dwplot(by_ctry_plot,
         legend.background = element_rect(colour="grey80"),
         legend.title = element_blank()) 
  
+###########################
+# D. Swiss as legal_owner # *without dropping other legal owners
+###########################
+
+dataregNoNA$ch_owner <- ifelse(dataregNoNA$ctry_leg_owner=="CH",1,0)
+
+left_var  <- c("world_class_90")
+
+right_var <- c("num_for_scient_log", "claims_log", "originality", "df_inv", "ch_owner",
+               # "f_inv", paste0(c("AT", "IL", "DK", "BE", "FI", "CA", "US", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG", "CN", "CH"), ":f_inv"),
+               paste0(c("AT", "IL", "DK", "BE", "FI", "CA", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG", "CN", "US", "REST"), ":df_inv"),
+              paste0(c("AT", "IL", "DK", "BE", "FI", "CA", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG", "CN", "US", "REST"), ":df_inv:ch_owner"))
+fe        <- c("p_year + tech_name + tech_name^p_year")
+m_1 <- as.formula(paste(left_var, paste(paste(c(right_var), collapse = "+"), "|", fe), sep=" ~ "))
+
+by_ctry <- model_estim(unique(dataregNoNA$techbroad), years = seq(1990, 2015), data = dataregNoNA, model_form = m_1, model_name = "by_ctry", cluster_level = "tech_name")
+
+by_ctry_plot <- by_ctry %>%
+  filter(term %in% c(
+    # "domestic", "domestic and foreign", "foreign", 
+    # "Size of the team", "Number of claims", "University participation", 
+    paste0("df_inv:ch_owner:", c("CA", "IT", "KR", "GB", "DE", "FR", "JP","CN", "US", "REST"))))        
+
+dwplot(by_ctry_plot,
+       vline = geom_vline(xintercept = 0, colour = "grey60", linetype = 2)) + # plot line at zero _behind_ coefs
+  theme_bw() + xlab("Coefficient Estimate") + ylab("") +
+  ggtitle("Quality of patents across technological fields by various factors") +
+  theme(plot.title = element_text(face="bold"),
+        legend.position = "bottom",
+        legend.justification = c(0, 0),
+        legend.background = element_rect(colour="grey80"),
+        legend.title = element_blank()) 
 
 
 ########################
