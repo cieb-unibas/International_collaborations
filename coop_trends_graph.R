@@ -43,6 +43,9 @@ datareg$num_tot_scient <- datareg$num_tot_scient+1
  # Calculate share of "foreign" scientists
  datareg$share_foreign <- datareg$num_for_scient/datareg$num_tot_scient
  
+ # Calculate share of "US" scientists
+ datareg$share_US <- datareg$num_US_scient/datareg$num_tot_scient
+ 
 # Create "foreign scientists" dummy
  datareg$foreign <- ifelse(datareg$num_for_scient>0,1,0)
  
@@ -62,9 +65,12 @@ datareg$num_tot_scient <- datareg$num_tot_scient+1
  # setDT(datareg)[p_year>=2005 & p_year<2010, interval := "2005-2010"]
  # setDT(datareg)[p_year>=2010 & p_year<2015, interval := "2010-2015"]
  
+ # Droping US patents
+ 
+ # datareg = filter(datareg, !(ctry_leg_owner %in% c("US")))
 
 # Use only subset of industrial countries as patent owners -> for policy advise to Switzerland I guess only such a rather homogeneous sub-sample is meaningful 
- #datareg <- filter(datareg, ctry_leg_owner %in% c("AT", "CH", "IL", "DK", "BE", "FI", "CA", "US", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG"))  
+   datareg <- filter(datareg, ctry_leg_owner %in% c("AT", "US", "AU", "NZ", "CH", "IL", "DK", "BE", "FI", "CA", "US", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG", "CN", "NO", "HK"))  
 
 # Aggregating data (collapsing) to technology, year and owner country and taking means
  #datareg_agregated <- datareg %>%
@@ -73,10 +79,10 @@ datareg$num_tot_scient <- datareg$num_tot_scient+1
  
  datareg_agregated <- datareg %>%
     group_by(ctry_leg_owner) %>% 
-    summarise_at(vars("foreignUS", "world_class_90"), mean, na.rm = TRUE) 
+    summarise_at(vars("share_US", "world_class_90"), mean, na.rm = TRUE) 
  
  
- datareg_agregated$foreignUS <- datareg_agregated$foreignUS*100 
+ datareg_agregated$share_US <- datareg_agregated$share_US*100 
  datareg_agregated$world_class_90 <- datareg_agregated$world_class_90*100 
  
 
