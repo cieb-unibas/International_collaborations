@@ -204,6 +204,18 @@ by_ctry <- model_estim(unique(dataregNoNA$techbroad), years = seq(1990, 2015), d
 
 #by_ctry <- deltaMethod(by_ctry, paste0(c("AT", "IL", "DK", "BE", "FI", "CA", "US", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG", "CN", "CH", "REST"), ":df_inv")+"df_inv")
 
+by_ctry_plot <- lincom(by_ctry, c("df_inv+df_inv:CA",
+              "df_inv+df_inv:US",
+              "df_inv+df_inv:IT",
+              "df_inv+df_inv:KR",
+              "df_inv+df_inv:GB",
+              "df_inv+df_inv:DE",
+              "df_inv+df_inv:FR",
+              "df_inv+df_inv:JP",
+              "df_inv+df_inv:CN",
+              "df_inv+df_inv:CH",
+              "df_inv+df_inv:REST",),eform=TRUE)
+
 by_ctry_plot <- by_ctry %>%
   filter(term %in% c(
     # "domestic", "domestic and foreign", "foreign", 
