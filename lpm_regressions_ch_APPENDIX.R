@@ -147,39 +147,12 @@ model_estim <- function(t_field, years, data, model_form, model_name = "no_name"
 colnames(dataregNoNA)
 test_sample<-subset(dataregNoNA,select =c("p_key","p_year","ctry_inventor","ctry_leg_owner","AT", "IL", "DK", "BE", "FI", "CA", "US", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG", "CN", "CH", "REST"))
 
-# ######################################
-# # A. Results for each broad tech field
-# ######################################
-# left_var  <- c("world_class_90")
-# right_var <- c("df_inv:techbroad", "num_tot_scient_log", "claims_log", "originality", "uni_priv", "uni")
-# fe        <- c("p_year + tech_name + tech_name^p_year + ctry_leg_owner + ctry_leg_owner^p_year")
-# m_1 <- as.formula(paste(left_var, paste(paste(c(right_var), collapse = "+"), "|", fe), sep=" ~ "))
-# 
-# # by_tech <- do.call(rbind, lapply(unique(dataregNoNA$techbroad), function(x) model_estim(x, years = seq(1980, 2015), data = dataregNoNA, model_form = m_1, model_name = x)))
-# by_tech <- model_estim(unique(dataregNoNA$techbroad), years = seq(1990, 2015), data = dataregNoNA, model_form = m_1, model_name = "broad_tech")
-# 
-# # drop fe from subset for plotting    
-# by_tech_plot <- by_tech %>%
-#   filter(term %in% c(
-#     # "domestic", "domestic and foreign", "foreign", 
-#     # "Size of the team", "Number of claims", "University participation", 
-#     "df_inv", paste0("df_inv:techbroad", unique(dataregNoNA$techbroad))))        
-# 
-# dwplot(by_tech_plot,
-#        vline = geom_vline(xintercept = 0, colour = "grey60", linetype = 2)) + # plot line at zero _behind_ coefs
-#   theme_bw() + xlab("Coefficient Estimate") + ylab("") +
-#   ggtitle("Quality of patents across technological fields by various factors") +
-#   theme(plot.title = element_text(face="bold"),
-#         legend.position = "bottom",
-#         legend.justification = c(0, 0),
-#         legend.background = element_rect(colour="grey80"),
-#         legend.title = element_blank()) 
 
 ############################
-# B. By partnering country #
+# A. DEP VAR:world_class_99#
 ############################
 dataregNoNA<-mutate(dataregNoNA, p_year=as.factor(p_year))
-left_var  <- c("world_class_90")
+left_var  <- c("world_class_99")
 right_var <- c("claims_log", "originality", "num_tot_scient_log",
                #"f_inv", paste0(c("AT", "IL", "DK", "BE", "FI", "CA", "US", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG", "CN", "CH"), ":f_inv"),
                paste0(c("AT", "IL", "DK", "BE", "FI", "CA", "US", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG", "CN", "CH", "REST")))
@@ -203,127 +176,58 @@ dwplot(by_ctry_plot,
         legend.background = element_rect(colour="grey80"),
         legend.title = element_blank()) 
 
-
-#####################################
-# C. By tech and partnering country #
-#####################################
-left_var  <- c("world_class_90")
+############################
+# B. DEP VAR:world_class_75#
+############################
+dataregNoNA<-mutate(dataregNoNA, p_year=as.factor(p_year))
+left_var  <- c("world_class_75")
 right_var <- c("claims_log", "originality", "num_tot_scient_log",
                #"f_inv", paste0(c("AT", "IL", "DK", "BE", "FI", "CA", "US", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG", "CN", "CH"), ":f_inv"),
                paste0(c("AT", "IL", "DK", "BE", "FI", "CA", "US", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG", "CN", "CH", "REST")))
 fe        <- c("p_year + tech_name + ctry_leg_owner")
 m_1 <- as.formula(paste(left_var, paste(paste(c(right_var), collapse = "+"), "|", fe), sep=" ~ "))
-
-by_tech_ctry <- do.call(rbind, lapply(unique(dataregNoNA$techbroad), function(x) model_estim(x, years = seq(1990, 2015), data = filter(dataregNoNA, ctry_leg_owner %in% c("AT", "CH", "IL", "DK", "BE", "FI", "CA", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG")), model_form = m_1, model_name = x)))
-
-# drop fe from subset for plotting    
-by_tech_ctry_plot <- by_tech_ctry %>%
-  filter(term %in% c(
-    # "domestic", "domestic and foreign", "foreign", 
-    # "Size of the team", "Number of claims", "University participation", 
-    paste0(c("CA", "US", "IT", "KR", "GB", "DE", "FR", "JP","CN", "CH", "REST"))))        
-
-dwplot(by_tech_ctry_plot,
-       vline = geom_vline(xintercept = 0, colour = "grey60", linetype = 2)) + # plot line at zero _behind_ coefs
-  theme_bw() + xlab("Coefficient Estimate") + ylab("") +
-  ggtitle("Quality of patents across technological fields by various partnering countries") +
-  theme(plot.title = element_text(face="bold"),
-        legend.position = "bottom",
-        legend.justification = c(0, 0),
-        legend.background = element_rect(colour="grey80"),
-        legend.title = element_blank()) 
-
-
-
-
-
-###########################
-# D. Swiss as legal_owner #
-###########################
-left_var  <- c("world_class_90")
-
-right_var <- c("claims_log", "originality", "num_tot_scient_log",
-               #"f_inv", paste0(c("AT", "IL", "DK", "BE", "FI", "CA", "US", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG", "CN", "CH"), ":f_inv"),
-               paste0(c("AT", "IL", "DK", "BE", "FI", "CA", "US", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG", "CN", "REST")))
-fe        <- c("p_year + tech_name")
-m_1 <- as.formula(paste(left_var, paste(paste(c(right_var), collapse = "+"), "|", fe), sep=" ~ "))
-
-by_ctry <- model_estim(unique(dataregNoNA$techbroad), years = seq(1990, 2015), data = filter(dataregNoNA, ctry_leg_owner == "CH"), model_form = m_1, model_name = "by_ctry", cluster_level = "tech_name")
+by_ctry <- model_estim(unique(dataregNoNA$techbroad), years = seq(1990, 2015), data = filter(dataregNoNA, !(ctry_leg_owner %in% c("US"))), model_form = m_1, model_name = "Overall")
 
 by_ctry_plot <- by_ctry %>%
   filter(term %in% c(
     # "domestic", "domestic and foreign", "foreign", 
     # "Size of the team", "Number of claims", "University participation", 
-    paste0(c("AT", "IL", "DK", "BE", "FI", "CA", "US", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG", "CN", "REST"))))        
+    paste0(c("AT", "IL", "DK", "BE", "FI", "CA", "US", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG", "CN", "CH", "REST"))))        
 
 dwplot(by_ctry_plot,
        vline = geom_vline(xintercept = 0, colour = "grey60", linetype = 2)) + # plot line at zero _behind_ coefs
   theme_bw() + xlab("Coefficient Estimate") + ylab("") +
   ggtitle("Quality of patents across technological fields by various factors") +
   theme(plot.title = element_text(face="bold"),
-        legend.position = "bottom",
+        # legend.position = "bottom",
         legend.justification = c(0, 0),
         legend.background = element_rect(colour="grey80"),
         legend.title = element_blank()) 
- 
-# ###########################
-# # D. Swiss as legal_owner # *without dropping other legal owners
-# ###########################
-# 
-# dataregNoNA$ch_owner <- ifelse(dataregNoNA$ctry_leg_owner=="CH",1,0)
-# 
-# left_var  <- c("world_class_90")
-# 
-# right_var <- c("num_for_scient_log", "claims_log", "originality", "df_inv", "ch_owner",
-#                # "f_inv", paste0(c("AT", "IL", "DK", "BE", "FI", "CA", "US", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG", "CN", "CH"), ":f_inv"),
-#                paste0(c("AT", "IL", "DK", "BE", "FI", "CA", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG", "CN", "US", "REST"), ":df_inv"),
-#               paste0(c("AT", "IL", "DK", "BE", "FI", "CA", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG", "CN", "US", "REST"), ":df_inv:ch_owner"))
-# fe        <- c("p_year + tech_name")
-# m_1 <- as.formula(paste(left_var, paste(paste(c(right_var), collapse = "+"), "|", fe), sep=" ~ "))
-# 
-# by_ctry <- model_estim(unique(dataregNoNA$techbroad), years = seq(1990, 2015), data = dataregNoNA, model_form = m_1, model_name = "by_ctry", cluster_level = "tech_name")
-# 
-# by_ctry_plot <- by_ctry %>%
-#   filter(term %in% c(
-#     # "domestic", "domestic and foreign", "foreign", 
-#     # "Size of the team", "Number of claims", "University participation", 
-#     paste0("df_inv:ch_owner:", c("CA", "IT", "KR", "GB", "DE", "FR", "JP","CN", "US", "REST"))))        
-# 
-# dwplot(by_ctry_plot,
-#        vline = geom_vline(xintercept = 0, colour = "grey60", linetype = 2)) + # plot line at zero _behind_ coefs
-#   theme_bw() + xlab("Coefficient Estimate") + ylab("") +
-#   ggtitle("Quality of patents across technological fields by various factors") +
-#   theme(plot.title = element_text(face="bold"),
-#         legend.position = "bottom",
-#         legend.justification = c(0, 0),
-#         legend.background = element_rect(colour="grey80"),
-#         legend.title = element_blank()) 
 
-
-########################
-# E. US as legal_owner #
-########################
-left_var  <- c("world_class_90")
-
+############################
+# C. LEAVE US PATENTS#
+############################
+dataregNoNA<-mutate(dataregNoNA, p_year=as.factor(p_year))
+left_var  <- c("world_class_75")
 right_var <- c("claims_log", "originality", "num_tot_scient_log",
                #"f_inv", paste0(c("AT", "IL", "DK", "BE", "FI", "CA", "US", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG", "CN", "CH"), ":f_inv"),
-               paste0(c("AT", "IL", "DK", "BE", "FI", "CA", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG", "CN", "CH", "REST")))
-fe        <- c("p_year + tech_name")
+               paste0(c("AT", "IL", "DK", "BE", "FI", "CA", "US", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG", "CN", "CH", "REST")))
+fe        <- c("p_year + tech_name + ctry_leg_owner")
 m_1 <- as.formula(paste(left_var, paste(paste(c(right_var), collapse = "+"), "|", fe), sep=" ~ "))
+by_ctry <- model_estim(unique(dataregNoNA$techbroad), years = seq(1990, 2015), data = dataregNoNA, model_form = m_1, model_name = "Overall")
 
-by_ctry <- model_estim(unique(dataregNoNA$techbroad), years = seq(1990, 2015), data = filter(dataregNoNA, ctry_leg_owner == "US"), model_form = m_1, model_name = "by_ctry", cluster_level = NULL)
 by_ctry_plot <- by_ctry %>%
   filter(term %in% c(
     # "domestic", "domestic and foreign", "foreign", 
     # "Size of the team", "Number of claims", "University participation", 
-    paste0(c("AT", "IL", "DK", "BE", "FI", "CA", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG", "CN", "CH", "REST"))))        
+    paste0(c("AT", "IL", "DK", "BE", "FI", "CA", "US", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG", "CN", "CH", "REST"))))        
 
 dwplot(by_ctry_plot,
        vline = geom_vline(xintercept = 0, colour = "grey60", linetype = 2)) + # plot line at zero _behind_ coefs
   theme_bw() + xlab("Coefficient Estimate") + ylab("") +
   ggtitle("Quality of patents across technological fields by various factors") +
   theme(plot.title = element_text(face="bold"),
-        legend.position = "bottom",
+        # legend.position = "bottom",
         legend.justification = c(0, 0),
         legend.background = element_rect(colour="grey80"),
         legend.title = element_blank()) 

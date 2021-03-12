@@ -49,24 +49,24 @@ server <- function(input, output,session) {
     output$coolplot <- renderPlotly({
 
 fig <- plot_ly(
-  dr(), x = ~share, y = ~location, frame=~interval,
-  color=~techbroad, type = "scatter",
+  dr(), x = ~location, y = ~share, frame=~interval,
+  color=~techbroad, type = "bar",
   mode="markers", 
   text = ~paste(sep='','<br>Share of inventors:', round(`share`,1),'%',
-                '%', '<br>Location:', `location`)) %>%
+                '<br>Location:', `location`)) %>%
   layout(
     title="Foreign collaboration and citation",
     
-    xaxis = list(title = '% of inventors',
+    yaxis = list(title = '% of inventors',
                  gridcolor = 'white',
                  
-                 range=c(0,22),
-                 zerolinewidth = 1,
+                 range=c(0,20),
+                 zerolinewidth = F,
                  ticklen = 5,
                  gridwidth = 2),
-    yaxis = list(title = 'Locations',
+    xaxis = list(title = 'Locations',
                  gridcolor = 'white',
-                 zerolinewidth = 1,
+                 zerolinewidth = F,
                  type = 'location',
                  range = c('location'),
                  ticklen = 5,
@@ -79,7 +79,7 @@ fig <- plot_ly(
   ) %>%
   
   animation_slider(
-    currentvalue = list(prefix = "Period", font = list(color="red"))
+    currentvalue = list(prefix = "", font = list(color="black"))
   )
 
 fig <- fig %>% layout(title = 'Locations of Swiss patent inventors',
