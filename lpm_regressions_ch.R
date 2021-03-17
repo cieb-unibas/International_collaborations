@@ -183,7 +183,7 @@ left_var  <- c("world_class_90")
 right_var <- c("claims_log", "originality", "num_tot_scient_log",
                #"f_inv", paste0(c("AT", "IL", "DK", "BE", "FI", "CA", "US", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG", "CN", "CH"), ":f_inv"),
                paste0(c("AT", "IL", "DK", "BE", "FI", "CA", "US", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG", "CN", "CH", "REST")))
-fe        <- c("p_year + tech_name + ctry_leg_owner")
+fe        <- c("p_year + tech_name + ctry_leg_owner + ctry_leg_owner^tech_name + ctry_leg_owner^p_year")
 m_1 <- as.formula(paste(left_var, paste(paste(c(right_var), collapse = "+"), "|", fe), sep=" ~ "))
 by_ctry <- model_estim(unique(dataregNoNA$techbroad), years = seq(1990, 2015), data = filter(dataregNoNA, !(ctry_leg_owner %in% c("US"))), model_form = m_1, model_name = "Overall")
 
@@ -211,7 +211,7 @@ left_var  <- c("world_class_90")
 right_var <- c("claims_log", "originality", "num_tot_scient_log",
                #"f_inv", paste0(c("AT", "IL", "DK", "BE", "FI", "CA", "US", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG", "CN", "CH"), ":f_inv"),
                paste0(c("AT", "IL", "DK", "BE", "FI", "CA", "US", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG", "CN", "CH", "REST")))
-fe        <- c("p_year + tech_name + ctry_leg_owner")
+fe        <- c("p_year + tech_name + ctry_leg_owner + ctry_leg_owner^tech_name + ctry_leg_owner^p_year")
 m_1 <- as.formula(paste(left_var, paste(paste(c(right_var), collapse = "+"), "|", fe), sep=" ~ "))
 
 by_tech_ctry <- do.call(rbind, lapply(unique(dataregNoNA$techbroad), function(x) model_estim(x, years = seq(1990, 2015), data = filter(dataregNoNA, ctry_leg_owner %in% c("AT", "CH", "IL", "DK", "BE", "FI", "CA", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG")), model_form = m_1, model_name = x)))
