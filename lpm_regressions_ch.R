@@ -234,7 +234,11 @@ dwplot(by_tech_ctry_plot,
         legend.title = element_blank()) 
 
 
-
+##########################################
+# Save coefficients for interactive plot  #
+##########################################
+dat_save <- rbind(by_ctry_plot, by_tech_ctry_plot)
+dat_save %>% write.csv2("/scicore/home/weder/rutzer/innoscape/female_inventors/Data/dat_coeff.csv", row.names = FALSE, fileEncoding="UTF-8")
 
 
 ###########################
