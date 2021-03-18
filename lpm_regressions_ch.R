@@ -238,7 +238,7 @@ dwplot(by_tech_ctry_plot,
 # Save coefficients for interactive plot  #
 ##########################################
 dat_save <- rbind(by_ctry_plot, by_tech_ctry_plot)
-dat_save %>% write.csv2("/scicore/home/weder/rutzer/innoscape/female_inventors/Data/dat_coeff.csv", row.names = FALSE, fileEncoding="UTF-8")
+dat_save %>% write.table("/scicore/home/weder/rutzer/innoscape/female_inventors/Data/dat_coeff.csv", row.names = FALSE, fileEncoding="UTF-8", sep = ",", dec = ".")
 
 
 ###########################
