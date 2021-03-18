@@ -2,27 +2,22 @@
 // CR: 18_3_2021
 
 
-Plotly.d3.csv("https://raw.githubusercontent.com/cieb-unibas/female_inventors/main/Data/ord_dat.csv", function(err, rows){
+Plotly.d3.csv("https://raw.githubusercontent.com/cieb-unibas/female_inventors/main/Data/dat_coeff.csv", function(err, rows){
 function unpack(rows, key) {
         return rows.map(function(row) { return row[key]; });
     }
 
-var     var1 = unpack(rows, 'size'),
-        var2 = unpack(rows, 'sektor'),
-        mean = unpack(rows, 'mean_wichtig'),
-        median = unpack(rows, 'median_wichtig'),
-        mean_qual = unpack(rows, 'mean_qual'),
-        median_qual = unpack(rows, 'median_qual'),
-        variable = unpack(rows, 'var_pairs'),
-        varName =  unpack(rows, 'var_names'),
+var     var1 = unpack(rows, 'term'),
+        var2 = unpack(rows, 'model'),
+        est = unpack(rows, 'estimate'),
+        conf_l = unpack(rows, 'conf.low'),
+        conf_h = unpack(rows, 'conf.high'),
         listVar1 = [],
         listVar2 = [],
-        currentmedian = [],
-        currentmean = [],
-        currentmedian_qual = [],
-        currentmean_qual = [],
-        currentVar = [],
-        currentVarName = [];
+        currentest = [],
+        currentctry = [],
+        currentconf_l = [],
+        currentconf_h = [];
 
     for (var i = 0; i < var2.length; i++ ){
         if (listVar2.indexOf(var2[i]) === -1 ){
@@ -39,45 +34,32 @@ var     var1 = unpack(rows, 'size'),
       
 
     function getCountryData(chosenCountry, chosenCountry2) {
-        currentmedian = [];
-        currentmean = [];
-        currentmedian_qual = [];
-        currentmean_qual = [];
-        currentVar = [];
-        currentVarName = [];
+        currentest = [];
+        currentconf_l = [];
+        currentconf_h = [];
+        currentctry = [];
         for (var i = 0 ; i < var1.length ; i++){
-            if (var1[i] === chosenCountry && var2[i] === chosenCountry2 && variable[i] === "v2_5v2_6" ||
-                var1[i] === chosenCountry && var2[i] === chosenCountry2 && variable[i] === "v11_11v11_12") {
-                currentmedian.push(median[i]);
-                currentmean.push(mean[i]);
-                currentmedian_qual.push(median_qual[i]);
-                currentmean_qual.push(mean_qual[i]);
-                currentVar.push(variable[i]);
-                currentVarName.push(varName[i]);
+            if (var1[i] === chosenCountry && var2[i] === chosenCountry2) {
+                currentest.push(est[i]);
+                currentctry.push(var1[i]);
+                currentconf_l.push(conf_l[i]);
+                currentconf_h.push(conf_h[i]);
                 }
     }
     };
 
 
 // Default Country Data
-setBubblePlot('<10', "Architektur/Werbung/Grafik/Design/PR");
+setBubblePlot("Overall", "AT");
 
 function setBubblePlot(chosenCountry, chosenCountry2) {
         getCountryData(chosenCountry, chosenCountry2);
-    
-    // Change Axis names
 
-yAxis = [];
-
-for(var i=0;i<currentVarName.length;i++){
-    yAxis[i]=currentVarName[i]  + ": Wichtigkeit <br><br> Knappheit ";
-}
-    
         var trace1 = {
-            y: yAxis,
-            x: currentmean,
-            customdata: currentmedian,
-            text: currentVarName,
+            y: currentest,
+            x: currentctry,
+         //    customdata: currentmedian,
+         //    text: currentVarName,
             type: 'bar',
             textposition: "auto",
             orientation: 'h',
@@ -86,34 +68,16 @@ for(var i=0;i<currentVarName.length;i++){
             target: 'y',
             order: 'descending',
             }], 
-            hovertemplate:  '<b>%{text}</b>' + 
-                             '<br><b>Arithmetisches Mittel: %{x}</b>' + '<br><b>Median: %{customdata}</b>' + '<extra></extra>',
+       //      hovertemplate:  '<b>%{text}</b>' + 
+      //                        '<br><b>Arithmetisches Mittel: %{x}</b>' + '<br><b>Median: %{customdata}</b>' + '<extra></extra>',
             marker: { color:  'rgba(53,91,118,0.8)'},
             textposition: 'center',
             hoverinfo: 'none'
         };
         
       
-        
 
-        
-        var trace2 = {
-            y: yAxis,
-            x: currentmean_qual,
-            customdata: currentmedian_qual,
-            text: currentVarName,
-            type: 'bar',
-            orientation: 'h',
-            hovertemplate:  '<b>%{text}</b>' + 
-                             '<br><b>Arithmetisches Mittel: %{x}</b>' + '<br><b>Median: %{customdata}</b>' + '<extra></extra>',
-            marker: { color:  "#61a4d7"},
-            textposition: 'center',
-            hoverinfo: 'none'
-        };
-        
-      
-      
-var data = [trace1, trace2];
+var data = [trace1];
  
 
 
@@ -128,9 +92,10 @@ if(trace1["x"].length != 0){
           margin: {l: 480},
     xaxis: {fixedrange: true,
             zeroline: false,
-            tickvals: [1, 2, 3, 4, 5], 
-            tickfont: {size: 18},
-            title: {text: '<b>1: nicht wichtig bzw. sehr gering                 5: sehr wichtig bzw. sehr hoch</b>'}},
+           // tickvals: [1, 2, 3, 4, 5], 
+            tickfont: {size: 18}
+           // title: {text: '<b>1: nicht wichtig bzw. sehr gering                 5: sehr wichtig bzw. sehr hoch</b>'}
+           },
     yaxis: {fixedrange: true,
             zeroline: false,
             tickfont: {size: 18, width: 2},
