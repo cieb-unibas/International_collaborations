@@ -38,9 +38,9 @@ datareg<-datareg %>%
  setDT(datareg)[p_year>=2006 & p_year<=2010, interval := "2006-2010"]
  setDT(datareg)[p_year>=2011 & p_year<=2015, interval := "2011-2015"]
 
-# Filter out patents where legal owner comes from CH
+# Filter out patents where legal owner comes from US
  datareg <-  datareg %>%
-  filter(str_detect(ctry_leg_owner, "CH"))
+  filter(str_detect(ctry_leg_owner, "US"))
 
 # Use only subset of industrial countries as patent owners -> for policy advise to Switzerland I guess only such a rather homogeneous sub-sample is meaningful 
  # datareg <- filter(datareg, ctry_inventor %in% c("AT", "CH", "IL", "DK", "BE", "FI", "CA", "US", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG"))  
@@ -129,7 +129,7 @@ inv_ch_techf_coun_f$'location_name'<-countrycode(sourcevar = inv_ch_techf_coun_f
 
 
 # Saving data for network graph as RDS in Scicore
-saveRDS(object=inv_ch_techf_coun_f, file = "/scicore/home/weder/GROUP/Innovation/01_patent_data/created data/inv_coll_ch_networkdata.rds")
+saveRDS(object=inv_ch_techf_coun_f, file = "/scicore/home/weder/GROUP/Innovation/01_patent_data/created data/inv_coll_us_networkdata.rds")
 
 
 
