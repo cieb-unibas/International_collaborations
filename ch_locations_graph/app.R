@@ -53,7 +53,7 @@ fig <- plot_ly(
   color=~techbroad, type = "bar",
   mode="markers", 
   text = ~paste(sep='','<br>Share of inventors:', round(`share`,1),'%',
-                '<br>Location:', `location`)) %>%
+                '<br>Location:', `location_name`)) %>%
   layout(
     title="Foreign collaboration and citation",
     
@@ -75,7 +75,7 @@ fig <- plot_ly(
     paper_bgcolor = 'white',
     plot_bgcolor = 'white') %>%
   animation_opts(
-    2000, redraw = FALSE
+    2500, redraw = FALSE
   ) %>%
   
   animation_slider(

@@ -30,13 +30,13 @@ datareg <- datareg_one_owner
 
 # Filter data, Year is filtered from 1980 to 2015 and creating 5 year intervals
 datareg<-datareg %>%
-  filter(p_year >=1990 & p_year <2015)
+  filter(p_year >1990 & p_year <=2015)
 
- setDT(datareg)[p_year>=1990 & p_year<1995, interval := "1990-1995"]
- setDT(datareg)[p_year>=1995 & p_year<2000, interval := "1995-2000"]
- setDT(datareg)[p_year>=2000 & p_year<2005, interval := "2000-2005"]
- setDT(datareg)[p_year>=2005 & p_year<2010, interval := "2005-2010"]
- setDT(datareg)[p_year>=2010 & p_year<2015, interval := "2010-2015"]
+ setDT(datareg)[p_year>1990 & p_year<=1995, interval := "1991-1995"]
+ setDT(datareg)[p_year>=1996 & p_year<=2000, interval := "1996-2000"]
+ setDT(datareg)[p_year>=2001 & p_year<=2005, interval := "2001-2005"]
+ setDT(datareg)[p_year>=2006 & p_year<=2010, interval := "2006-2010"]
+ setDT(datareg)[p_year>=2011 & p_year<=2015, interval := "2011-2015"]
 
 # Filter out patents where legal owner comes from CH
  datareg <-  datareg %>%
@@ -124,7 +124,8 @@ inv_ch_techf_coun_f$variable <- inv_ch_techf_coun_f$variable %>%
 
 colnames(inv_ch_techf_coun_f) <- c("techbroad", "interval", "location", "share")
 
-
+# Creating a column with full ctry names
+inv_ch_techf_coun_f$'location_name'<-countrycode(sourcevar = inv_ch_techf_coun_f$'location', "iso2c", "country.name")
 
 
 # Saving data for network graph as RDS in Scicore
