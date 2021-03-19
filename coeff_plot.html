@@ -33,12 +33,13 @@
   <div id="bubbleplots">
       <div class="plot" id="plotdiv"></div>
       <div class="control-row">
-        <select class="selectpicker" id="select_1">
-        <option selected >AT</option>   
-        <option><10</option>   
-        <option>10-50</option>   
-        <option>51-250</option>   
-        <option>>250</option>  
+        <select class="selectpicker" id="select_1" name="select1" multiple="multiple">
+        <option value="CN" selected >CN</option>
+        <option value="AT">AT</option>   
+        <option value="BE">BE</option>   
+        <option value="DE">DE</option>   
+        <option value="CN">CN</option>  
+        <option value="US">US</option>   
         </select>
     </div>
   </div>
@@ -49,30 +50,27 @@
   <div id="bubbleplots_2">
       <div class="plot" id="plotdiv_2"></div>
       <div class="control-row">
-        <select class="selectpicker" id="select_2">
-        <option selected >Overall</option>   
-        <option>Architektur/Werbung/Grafik/Design/PR</option>   
-        <option>Bau, Energie- und Wasserversorgung</option>   
-        <option>Finanzen und Versicherung</option>   
-        <option>Gross- und Einzelhandel</option>   
-        <option>Herstellung von Nahrungsmitteln</option>   
-        <option>Maschinen-, Elektro- und Metallindustrie</option>   
-        <option>Sonstige Dienstleistungen</option>   
-        <option>Sonstiges Gewerbe</option>   
-        <option>Treuhand/Consulting</option>   
-        <option>Verkehr und Gastgewerbe</option>   
-        <option>Gesundheitssektor</option>   
-        <option>Chemisch-Pharmazeutische Industrie</option>   
-        <option>Information und Kommunikation</option>   
+        <select class="selectpicker" id="select_2" name="select2" multiple="multiple">
+        <option selected >Chemistry</option>   
+        <option>Overall</option>   
+        <option>Electrical engineering</option>   
+        <option>Instruments</option>   
+        <option>Mechanical engineering</option>   
+        <option>Other fields</option>   
        </select>
     </div>
   </div>
 </div>
 
 
-<div id="test1"></div>
 
 <div id='select_1' class="links_rechts"></div>
 <div id='select_2' class="links_rechts"></div>
+
+
+<div id="test1"></div>
+
+<div id="myDiv"></div>
+
 
 </body>

@@ -16,6 +16,7 @@ var     var1 = unpack(rows, 'term'),
         listVar2 = [],
         currentest = [],
         currentctry = [],
+        currentmodel = [],
         currentconf_l = [],
         currentconf_h = [];
 
@@ -38,26 +39,29 @@ var     var1 = unpack(rows, 'term'),
         currentconf_l = [];
         currentconf_h = [];
         currentctry = [];
+        currentmodel = [];
         for (var i = 0 ; i < var1.length ; i++){
-            if (var1[i] === chosenCountry && var2[i] === chosenCountry2) {
+          for(var j = 0; j < var2.length; j ++){
+            if (var1[i] === chosenCountry[j] && var2[i] === chosenCountry2) {
                 currentest.push(est[i]);
                 currentctry.push(var1[i]);
+                currentmodel.push(var2[i]);
                 currentconf_l.push(conf_l[i]);
                 currentconf_h.push(conf_h[i]);
                 }
     }
-    };
-
+    }
+}
 
 // Default Country Data
-setBubblePlot("Overall", "AT");
+setBubblePlot("CN", "Overall");
 
 function setBubblePlot(chosenCountry, chosenCountry2) {
         getCountryData(chosenCountry, chosenCountry2);
 
         var trace1 = {
-            y: currentest,
-            x: currentctry,
+            x: currentest,
+            y: currentctry,
          //    customdata: currentmedian,
          //    text: currentVarName,
             type: 'bar',
@@ -79,9 +83,6 @@ function setBubblePlot(chosenCountry, chosenCountry2) {
 
 var data = [trace1];
  
-
-
-if(trace1["x"].length != 0){ 
         var layout = {
           hovermode: "closest",
           hoverlabel: { bgcolor: "#FFF" },
@@ -101,34 +102,18 @@ if(trace1["x"].length != 0){
             tickfont: {size: 18, width: 2},
             title: {text: '<b></b>'}}};
   
-} else {
-  
-        var layout = {
-          hovermode: "closest",
-          hoverlabel: { bgcolor: "#FFF" },
-          bargap: 0.4,
-          bargroupgap:  0.1, 
-          showlegend: false,
-          scrollZoom: false,
-          margin: {l: 480},
-          annotations: [{text: "Für die Auswahl stehen zu wenige Beobachtungen zur Verfügung", showarrow: false, font: {size: 20}}],
-          xaxis: {visible: false},
-          yaxis: {visible: false}
-        };
-}
+
 
 
 
 Plotly.newPlot('myDiv', data, layout, {displayModeBar: false});
-Plotly.update('myDiv', data, layout);
+//Plotly.update('myDiv', data, layout);
 };    
-
-
-
 
 
 var countrySelector = document.getElementById("select_1");
 var countrySelector2 = document.getElementById("select_2");
+
 
 
 
@@ -145,7 +130,12 @@ var countrySelector2 = document.getElementById("select_2");
 //assignOptions(listVar2, countrySelector2);
 
 function updateCountry(){
-        setBubblePlot(countrySelector.value, countrySelector2.value);
+  var var_2l = [];
+  $.each($("#select_1 option:selected" ), function() {
+  var_2l.push($(this).val());  
+  })
+  document.getElementById("test1").innerHTML = var_2l; 
+        setBubblePlot(var_2l, countrySelector2.value);
     }
 
 
