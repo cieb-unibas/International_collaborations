@@ -62,7 +62,7 @@ var     var1 = unpack(rows, 'term'),
                 currentmodel.push(var2[i]);
                 currentconf_l.push(conf_l[i]);
                 currentconf_h.push(conf_h[i]);
-                current_ctry_model.push(var1[i] + " " + var2[i]);
+                current_ctry_model.push(var1[i] + "-" + var2[i]);
                 
                 test = round(est[i], 2);
                 
@@ -97,12 +97,14 @@ var trace1 = {
       //      textposition: "auto",
             orientation: 'h',
            transforms: [ 
-           {
+     /*    {
              type: 'sort',
              target: currentctry,
-             order: 'descending'},{
+             order: 'ascending'},
+             */
+             {
            type: 'groupby',
-           groups: currentctry,
+           groups: currentctry, 
            styles:[
              {target: "DE", value: {marker: {color: '#FDE725FF'}}},
              {target: "AT", value: {marker: {color: '#FDE725FF'}}},
@@ -138,11 +140,11 @@ var trace1 = {
 
 var data = [trace1];
  
-        var layout = {
+var layout = {
           hovermode: "closest",
           hoverlabel: { bgcolor: "#FFF" },
-          bargap: 0.4,
-          bargroupgap:  0.1, 
+        //  bargap: 0.4,
+        //  bargroupgap:  0.1, 
           showlegend: false,
           scrollZoom: false,
           height: 50 + 40*currentest.length,
@@ -164,14 +166,16 @@ var data = [trace1];
                    
     xaxis: {fixedrange: true,
             zeroline: false,
-           // tickvals: [1, 2, 3, 4, 5], 
+            
+            // tickvals: [1, 2, 3, 4, 5], 
             tickfont: {size: 18},
-            categoryorder: "total ascending",
             title: {text: '<b>Coefficient estimate</b>', font: {size: 18}}
            },
     yaxis: {fixedrange: true,
             zeroline: true,
-   //         tickvals: Array(current_ctry_model.length).fill().map((element, index) => index + 0), 
+            type: "category", 
+            categoryorder: "total ascending",
+            //         tickvals: Array(current_ctry_model.length).fill().map((element, index) => index + 0), 
     //        ticktext: currentctry, 
             tickfont: {size: 18, width: 2},
             title: {text: '<b></b>'}}
