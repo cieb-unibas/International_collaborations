@@ -71,7 +71,7 @@ var     var1 = unpack(rows, 'term'),
 }
 }
 // Default Country Data
-setBubblePlot(["CN", "DE"], "Overall");
+setBubblePlot(["CH", "GB", "US", "CN", "DE"], ["Overall"]);
 
 function setBubblePlot(chosenCountry, chosenCountry2) {
         getCountryData(chosenCountry, chosenCountry2);
@@ -79,23 +79,49 @@ function setBubblePlot(chosenCountry, chosenCountry2) {
         var trace1 = {
             x: currentest,
             y: current_ctry_model,
+            offset: 0.5,
             error_x: {
             type: 'data',
-            array: currentconf_h,
+            array: currentconf_l,
             visible: true},
-         //    customdata: currentmedian,
+            customdata: currentmodel,
          //    text: currentVarName,
             type: 'scatter',
             mode: "markers",
-            textposition: "auto",
+            marker: {width: 10},
+      //      textposition: "auto",
             orientation: 'h',
-         //    transforms: [{
-         //    type: 'sort',
-         //    target: 'y',
-         //    order: 'descending',
-         //    }], 
-       //      hovertemplate:  '<b>%{text}</b>' + 
-      //                        '<br><b>Arithmetisches Mittel: %{x}</b>' + '<br><b>Median: %{customdata}</b>' + '<extra></extra>',
+           transforms: [
+          {
+           type: 'groupby',
+           target: 'y',
+           groups: currentctry,
+           styles:[
+             {target: "DE", value: {marker: {color: '#FDE725FF'}}},
+             {target: "AT", value: {marker: {color: '#FDE725FF'}}},
+             {target: "BE", value: {marker: {color: '#440154FF"'}}},
+             {target: "CA", value: {marker: {color: '#470E61FF'}}},
+             {target: "CH", value: {marker: {color: '#481B6DFF'}}},
+             {target: "CN", value: {marker: {color: '#FDE725FF'}}},
+             {target: "DE", value: {marker: {color: '#FDE725FF'}}},
+             {target: "DK", value: {marker: {color: '#FDE725FF'}}},
+             {target: "ES", value: {marker: {color: '#FDE725FF'}}},
+             {target: "FI", value: {marker: {color: '#FDE725FF'}}},
+             {target: "FR", value: {marker: {color: '#FDE725FF'}}},
+             {target: "GB", value: {marker: {color: '#FDE725FF'}}},
+             {target: "IE", value: {marker: {color: '#FDE725FF'}}},
+             {target: "IL", value: {marker: {color: '#FDE725FF'}}},
+             {target: "IT", value: {marker: {color: '#FDE725FF'}}},
+             {target: "JP", value: {marker: {color: '#FDE725FF'}}},
+             {target: "KR", value: {marker: {color: '#FDE725FF'}}},
+             {target: "NL", value: {marker: {color: '#FDE725FF'}}},
+             {target: "NO", value: {marker: {color: '#FDE725FF'}}},
+             {target: "SE", value: {marker: {color: '#FDE725FF'}}},
+             {target: "SG", value: {marker: {color: '#FDE725FF'}}},
+             {target: "US", value: {marker: {color: '#FDE725FF'}}},
+             {target: "Rest", value: {marker: {color: '#FDE725FF'}}}]
+           }],
+            hovertemplate:  '<b>Country: </b> <br>' + '<b>Technology: %{customdata}</b>' + '<extra></extra>',
             marker: { color:  'rgba(53,91,118,0.8)', size: 20},
             textposition: 'center',
             hoverinfo: 'none'
@@ -103,30 +129,31 @@ function setBubblePlot(chosenCountry, chosenCountry2) {
         
             var trace2 = {
             x: currentest,
-            y: current_ctry_model,
+            y: currentctry,
             error_x: {
             type: 'data',
-            array: currentconf_h,
+            array: currentconf_l,
             visible: true},
-         //    customdata: currentmedian,
+            customdata: currentctry,
          //    text: currentVarName,
             type: 'scatter',
             mode: "markers",
             textposition: "auto",
             orientation: 'h',
-         //    transforms: [{
-         //    type: 'sort',
-         //    target: 'y',
-         //    order: 'descending',
-         //    }], 
+           transforms: [{
+           type: 'sort',
+           target: 'customdata',
+           order: 'ascending',
+           }],  
        //      hovertemplate:  '<b>%{text}</b>' + 
       //                        '<br><b>Arithmetisches Mittel: %{x}</b>' + '<br><b>Median: %{customdata}</b>' + '<extra></extra>',
             marker: { color:  'rgba(53,91,118,0.8)', size: 20},
             textposition: 'center',
             hoverinfo: 'none'
         };
+        
 
-var data = [trace1, trace2];
+var data = [trace1];
  
         var layout = {
           hovermode: "closest",
@@ -135,15 +162,34 @@ var data = [trace1, trace2];
           bargroupgap:  0.1, 
           showlegend: false,
           scrollZoom: false,
-          margin: {l: 480},
+          height: 50 + 40*currentest.length,
+          margin: {l: 250,
+                   r: 0,
+                   b: 50,
+                   t: 0},
+           shapes: [{
+    type: 'line',
+    x0: 0,
+    y0: -1,
+    x1: 0,
+    y1: current_ctry_model.length + 1,
+    line: {
+      color: 'grey',
+      width: 1.5,
+      dash: 'dash'
+    }}],       
+                   
     xaxis: {fixedrange: true,
             zeroline: false,
            // tickvals: [1, 2, 3, 4, 5], 
-            tickfont: {size: 18}
-           // title: {text: '<b>1: nicht wichtig bzw. sehr gering                 5: sehr wichtig bzw. sehr hoch</b>'}
+            tickfont: {size: 18},
+            title: {text: '<b>Coefficient estimate</b>', font: {size: 18}}
            },
     yaxis: {fixedrange: true,
-            zeroline: false,
+            zeroline: true,
+            categoryorder: currentctry,
+   //         tickvals: Array(current_ctry_model.length).fill().map((element, index) => index + 0), 
+    //        ticktext: currentctry, 
             tickfont: {size: 18, width: 2},
             title: {text: '<b></b>'}}
  //   shapes: [{
@@ -159,7 +205,7 @@ var data = [trace1, trace2];
   
 
 Plotly.newPlot('myDiv', data, layout, {displayModeBar: false});
-//Plotly.update('myDiv', data, layout);
+Plotly.update('myDiv', data, layout);
 };    
 
 
@@ -184,6 +230,8 @@ var countrySelector2 = document.getElementById("select_2");
 function updateCountry(){
   var var_2l = [];
   var var_1l = [];
+
+
   $.each($("#select_1 option:selected" ), function() {
   var_2l.push($(this).val());  
   })
@@ -192,8 +240,7 @@ function updateCountry(){
   var_1l.push($(this).val());  
   })
   
-  document.getElementById("test1").innerHTML = var_1l; 
-        setBubblePlot(var_2l, var_1l);
+setBubblePlot(var_2l, var_1l);
     }
 
 
