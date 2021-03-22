@@ -1,5 +1,5 @@
 // Interactive plot showing regression coefficients
-// CR: 18_3_2021
+// CR: 22_3_2021
 
 function round(value, decimals) {
   return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
