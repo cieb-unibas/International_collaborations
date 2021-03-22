@@ -84,7 +84,7 @@ function setBubblePlot(chosenCountry, chosenCountry2) {
             type: 'data',
             array: currentconf_l,
             visible: true},
-            customdata: currentctry,
+            customdata: currentmodel,
          //    text: currentVarName,
             type: 'scatter',
             mode: "markers",
@@ -121,8 +121,7 @@ function setBubblePlot(chosenCountry, chosenCountry2) {
              {target: "US", value: {marker: {color: '#FDE725FF'}}},
              {target: "Rest", value: {marker: {color: '#FDE725FF'}}}]
            }],
-       //      hovertemplate:  '<b>%{text}</b>' + 
-      //                        '<br><b>Arithmetisches Mittel: %{x}</b>' + '<br><b>Median: %{customdata}</b>' + '<extra></extra>',
+            hovertemplate:  '<b>Country: </b> <br>' + '<b>Technology: %{customdata}</b>' + '<extra></extra>',
             marker: { color:  'rgba(53,91,118,0.8)', size: 20},
             textposition: 'center',
             hoverinfo: 'none'
