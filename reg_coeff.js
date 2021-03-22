@@ -62,19 +62,24 @@ function setBubblePlot(chosenCountry, chosenCountry2) {
         var trace1 = {
             x: currentest,
             y: currentctry,
+            error_x: {
+            type: 'data',
+            array: currentconf_h,
+            visible: true},
          //    customdata: currentmedian,
          //    text: currentVarName,
-            type: 'bar',
+            type: 'scatter',
+            mode: "markers",
             textposition: "auto",
             orientation: 'h',
-            transforms: [{
-            type: 'sort',
-            target: 'y',
-            order: 'descending',
-            }], 
+         //    transforms: [{
+         //    type: 'sort',
+         //    target: 'y',
+         //    order: 'descending',
+         //    }], 
        //      hovertemplate:  '<b>%{text}</b>' + 
       //                        '<br><b>Arithmetisches Mittel: %{x}</b>' + '<br><b>Median: %{customdata}</b>' + '<extra></extra>',
-            marker: { color:  'rgba(53,91,118,0.8)'},
+            marker: { color:  'rgba(53,91,118,0.8)', size: 20},
             textposition: 'center',
             hoverinfo: 'none'
         };
@@ -100,11 +105,16 @@ var data = [trace1];
     yaxis: {fixedrange: true,
             zeroline: false,
             tickfont: {size: 18, width: 2},
-            title: {text: '<b></b>'}}};
+            title: {text: '<b></b>'}},
+    shapes: [{
+      type: 'line',
+      x0: 0, 
+      y0: currentctry.length,
+      x1: 0,
+      y1: currentctry.length,
+      line: {dash: 'dot'}
+    }]};
   
-
-
-
 
 Plotly.newPlot('myDiv', data, layout, {displayModeBar: false});
 //Plotly.update('myDiv', data, layout);
