@@ -9,6 +9,7 @@
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.2.1/math.min.js"></script>
   
+  
 <!-- javascript funktion für balkendiagramm-->
 <script src="reg_coeff.js"></script>
 
@@ -36,7 +37,7 @@
         <select class="selectpicker" id="select_1" name="select1" multiple="multiple">
         <option value="AT">AT</option>   
         <option value="BE">BE</option>  
-        <option value="CA" selected>CH</option>
+        <option value="CA" selected>CA</option>
         <option value="CH">CH</option>   
         <option value="CN" selected>CN</option>
         <option value="DE" selected>DE</option>
@@ -55,7 +56,7 @@
         <option value="SE">SE</option>
         <option value="SG">SG</option>
         <option value="US" selected>US</option>
-        <option value="Rest">REST</option>
+        <option value="REST">Rest</option>
         </select>
     </div>
   </div>
@@ -67,8 +68,8 @@
       <div class="plot" id="plotdiv_2"></div>
       <div class="control-row">
         <select class="selectpicker" id="select_2" name="select2" multiple="multiple">
-        <option selected >Chemistry</option>   
-        <option>Overall</option>   
+        <option selected>Overall</option> 
+        <option>Chemistry</option>   
         <option>Electrical engineering</option>   
         <option>Instruments</option>   
         <option>Mechanical engineering</option>   
@@ -80,11 +81,10 @@
 
 
 
-<div id='select_1' class="links_rechts"></div>
-<div id='select_2' class="links_rechts"></div>
+<div id='select_1'></div>
+<div id='select_2'></div>
 
 
-<div id="test1"></div>
 
 <div id="myDiv"></div>
 
