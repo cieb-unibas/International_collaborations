@@ -82,12 +82,9 @@ function setBubblePlot(chosenCountry, chosenCountry2) {
         getCountryData(chosenCountry, chosenCountry2);
  
  
-
- 
-        var trace1 = {
+var trace1 = {
             x: currentest,
             y: current_ctry_model,
-            offset: 0.5,
             error_x: {
             type: 'data',
             array: currentconf_l,
@@ -96,13 +93,15 @@ function setBubblePlot(chosenCountry, chosenCountry2) {
          //    text: currentVarName,
             type: 'scatter',
             mode: "markers",
-            marker: {width: 10},
+            marker: {width: 20},
       //      textposition: "auto",
             orientation: 'h',
-           transforms: [
-          {
+           transforms: [ 
+           {
+             type: 'sort',
+             target: currentctry,
+             order: 'descending'},{
            type: 'groupby',
-           target: 'y',
            groups: currentctry,
            styles:[
              {target: "DE", value: {marker: {color: '#FDE725FF'}}},
@@ -128,38 +127,14 @@ function setBubblePlot(chosenCountry, chosenCountry2) {
              {target: "SG", value: {marker: {color: '#FDE725FF'}}},
              {target: "US", value: {marker: {color: '#FDE725FF'}}},
              {target: "Rest", value: {marker: {color: '#FDE725FF'}}}]
-           }],
+           }
+           ],
             hovertemplate:  '%{customdata}' + '<extra></extra>',
-            marker: { color:  'rgba(53,91,118,0.8)', size: 20},
             textposition: 'center',
             hoverinfo: 'none'
         };
         
-            var trace2 = {
-            x: currentest,
-            y: currentctry,
-            error_x: {
-            type: 'data',
-            array: currentconf_l,
-            visible: true},
-            customdata: currentctry,
-         //    text: currentVarName,
-            type: 'scatter',
-            mode: "markers",
-            textposition: "auto",
-            orientation: 'h',
-           transforms: [{
-           type: 'sort',
-           target: 'customdata',
-           order: 'ascending',
-           }],  
-       //      hovertemplate:  '<b>%{text}</b>' + 
-      //                        '<br><b>Arithmetisches Mittel: %{x}</b>' + '<br><b>Median: %{customdata}</b>' + '<extra></extra>',
-            marker: { color:  'rgba(53,91,118,0.8)', size: 20},
-            textposition: 'center',
-            hoverinfo: 'none'
-        };
-        
+          
 
 var data = [trace1];
  
@@ -191,11 +166,11 @@ var data = [trace1];
             zeroline: false,
            // tickvals: [1, 2, 3, 4, 5], 
             tickfont: {size: 18},
+            categoryorder: "total ascending",
             title: {text: '<b>Coefficient estimate</b>', font: {size: 18}}
            },
     yaxis: {fixedrange: true,
             zeroline: true,
-            categoryorder: currentctry,
    //         tickvals: Array(current_ctry_model.length).fill().map((element, index) => index + 0), 
     //        ticktext: currentctry, 
             tickfont: {size: 18, width: 2},
