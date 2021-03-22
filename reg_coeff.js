@@ -1,6 +1,11 @@
 // Interactive plot showing regression coefficients
 // CR: 18_3_2021
 
+function round(value, decimals) {
+  return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
+}
+
+
 
 Plotly.d3.csv("https://raw.githubusercontent.com/cieb-unibas/female_inventors/main/Data/dat_coeff.csv", function(err, rows){
 function unpack(rows, key) {
@@ -10,8 +15,9 @@ function unpack(rows, key) {
 var     var1 = unpack(rows, 'term'),
         var2 = unpack(rows, 'model'),
         est = unpack(rows, 'estimate'),
-        conf_l = unpack(rows, 'conf.low'),
+        conf_l = unpack(rows, 'conf_int'),
         conf_h = unpack(rows, 'conf.high'),
+        conf_low = unpack(rows, 'conf.low'),
         listVar1 = [],
         listVar2 = [],
         currentest = [],
@@ -20,12 +26,8 @@ var     var1 = unpack(rows, 'term'),
         currentconf_l = [],
         currentconf_h = [],
         current_ctry_model = [],
-        current_model_1 = [],
-        current_model_2 = [],
-        current_model_3 = [],
-        current_model_4 = [],
-        current_model_5 = [],
-        current_model_6 = [];
+        confl = [],
+        text_var = [];
 
     for (var i = 0; i < var2.length; i++ ){
         if (listVar2.indexOf(var2[i]) === -1 ){
@@ -48,12 +50,8 @@ var     var1 = unpack(rows, 'term'),
         currentctry = [];
         currentmodel = [];
         current_ctry_model = [];
-        current_model_1 = [];
-        current_model_2 = [];
-        current_model_3 = [];
-        current_model_4 = [];
-        current_model_5 = [];
-        current_model_6 = [];
+        text_var =[];
+        confl = [];
         
         for (var i = 0 ; i < var1.length ; i++){
           for(var j = 0; j < var2.length; j ++){
@@ -65,6 +63,13 @@ var     var1 = unpack(rows, 'term'),
                 currentconf_l.push(conf_l[i]);
                 currentconf_h.push(conf_h[i]);
                 current_ctry_model.push(var1[i] + " " + var2[i]);
+                
+                test = round(est[i], 2);
+                
+                text_var.push('Country: ' + var1[i] + '<br>' +  'Technology: ' + var2[i] + '<br>' + 'Estimated coefficient: ' + round(est[i], 4) +
+                    '<br>' + '95% Confidence Intervall: [' + round(conf_low[i], 4) + ', ' + round(conf_h[i], 4) + ']');
+                
+                
                 }
     }
     }
@@ -75,7 +80,10 @@ setBubblePlot(["CH", "GB", "US", "CN", "DE"], ["Overall"]);
 
 function setBubblePlot(chosenCountry, chosenCountry2) {
         getCountryData(chosenCountry, chosenCountry2);
+ 
+ 
 
+ 
         var trace1 = {
             x: currentest,
             y: current_ctry_model,
@@ -84,7 +92,7 @@ function setBubblePlot(chosenCountry, chosenCountry2) {
             type: 'data',
             array: currentconf_l,
             visible: true},
-            customdata: currentmodel,
+            customdata: text_var,
          //    text: currentVarName,
             type: 'scatter',
             mode: "markers",
@@ -121,7 +129,7 @@ function setBubblePlot(chosenCountry, chosenCountry2) {
              {target: "US", value: {marker: {color: '#FDE725FF'}}},
              {target: "Rest", value: {marker: {color: '#FDE725FF'}}}]
            }],
-            hovertemplate:  '<b>Country: </b> <br>' + '<b>Technology: %{customdata}</b>' + '<extra></extra>',
+            hovertemplate:  '%{customdata}' + '<extra></extra>',
             marker: { color:  'rgba(53,91,118,0.8)', size: 20},
             textposition: 'center',
             hoverinfo: 'none'
