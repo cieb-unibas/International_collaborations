@@ -7,6 +7,9 @@ function round(value, decimals) {
 
 
 
+
+
+
 Plotly.d3.csv("https://raw.githubusercontent.com/cieb-unibas/female_inventors/main/Data/dat_coeff.csv", function(err, rows){
 function unpack(rows, key) {
         return rows.map(function(row) { return row[key]; });
@@ -106,13 +109,12 @@ var trace1 = {
            type: 'groupby',
            groups: currentctry, 
            styles:[
-             {target: "DE", value: {marker: {color: '#FDE725FF'}}},
+             {target: "DE", value: {marker: {color: d3.interpolateViridis(0.5)}}},
              {target: "AT", value: {marker: {color: '#FDE725FF'}}},
              {target: "BE", value: {marker: {color: '#440154FF"'}}},
              {target: "CA", value: {marker: {color: '#470E61FF'}}},
-             {target: "CH", value: {marker: {color: '#481B6DFF'}}},
+             {target: "CH", value: {marker: {color: d3.interpolateViridis(0.7)}}},
              {target: "CN", value: {marker: {color: '#FDE725FF'}}},
-             {target: "DE", value: {marker: {color: '#FDE725FF'}}},
              {target: "DK", value: {marker: {color: '#FDE725FF'}}},
              {target: "ES", value: {marker: {color: '#FDE725FF'}}},
              {target: "FI", value: {marker: {color: '#FDE725FF'}}},
@@ -127,7 +129,7 @@ var trace1 = {
              {target: "NO", value: {marker: {color: '#FDE725FF'}}},
              {target: "SE", value: {marker: {color: '#FDE725FF'}}},
              {target: "SG", value: {marker: {color: '#FDE725FF'}}},
-             {target: "US", value: {marker: {color: '#FDE725FF'}}},
+             {target: "US", value: {marker: {color: d3.interpolateViridis(0.5)}}},
              {target: "Rest", value: {marker: {color: '#FDE725FF'}}}]
            }
            ],
