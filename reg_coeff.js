@@ -10,7 +10,7 @@ function round(value, decimals) {
 
 
 
-Plotly.d3.csv("https://raw.githubusercontent.com/cieb-unibas/female_inventors/main/Data/dat_coeff.csv", function(err, rows){
+Plotly.d3.csv("dat_coeff.csv", function(err, rows){
 function unpack(rows, key) {
         return rows.map(function(row) { return row[key]; });
     }
@@ -166,17 +166,18 @@ var layout = {
       dash: 'dash'
     }}],       
                    
-    xaxis: {fixedrange: true,
+    xaxis: {autotick: true,
+            fixedrange: true,
             zeroline: false,
-            
             // tickvals: [1, 2, 3, 4, 5], 
             tickfont: {size: 18},
             title: {text: '<b>Coefficient estimate</b>', font: {size: 18}}
            },
-    yaxis: {fixedrange: true,
-            zeroline: true,
-            type: "category", 
-            categoryorder: "total ascending",
+    yaxis: {autotick: false,
+            fixedrange: true,
+            zeroline: false,
+            categoryorder: "category descending",
+            categoryarry: current_ctry_model,
             //         tickvals: Array(current_ctry_model.length).fill().map((element, index) => index + 0), 
     //        ticktext: currentctry, 
             tickfont: {size: 18, width: 2},
