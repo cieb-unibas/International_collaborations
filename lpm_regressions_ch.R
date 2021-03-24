@@ -221,7 +221,7 @@ by_tech_ctry_plot <- by_tech_ctry %>%
   filter(term %in% c(
     # "domestic", "domestic and foreign", "foreign", 
     # "Size of the team", "Number of claims", "University participation", 
-    paste0(c("CA", "US", "IT", "KR", "GB", "DE", "FR", "JP","CN", "CH", "REST"))))        
+    paste0(c("AT", "IL", "DK", "BE", "FI", "CA", "US", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG", "CN", "CH", "REST"))))        
 
 dwplot(by_tech_ctry_plot,
        vline = geom_vline(xintercept = 0, colour = "grey60", linetype = 2)) + # plot line at zero _behind_ coefs
