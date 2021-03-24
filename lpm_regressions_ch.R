@@ -239,6 +239,9 @@ dwplot(by_tech_ctry_plot,
 ##########################################
 dat_save <- rbind(by_ctry_plot, by_tech_ctry_plot)
 dat_save <- mutate(dat_save, conf_int = estimate-conf.low)
+dat_save <- mutate(dat_save, estimate = round(estimate, 4), conf.low = round(conf.low, 3), conf.high = round(conf.high, 3), conf_int = round(conf_int, 3))
+dat_save <- dplyr::arrange(dat_save, desc(term), desc(model))
+
 dat_save %>% write.table("/scicore/home/weder/rutzer/innoscape/female_inventors/Data/dat_coeff.csv", row.names = FALSE, fileEncoding="UTF-8", sep = ",", dec = ".")
 
 
