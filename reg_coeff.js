@@ -17,10 +17,12 @@ function unpack(rows, key) {
 
 var     var1 = unpack(rows, 'term'),
         var2 = unpack(rows, 'model'),
+        ctry_name = unpack(rows, 'ctry_name'),
         est = unpack(rows, 'estimate'),
         conf_l = unpack(rows, 'conf_int'),
         conf_h = unpack(rows, 'conf.high'),
         conf_low = unpack(rows, 'conf.low'),
+        p_value = unpack(rows, 'p.value'),
         listVar1 = [],
         listVar2 = [],
         currentest = [],
@@ -59,14 +61,6 @@ var     var1 = unpack(rows, 'term'),
         text_var =[];
         confl = [];
         color_var = [];
-        currentest_1 = [];
-        currentconf_l_1 = [];
-        currentconf_h_1 = [];
-        currentctry_1 = [];
-        currentmodel_1 = [];
-        current_ctry_model_1 = [];
-        text_var_1 =[];
-        confl_1 = [];
         current_color = [];
         
         for (var i = 0 ; i < var1.length ; i++){
@@ -94,8 +88,9 @@ var     var1 = unpack(rows, 'term'),
                 currentconf_h.push(conf_h[i]);
                 current_ctry_model.push(var1[i] + "-" + var2[i]);
                 current_color.push(color_var[i]);
-                text_var.push('Country: ' + var1[i] + '<br>' +  'Technology: ' + var2[i] + '<br>' + 'Estimated coefficient: ' + round(est[i], 4) +
-                    '<br>' + '95% Confidence Intervall: [' + round(conf_low[i], 4) + ', ' + round(conf_h[i], 4) + ']');
+
+                text_var.push('Country: ' + ctry_name[i] + '<br>' +  'Technology: ' + var2[i] + '<br>' + 'Estimated coefficient: ' + round(est[i], 4) +
+                    '<br>' +  'P-value: ' + p_value[i] +'<br>' + '95% Confidence Intervall: [' + round(conf_low[i], 4) + ', ' + round(conf_h[i], 4) + ']');
                 
           }
     }
@@ -140,7 +135,7 @@ var layout = {
           showlegend: false,
           scrollZoom: false,
           height: 60 + 40*currentest.length,
-          margin: {l: 250,
+          margin: {l: 300,
                    r: 0,
                    b: 50,
                    t: 0},
