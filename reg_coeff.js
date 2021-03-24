@@ -30,8 +30,11 @@ var     var1 = unpack(rows, 'term'),
         currentconf_h = [],
         current_ctry_model = [],
         confl = [],
-        text_var = [];
-
+        text_var = [],
+        color_var = [],
+        current_color = [];
+        
+        
     for (var i = 0; i < var2.length; i++ ){
         if (listVar2.indexOf(var2[i]) === -1 ){
             listVar2.push(var2[i]);
@@ -55,8 +58,32 @@ var     var1 = unpack(rows, 'term'),
         current_ctry_model = [];
         text_var =[];
         confl = [];
+        color_var = [];
+        currentest_1 = [];
+        currentconf_l_1 = [];
+        currentconf_h_1 = [];
+        currentctry_1 = [];
+        currentmodel_1 = [];
+        current_ctry_model_1 = [];
+        text_var_1 =[];
+        confl_1 = [];
+        current_color = [];
         
         for (var i = 0 ; i < var1.length ; i++){
+           if(var2[i] === "Overall"){
+           color_var[i] = d3.interpolateViridis(0);
+           } else if (var2[i] === "Chemistry"){
+           color_var[i] = d3.interpolateViridis(0.2);
+           } else if (var2[i] === "Electrical engineering"){
+            color_var[i] = d3.interpolateViridis(0.4);
+           } else if (var2[i] === "Instruments"){
+           color_var[i] = d3.interpolateViridis(0.6);
+           } else if (var2[i] === "Other fields"){
+           color_var[i] = d3.interpolateViridis(0.8);
+           } else if (var2[i] === "Mechanical engineering"){
+           color_var[i] = d3.interpolateViridis(1);
+           } 
+
           for(var j = 0; j < var2.length; j ++){
           for(var k = 0; k < var1.length; k++){
             if (var1[i] === chosenCountry[j] && var2[i] === chosenCountry2[k]) {
@@ -66,14 +93,11 @@ var     var1 = unpack(rows, 'term'),
                 currentconf_l.push(conf_l[i]);
                 currentconf_h.push(conf_h[i]);
                 current_ctry_model.push(var1[i] + "-" + var2[i]);
-                
-                test = round(est[i], 2);
-                
+                current_color.push(color_var[i]);
                 text_var.push('Country: ' + var1[i] + '<br>' +  'Technology: ' + var2[i] + '<br>' + 'Estimated coefficient: ' + round(est[i], 4) +
                     '<br>' + '95% Confidence Intervall: [' + round(conf_low[i], 4) + ', ' + round(conf_h[i], 4) + ']');
                 
-                
-                }
+          }
     }
     }
 }
@@ -87,58 +111,24 @@ function setBubblePlot(chosenCountry, chosenCountry2) {
  
 var trace1 = {
             x: currentest,
-            y: current_ctry_model,
-            error_x: {
-            type: 'data',
-            array: currentconf_l,
-            visible: true},
+            y: [currentmodel, currentctry],
             customdata: text_var,
-         //    text: currentVarName,
             type: 'scatter',
             mode: "markers",
-            marker: {width: 20},
-      //      textposition: "auto",
+            color: current_color,
+            marker: {size: 20, color: current_color},
+            error_x: {
+            type: 'data', color: current_color,
+            array: currentconf_l},
             orientation: 'h',
-           transforms: [ 
-     /*    {
-             type: 'sort',
-             target: currentctry,
-             order: 'ascending'},
-             */
-             {
-           type: 'groupby',
-           groups: currentctry, 
-           styles:[
-             {target: "DE", value: {marker: {color: d3.interpolateViridis(0.5)}}},
-             {target: "AT", value: {marker: {color: '#FDE725FF'}}},
-             {target: "BE", value: {marker: {color: '#440154FF"'}}},
-             {target: "CA", value: {marker: {color: '#470E61FF'}}},
-             {target: "CH", value: {marker: {color: d3.interpolateViridis(0.7)}}},
-             {target: "CN", value: {marker: {color: '#FDE725FF'}}},
-             {target: "DK", value: {marker: {color: '#FDE725FF'}}},
-             {target: "ES", value: {marker: {color: '#FDE725FF'}}},
-             {target: "FI", value: {marker: {color: '#FDE725FF'}}},
-             {target: "FR", value: {marker: {color: '#FDE725FF'}}},
-             {target: "GB", value: {marker: {color: '#FDE725FF'}}},
-             {target: "IE", value: {marker: {color: '#FDE725FF'}}},
-             {target: "IL", value: {marker: {color: '#FDE725FF'}}},
-             {target: "IT", value: {marker: {color: '#FDE725FF'}}},
-             {target: "JP", value: {marker: {color: '#FDE725FF'}}},
-             {target: "KR", value: {marker: {color: '#FDE725FF'}}},
-             {target: "NL", value: {marker: {color: '#FDE725FF'}}},
-             {target: "NO", value: {marker: {color: '#FDE725FF'}}},
-             {target: "SE", value: {marker: {color: '#FDE725FF'}}},
-             {target: "SG", value: {marker: {color: '#FDE725FF'}}},
-             {target: "US", value: {marker: {color: d3.interpolateViridis(0.5)}}},
-             {target: "Rest", value: {marker: {color: '#FDE725FF'}}}]
-           }
-           ],
             hovertemplate:  '%{customdata}' + '<extra></extra>',
             textposition: 'center',
             hoverinfo: 'none'
         };
         
-          
+        
+
+                  
 
 var data = [trace1];
  
@@ -149,7 +139,7 @@ var layout = {
         //  bargroupgap:  0.1, 
           showlegend: false,
           scrollZoom: false,
-          height: 50 + 40*currentest.length,
+          height: 60 + 40*currentest.length,
           margin: {l: 250,
                    r: 0,
                    b: 50,
@@ -176,8 +166,8 @@ var layout = {
     yaxis: {autotick: false,
             fixedrange: true,
             zeroline: false,
-            categoryorder: "category descending",
-            categoryarry: current_ctry_model,
+            categoryorder: "category ascending",
+            categoryarry: currentmodel,
             //         tickvals: Array(current_ctry_model.length).fill().map((element, index) => index + 0), 
     //        ticktext: currentctry, 
             tickfont: {size: 18, width: 2},
