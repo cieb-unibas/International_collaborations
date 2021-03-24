@@ -111,19 +111,19 @@ function setBubblePlot(chosenCountry, chosenCountry2) {
  
 var trace1 = {
             x: currentest,
-            y: [currentmodel, currentctry],
+            y: [currentctry, currentmodel],
             customdata: text_var,
             type: 'scatter',
-            mode: "markers",
+            mode: "markers+text",
             color: current_color,
+            text:  currentctry,
             marker: {size: 20, color: current_color},
             error_x: {
             type: 'data', color: current_color,
             array: currentconf_l},
             orientation: 'h',
             hovertemplate:  '%{customdata}' + '<extra></extra>',
-            textposition: 'center',
-            hoverinfo: 'none'
+            textposition: 'top',
         };
         
         
@@ -155,38 +155,31 @@ var layout = {
       width: 1.5,
       dash: 'dash'
     }}],       
-                   
+                 
     xaxis: {autotick: true,
             fixedrange: true,
             zeroline: false,
-            // tickvals: [1, 2, 3, 4, 5], 
+            autorange: true,
+                       // tickvals: [1, 2, 3, 4, 5], 
             tickfont: {size: 18},
             title: {text: '<b>Coefficient estimate</b>', font: {size: 18}}
            },
     yaxis: {autotick: false,
             fixedrange: true,
             zeroline: false,
-            categoryorder: "category ascending",
-            categoryarry: currentmodel,
-            //         tickvals: Array(current_ctry_model.length).fill().map((element, index) => index + 0), 
-    //        ticktext: currentctry, 
+            showticklabels: true,
+             categoryorder: "array",
+            categoryarry: currentmodel, 
             tickfont: {size: 18, width: 2},
             title: {text: '<b></b>'}}
- //   shapes: [{
-//      type: 'line',
-//      x0: 0, 
-//      y0: currentctry.length,
-//      x1: 0,
-//      y1: currentctry.length,
-//      line: {dash: 'dot'}
-//    }]
+
   
 };
   
 
 Plotly.newPlot('myDiv', data, layout, {displayModeBar: false});
-Plotly.update('myDiv', data, layout);
-};    
+//Plotly.update('myDiv', data, layout);
+}
 
 
 var countrySelector = document.getElementById("select_1");
