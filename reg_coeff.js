@@ -165,6 +165,7 @@ var layout = {
             title: {text: '<b>Coefficient estimate</b>', font: {size: 18}}
            },
     yaxis: {autotick: false,
+            showgrid: false,
             fixedrange: true,
             zeroline: false,
             showticklabels: true,
