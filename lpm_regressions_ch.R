@@ -239,7 +239,8 @@ dwplot(by_tech_ctry_plot,
 ##########################################
 dat_save <- rbind(by_ctry_plot, by_tech_ctry_plot)
 dat_save <- mutate(dat_save, conf_int = estimate-conf.low)
-dat_save <- mutate(dat_save, estimate = round(estimate, 4), conf.low = round(conf.low, 3), conf.high = round(conf.high, 3), conf_int = round(conf_int, 3))
+dat_save <- mutate(dat_save, p.value = round(p.value, 4), estimate = round(estimate, 4), conf.low = round(conf.low, 3), conf.high = round(conf.high, 3), conf_int = round(conf_int, 3), ctry_name = countrycode(term, "iso2c", "country.name.en"))
+dat_save <- mutate(dat_save, ctry_name = ifelse(is.na(ctry_name) == T, "All other countries", ctry_name))
 dat_save <- dplyr::arrange(dat_save, desc(term), desc(model))
 
 dat_save %>% write.table(paste0(getwd(), "/dat_coeff.csv"), row.names = FALSE, fileEncoding="UTF-8", sep = ",", dec = ".")
