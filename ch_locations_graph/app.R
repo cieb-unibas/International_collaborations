@@ -52,8 +52,10 @@ fig <- plot_ly(
   dr(), x = ~location, y = ~share, frame=~interval,
   color=~techbroad, type = "bar",
   mode="markers", 
-  text = ~paste(sep='','<br>Share of inventors:', round(`share`,1),'%',
-                '<br>Location:', `location_name`)) %>%
+  text = ~paste('Share of inventors:', round(`share`,1),'%',
+                '<br>Location:', `location_name`), 
+  hoverinfo = "text"
+  ) %>%
   layout(
     title="Foreign collaboration and citation",
     
