@@ -37,6 +37,7 @@ datareg<-datareg %>%
  setDT(datareg)[p_year>=2001 & p_year<=2005, interval := "2001-2005"]
  setDT(datareg)[p_year>=2006 & p_year<=2010, interval := "2006-2010"]
  setDT(datareg)[p_year>=2011 & p_year<=2015, interval := "2011-2015"]
+ 
 
 # Filter out patents where legal owner comes from CH
  datareg <-  datareg %>%
@@ -82,13 +83,21 @@ datareg<-datareg %>%
 # # Calculating the number of foreign scientists in Swiss patents, per technology
 # 
 # inv_ch_techf_coun <- subset(network_coll_data_ch, select = c("ctry_inventor", "tech_field"))
-# 
+ 
  
  inv_ch_techf_coun_f <- datareg %>% 
    group_by(techbroad, interval) %>%
    summarise_at(vars("num_tot_scient", "num_AT_scient" , "num_CH_scient" , "num_IL_scient" , "num_DK_scient", "num_BE_scient", "num_FI_scient", "num_CA_scient", "num_US_scient", "num_SE_scient", "num_IT_scient", "num_KR_scient", "num_GB_scient", "num_DE_scient", "num_FR_scient", "num_JP_scient", "num_NO_scient", "num_ES_scient", "num_NL_scient", "num_IE_scient", "num_SG_scient"), sum, na.rm = TRUE)
+
+# Creating a total category 
+ inv_ch_techf_coun_f_total <- datareg %>% 
+   group_by(interval) %>%
+   summarise_at(vars("num_tot_scient", "num_AT_scient" , "num_CH_scient" , "num_IL_scient" , "num_DK_scient", "num_BE_scient", "num_FI_scient", "num_CA_scient", "num_US_scient", "num_SE_scient", "num_IT_scient", "num_KR_scient", "num_GB_scient", "num_DE_scient", "num_FR_scient", "num_JP_scient", "num_NO_scient", "num_ES_scient", "num_NL_scient", "num_IE_scient", "num_SG_scient"), sum, na.rm = TRUE)
  
+ setDT(inv_ch_techf_coun_f_total)[, techbroad := "Total"]
  
+ inv_ch_techf_coun_f <- rbind(inv_ch_techf_coun_f,inv_ch_techf_coun_f_total)
+   
 # Calculating the share of foreign scientists in Swiss patents, per country of inventors
 
  options(scipen=999)

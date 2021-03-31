@@ -28,9 +28,9 @@ ch_locations<-ch_locations %>%
 ui <- fluidPage(
   
   plotlyOutput("coolplot"),
-  selectizeInput("techbroad", "Choose technology",
-                 options = list(placeholder = 'select technology'),
-                 choices = c(ch_locations$techbroad), multiple = FALSE)
+  selectizeInput("techbroad", "Choose a technology field",
+                 options = list(placeholder = 'Technology fields'),
+                 choices = c(ch_locations$techbroad), multiple = T, selected = "Total")
   
   
 )
