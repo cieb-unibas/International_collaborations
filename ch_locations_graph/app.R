@@ -82,7 +82,7 @@ fig <- plot_ly(
     currentvalue = list(prefix = "", font = list(color="black"))
   )
 
-fig <- fig %>% layout(title = 'Locations of Swiss patent inventors',
+fig <- fig %>% layout(title = F,
                       xaxis = list(showgrid = TRUE),
                       legend.position = "none",
                       yaxis = list(showgrid = TRUE))
