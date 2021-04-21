@@ -10,7 +10,7 @@ function round(value, decimals) {
 
 
 
-Plotly.d3.csv("dat_coeff.csv", function(err, rows){
+Plotly.d3.csv("https://raw.githubusercontent.com/cieb-unibas/International_collaborations/main/Report/dat_coeff.csv", function(err, rows){
 function unpack(rows, key) {
         return rows.map(function(row) { return row[key]; });
     }
@@ -135,9 +135,9 @@ var layout = {
           showlegend: false,
           scrollZoom: false,
           height: 60 + 40*currentest.length,
-          margin: {l: 300,
+          margin: {l: 0,
                    r: 0,
-                   b: 50,
+                   b: 80,
                    t: 0},
            shapes: [{
     type: 'line',

@@ -63,7 +63,11 @@ Our goal is to discover whether international R&D collaborations are associated 
 ```{r, echo=FALSE}
 htmltools::includeHTML("coeff_plot.html")
 ```
-<span style="font-size:0.8em">*Source: CIEB’s own calculations based on data from the <a href=https://www.patentsview.org/download/ target = “_blank”>USPTO</a>. </span>
+
+<br>
+
+<span style="font-size:0.8em">*Source and notes: CIEB’s own calculations based on data from the <a href=https://www.patentsview.org/download/ target = “_blank”>USPTO</a>. The horizontal bar plots show the corresponding 95% confidence intervall. If the lower bound is above zero, the corresponding coefficient is positive significant at the 95% level or higher. If the upper bound is below zero, the coefficient is negative significant at the 95% level or higher.*</span>
+
 
 <br>
 
@@ -87,7 +91,7 @@ Now that we know with which locations it is beneficial to collaborate in order t
 ```{r, echo=FALSE}
 #htmltools::includeHTML("xxx.html")
 ```
-<span style="font-size:0.8em">*Source: CIEB’s own calculations based on data from the <a href=https://www.patentsview.org/download/ target = “_blank”>USPTO</a>. </span>
+<span style="font-size:0.8em">*Source: CIEB’s own calculations based on data from the <a href=https://www.patentsview.org/download/ target = “_blank”>USPTO</a>.*</span>
 
 <br>
 
@@ -117,11 +121,11 @@ For instance, the fact that Great Britain left the EU and that Swiss R&D-coopera
 
 <br>
 
-**Are you interested in** how countries have specialised in different innovations over time? Then check out our Dashboard <a href=https://innoscape.ch/en/publications/rnd-specialization target=”_blank”>R&D Specialization</a>.
+**Are you interested in** how countries have specialized in different innovations over time? Then check out our Dashboard <a href=https://innoscape.ch/en/publications/rnd-specialization target=”_blank”>R&D Specialization</a>. Or on cross-border commuting and inventions "Made in Switzerland"? Then click <a href=https://innoscape.ch/en/publications/cross-border-commuting-and-inventions-made-in-switzerland target=”_blank”>here</a>.
 
 <br>
 
-<span style="font-size:0.8em">*This report was written using <a href = https://rmarkdown.rstudio.com/ target = “_blank”>R Markdown</a>, <a href=https://shiny.rstudio.com/ target = “_blank”>R shiny</a> and <a href=https://plotly.com/javascript/ target = “_blank”>Plotly</a>. Data and code to reproduce the figures presented in this article are available on <a href=ADDGITHUBLINK="_blank"> ADDGITHUBLINK </a>.*</span>
+<span style="font-size:0.8em">*This report was written using <a href = https://rmarkdown.rstudio.com/ target = “_blank”>R Markdown</a>, <a href=https://shiny.rstudio.com/ target = “_blank”>R shiny</a> and <a href=https://plotly.com/javascript/ target = “_blank”>Plotly</a>. Data and code to reproduce the figures presented in this article are available on <a href=https://github.com/cieb-unibas/International_collaborations/tree/37f500c66f7b4ec02736aace9eddc1df5c9657a4/Report target = "_blank">Github</a>.*</span>
 <br>
 <br>
 <br>
