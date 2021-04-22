@@ -88,9 +88,9 @@ server <- function(input, output,session) {
   ) %>% config(displayModeBar = F)
 
 fig <- fig %>% layout(title = F,
-                      xaxis = list(showgrid = TRUE),
+                      xaxis = list(showgrid = TRUE, fixedrange = TRUE),
                       legend.position = "none",
-                      yaxis = list(showgrid = TRUE))
+                      yaxis = list(showgrid = TRUE, fixedrange = TRUE))
 } else {}
     })
   })  
