@@ -66,7 +66,7 @@ htmltools::includeHTML("coeff_plot.html")
 
 <br>
 
-<span style="font-size:0.8em">*Source and notes: CIEB’s own calculations based on data from the <a href=https://www.patentsview.org/download/ target = “_blank”>USPTO</a>. The horizontal bar plots show the corresponding 95% confidence intervall. If the lower bound is above zero, the corresponding coefficient is positive significant at the 95% level or higher. If the upper bound is below zero, the coefficient is negative significant at the 95% level or higher.*</span>
+<span style="font-size:0.8em">*Source and notes: CIEB’s own calculations based on data from the <a href=https://www.patentsview.org/download/ target = “_blank”>USPTO</a>. The horizontal bar plots show the corresponding 95% confidence intervall. If the lower bound is above zero, the corresponding coefficient is significant positive at the 95% level or higher. If the upper bound is below zero, the coefficient is significant negative at the 95% level or higher.*</span>
 
 
 <br>
