@@ -134,7 +134,7 @@ var layout = {
         //  bargroupgap:  0.1, 
           showlegend: false,
           scrollZoom: false,
-          height: 60 + 40*currentest.length,
+          height: 60 + 44*currentest.length,
           margin: {l: 0,
                    r: 0,
                    b: 80,

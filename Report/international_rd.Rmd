@@ -31,7 +31,7 @@ output:
 <br>
 
 <div class=bloc_div>
-<blockquote>***”The amplitude of cross-border / overseas R&D operations has dramatically increased over the last two decades. Indeed, products embody a growing number of technologies and components, and are thus becoming increasingly reliant upon an expanding number of specialized fields of knowledge. Therefore, in order to remain competitive, firms must master innovations across a wide range of technology fields and this often requires tapping into different centers of excellence around the world.”
+<blockquote>***”The amplitude of cross-border / overseas R&D operations has dramatically increased over the last two decades. Indeed, products embody a growing number of technologies and components, and are thus becoming increasingly reliant upon an expanding number of specialized fields of knowledge. Therefore, in order to remain competitive, firms must master innovations across a wide range of technology fields and this often requires tapping into different centers of excellence around the world. 
 <a href = https://core.ac.uk/download/pdf/192762856.pdf target = “_blank”>( Moncada-Paternò-Castello et al., 2011, p.2)</a>
 ***</blockquote>
 </div> 
@@ -87,10 +87,10 @@ Now that we know with which locations it is beneficial to collaborate in order t
 <br>
 
 <hr class="hr_red">
-#### **Figure 2: Locations of Swiss patents’ inventors **
-```{r, echo=FALSE}
-#htmltools::includeHTML("xxx.html")
-```
+#### **Figure 2: International locations of Swiss patents’ inventors **
+<iframe width="100%" height="540" scrolling="no" frameBorder="0" style="overflow: hidden" src=" https://cieb.shinyapps.io/ch_locations_graph" id="geo_plot">
+<p>Your browser does not support iframes</p>
+</iframe>
 <span style="font-size:0.8em">*Source: CIEB’s own calculations based on data from the <a href=https://www.patentsview.org/download/ target = “_blank”>USPTO</a>.*</span>
 
 <br>
@@ -130,5 +130,4 @@ For instance, the fact that Great Britain left the EU and that Swiss R&D-coopera
 <br>
 <br>
 <br>
-
 
