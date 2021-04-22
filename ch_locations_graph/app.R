@@ -1,16 +1,17 @@
-library(dplyr)
-library(purrr)
-library(igraph)
-library(ggplot2)
-library(ggraph)
-library(RColorBrewer)
-library(countrycode)
-library(visNetwork)
-library(data.table)
-library(tidyverse)
+# library(dplyr)
+# library(purrr)
+# library(igraph)
+# library(ggplot2)
+# library(ggraph)
+# library(RColorBrewer)
+# library(countrycode)
+# library(visNetwork)
+# library(data.table)
+# library(tidyverse)
 library(shiny)
 library(shinyWidgets)
 library(plotly)
+library(viridis)
 
 rm(list = ls())
 
@@ -19,11 +20,10 @@ rm(list = ls())
 # Swiss invention locations graph
 ################################################################################
 
-ch_locations <- readRDS("/scicore/home/weder/GROUP/Innovation/01_patent_data/created data/inv_coll_ch_networkdata.rds")
+ch_locations <- readRDS("inv_coll_ch_networkdata.rds")
 
-ch_locations<-ch_locations %>%
-  filter(location !="CH")
-
+ch_locations <- subset(ch_locations, location !="CH")
+ch_locations <- ch_locations[order(ch_locations$location_name), ]
 
 ui <- fluidPage(
   
@@ -48,9 +48,12 @@ server <- function(input, output,session) {
     
     output$coolplot <- renderPlotly({
 
-fig <- plot_ly(
+  if(nrow(dr())!= 0){   
+        
+  fig <- plot_ly(
   dr(), x = ~location, y = ~share, frame=~interval,
   color=~techbroad, type = "bar",
+  colors = viridis_pal(option = "D", begin = 0, end = 1, direction = -1)(length(unique(dr()$techbroad))),
   mode="markers", 
   text = ~paste('Share of inventors:', round(`share`,1),'%',
                 '<br>Location:', `location_name`), 
@@ -82,12 +85,13 @@ fig <- plot_ly(
   
   animation_slider(
     currentvalue = list(prefix = "", font = list(color="black"))
-  )
+  ) %>% config(displayModeBar = F)
 
 fig <- fig %>% layout(title = F,
                       xaxis = list(showgrid = TRUE),
                       legend.position = "none",
                       yaxis = list(showgrid = TRUE))
+} else {}
     })
   })  
 }

@@ -1,0 +1,12 @@
+name: ch_locations_graph
+title: ch_locations_graph
+username:
+account: cieb
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 4012075
+bundleId: 4503899
+url: https://cieb.shinyapps.io/ch_locations_graph/
+when: 1619079937.60634
+asMultiple: FALSE
+asStatic: FALSE
