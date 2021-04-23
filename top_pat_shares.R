@@ -30,6 +30,20 @@ dataregNoNA <- readRDS("/scicore/home/weder/GROUP/Innovation/01_patent_data/crea
  ggplot(toppat_share, aes(x = reorder(ctry_leg_owner, -world_class_90), y = world_class_90)) + geom_bar(stat = "identity")
  
  
+ # Use only subset of home patents 
+ 
+ dataregNoNA <- readRDS("/scicore/home/weder/GROUP/Innovation/01_patent_data/created data/datareg_ch.rds")
+ 
+ toppat_share_domoestic <- filter(dataregNoNA, num_dom_scient>0)  
+ 
+ toppat_share_domoestic <- toppat_share_domoestic %>%
+   group_by(ctry_leg_owner) %>% 
+   summarise_at(vars("world_class_90"), mean,na.rm=TRUE)
+ 
+ # Use only subset of industrial countries as patent owners -> for policy advise to Switzerland I guess only such a rather homogeneous sub-sample is meaningful 
+ toppat_share_domoestic <- filter(toppat_share_domoestic, ctry_leg_owner %in% c("AT", "CH", "IL", "DK", "BE", "FI", "CA", "US", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG"))  
+ 
+ ggplot(toppat_share_domoestic, aes(x = reorder(ctry_leg_owner, -world_class_90), y = world_class_90)) + geom_bar(stat = "identity")
  
  
  
