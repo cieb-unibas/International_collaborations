@@ -135,7 +135,7 @@ var layout = {
           showlegend: false,
           scrollZoom: false,
           height: 60 + 44*currentest.length,
-          margin: {l: 0,
+          margin: {l: 280,
                    r: 0,
                    b: 80,
                    t: 0},
