@@ -24,9 +24,9 @@ output:
 *May 2021* by <a href="https://wwz.unibas.ch/de/personen/dragan-filimonovic/" target = "_blank">Dragan Filimonovic</a> and <a href="https://wwz.unibas.ch/de/personen/christian-rutzer/" target = "_blank">Christian Rutzer</a> 
 <br>
 
-![](){width=100%} 
+![](title_new.jpg){width=100%}  
 
-<a href="XXX" target = "_blank">XXX | XXX</a> 
+<a href="http://www.freepik.com">Designed by macrovector | Freepik</a>
 
 <br>
 
