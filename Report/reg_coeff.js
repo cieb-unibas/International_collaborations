@@ -131,7 +131,7 @@ var layout = {
         //  bargroupgap:  0.1, 
           showlegend: false,
           scrollZoom: false,
-          height: 60 + 45*currentest.length,
+          height: 80 + 50*currentest.length,
           margin: {l: 280,
                    r: 0,
                    b: 80,
@@ -150,23 +150,23 @@ var layout = {
     annotations: [{
     xref: 'x',
     yref: 'y',
-    x: 0.006,
+    x: 0.01,
     xanchor: 'left',
     y: current_ctry_model.length + 0.5,
     yanchor: 'bottom',
-    text: '<b>Better</b> (compared to only domestic)',
-    font: {size: 18},
+    text: '<b>Better</b><br>(compared to only domestic)',
+    font: {size: 14},
     showarrow: false
   },
   {
     xref: 'x',
     yref: 'y',
-    x: -0.017,
-    xanchor: 'left',
+    x: -0.01,
+    xanchor: 'right',
     y: current_ctry_model.length + 0.5,
     yanchor: 'bottom',
-    text: '<b>Worse</b> (compared to only domestic)',
-    font: {size: 18},
+    text: '<b>Worse</b><br>(compared to only domestic)',
+    font: {size: 14},
     showarrow: false
   }],
     xaxis: {autotick: true,
@@ -175,7 +175,7 @@ var layout = {
             autorange: true,
                        // tickvals: [1, 2, 3, 4, 5], 
             tickfont: {size: 18},
-            title: {text: '<b>Coefficient estimate</b>', font: {size: 18}}
+            title: {text: '<b>Coefficient estimate</b>', font: {size: 14}}
            },
     yaxis: {autotick: false,
             showgrid: false,
