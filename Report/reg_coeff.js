@@ -122,9 +122,6 @@ var trace1 = {
         };
         
         
-
-                  
-
 var data = [trace1];
  
 var layout = {
@@ -134,7 +131,7 @@ var layout = {
         //  bargroupgap:  0.1, 
           showlegend: false,
           scrollZoom: false,
-          height: 60 + 44*currentest.length,
+          height: 60 + 45*currentest.length,
           margin: {l: 280,
                    r: 0,
                    b: 80,
@@ -149,8 +146,29 @@ var layout = {
       color: 'grey',
       width: 1.5,
       dash: 'dash'
-    }}],       
-                 
+    }}],   
+    annotations: [{
+    xref: 'x',
+    yref: 'y',
+    x: 0.006,
+    xanchor: 'left',
+    y: current_ctry_model.length + 0.5,
+    yanchor: 'bottom',
+    text: '<b>Better</b> (compared to only domestic)',
+    font: {size: 18},
+    showarrow: false
+  },
+  {
+    xref: 'x',
+    yref: 'y',
+    x: -0.017,
+    xanchor: 'left',
+    y: current_ctry_model.length + 0.5,
+    yanchor: 'bottom',
+    text: '<b>Worse</b> (compared to only domestic)',
+    font: {size: 18},
+    showarrow: false
+  }],
     xaxis: {autotick: true,
             fixedrange: true,
             zeroline: false,
