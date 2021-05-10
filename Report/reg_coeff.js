@@ -65,7 +65,7 @@ var     var1 = unpack(rows, 'term'),
         
         for (var i = 0 ; i < var1.length ; i++){
            if(var2[i] === "Overall"){
-           color_var[i] = d3.interpolateViridis(0);
+           color_var[i] = d3.interpolateViridis(1);
            } else if (var2[i] === "Chemistry"){
            color_var[i] = d3.interpolateViridis(0.2);
            } else if (var2[i] === "Electrical engineering"){
@@ -75,7 +75,7 @@ var     var1 = unpack(rows, 'term'),
            } else if (var2[i] === "Other fields"){
            color_var[i] = d3.interpolateViridis(0.8);
            } else if (var2[i] === "Mechanical engineering"){
-           color_var[i] = d3.interpolateViridis(1);
+           color_var[i] = d3.interpolateViridis(0);
            } 
 
           for(var j = 0; j < var2.length; j ++){
