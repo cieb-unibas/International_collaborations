@@ -167,7 +167,7 @@ var layout = {
     xanchor: 'left',
     y: current_ctry_model.length + 0.5,
     yanchor: 'bottom',
-    text:text_left,
+    text:text_right,
     font: {size: 14},
     showarrow: false
   },
@@ -178,7 +178,7 @@ var layout = {
     xanchor: 'right',
     y: current_ctry_model.length + 0.5,
     yanchor: 'bottom',
-    text: text_right,
+    text: text_left,
     font: {size: 14},
     showarrow: false
   }],
