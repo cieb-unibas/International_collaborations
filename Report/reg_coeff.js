@@ -103,6 +103,19 @@ setBubblePlot(["CH", "GB", "US", "CN", "DE"], ["Overall"]);
 function setBubblePlot(chosenCountry, chosenCountry2) {
         getCountryData(chosenCountry, chosenCountry2);
  
+
+if( /Android|webOS|iPhone|iPad|Mac|Macintosh|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+  var margin_left = 100,
+      tick_y_axis = 14,
+      text_right = "<b>Better</b><br>(compared to<br>only domestic)",
+      text_left = "<b>Worse</b><br>(compared to<br>only domestic)";
+
+} else{ 
+  var margin_left = 280,
+      tick_y_axis = 18,
+      text_right = "<b>Better</b><br>(compared to only domestic)",
+      text_left = "<b>Worse</b><br>(compared to only domestic)";
+  }
  
 var trace1 = {
             x: currentest,
@@ -132,7 +145,7 @@ var layout = {
           showlegend: false,
           scrollZoom: false,
           height: 80 + 50*currentest.length,
-          margin: {l: 280,
+          margin: {l: margin_left,
                    r: 0,
                    b: 80,
                    t: 0},
@@ -154,7 +167,7 @@ var layout = {
     xanchor: 'left',
     y: current_ctry_model.length + 0.5,
     yanchor: 'bottom',
-    text: '<b>Better</b><br>(compared to only domestic)',
+    text:text_left,
     font: {size: 14},
     showarrow: false
   },
@@ -165,7 +178,7 @@ var layout = {
     xanchor: 'right',
     y: current_ctry_model.length + 0.5,
     yanchor: 'bottom',
-    text: '<b>Worse</b><br>(compared to only domestic)',
+    text: text_right,
     font: {size: 14},
     showarrow: false
   }],
@@ -184,7 +197,7 @@ var layout = {
             showticklabels: true,
              categoryorder: "array",
             categoryarry: currentmodel, 
-            tickfont: {size: 18, width: 2},
+            tickfont: {size: tick_y_axis, width: 2},
             title: {text: '<b></b>'}}
 
   
