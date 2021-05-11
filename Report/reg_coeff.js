@@ -62,21 +62,29 @@ var     var1 = unpack(rows, 'term'),
         confl = [];
         color_var = [];
         current_color = [];
+        ind_short = [];
+        ind_short_current = [];
         
         for (var i = 0 ; i < var1.length ; i++){
            if(var2[i] === "Overall"){
            color_var[i] = d3.interpolateViridis(1);
+           ind_short[i] = "Overall";
            } else if (var2[i] === "Chemistry"){
            color_var[i] = d3.interpolateViridis(0.2);
+           ind_short[i] = "Chemistry";
            } else if (var2[i] === "Electrical engineering"){
-            color_var[i] = d3.interpolateViridis(0.4);
+           color_var[i] = d3.interpolateViridis(0.4);
+           ind_short[i] = "Electrical";
            } else if (var2[i] === "Instruments"){
            color_var[i] = d3.interpolateViridis(0.6);
+           ind_short[i] = "Instruments";
            } else if (var2[i] === "Other fields"){
            color_var[i] = d3.interpolateViridis(0.8);
+           ind_short[i] = "Other fields";
            } else if (var2[i] === "Mechanical engineering"){
            color_var[i] = d3.interpolateViridis(0);
-           } 
+           ind_short[i] = "Mechanical";
+          } 
 
           for(var j = 0; j < var2.length; j ++){
           for(var k = 0; k < var1.length; k++){
@@ -88,6 +96,7 @@ var     var1 = unpack(rows, 'term'),
                 currentconf_h.push(conf_h[i]);
                 current_ctry_model.push(var1[i] + "-" + var2[i]);
                 current_color.push(color_var[i]);
+                ind_short_current.push(ind_short[i]);
 
                 text_var.push('Country: ' + ctry_name[i] + '<br>' +  'Technology: ' + var2[i] + '<br>' + 'Estimated coefficient: ' + round(est[i], 4) +
                     '<br>' +  'P-value: ' + p_value[i] +'<br>' + '95% Confidence Intervall: [' + round(conf_low[i], 4) + ', ' + round(conf_h[i], 4) + ']');
@@ -109,17 +118,20 @@ if( /Android|webOS|iPhone|iPad|Mac|Macintosh|iPod|BlackBerry|IEMobile|Opera Mini
       tick_y_axis = 14,
       text_right = "<b>Better</b><br>(compared to<br>only domestic)",
       text_left = "<b>Worse</b><br>(compared to<br>only domestic)";
+      y_axis_text = ind_short_current;
 
 } else{ 
   var margin_left = 280,
       tick_y_axis = 18,
       text_right = "<b>Better</b><br>(compared to only domestic)",
       text_left = "<b>Worse</b><br>(compared to only domestic)";
+      y_axis_text = currentmodel;
+
   }
  
 var trace1 = {
             x: currentest,
-            y: [currentctry, currentmodel],
+            y: [currentctry, y_axis_text],
             customdata: text_var,
             type: 'scatter',
             mode: "markers+text",
