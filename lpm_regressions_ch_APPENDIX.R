@@ -216,32 +216,51 @@ dwplot(by_ctry_plot,
         legend.title = element_blank()) 
 
 ############################
-# C. LEAVE US PATENTS#
+# C. LEAVE CH PATENTS#
 ############################
-# dataregNoNA<-mutate(dataregNoNA, p_year=as.factor(p_year))
-# left_var  <- c("world_class_90")
-# right_var <- c("claims_log", "originality", "num_tot_scient_log",
-#                #"f_inv", paste0(c("AT", "IL", "DK", "BE", "FI", "CA", "US", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG", "CN", "CH"), ":f_inv"),
-#                paste0(c("AT", "IL", "DK", "BE", "FI", "CA", "US", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG", "CN", "CH", "REST")))
-# fe        <- c("p_year + tech_name + ctry_leg_owner + ctry_leg_owner^tech_name + ctry_leg_owner^p_year")
-# m_1 <- as.formula(paste(left_var, paste(paste(c(right_var), collapse = "+"), "|", fe), sep=" ~ "))
-# by_ctry <- model_estim(unique(dataregNoNA$techbroad), years = seq(1990, 2015), data = dataregNoNA, model_form = m_1, model_name = "Overall")
-# 
-# by_ctry_plot <- by_ctry %>%
-#   filter(term %in% c(
-#     # "domestic", "domestic and foreign", "foreign", 
-#     # "Size of the team", "Number of claims", "University participation", 
-#     paste0(c("AT", "IL", "DK", "BE", "FI", "CA", "US", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG", "CN", "CH", "REST"))))        
-# 
-# dwplot(by_ctry_plot,
-#        vline = geom_vline(xintercept = 0, colour = "grey60", linetype = 2)) + # plot line at zero _behind_ coefs
-#   theme_bw() + xlab("Coefficient Estimate") + ylab("") +
-#   ggtitle("Quality of patents across technological fields by various factors") +
-#   theme(plot.title = element_text(face="bold"),
-#         # legend.position = "bottom",
-#         legend.justification = c(0, 0),
-#         legend.background = element_rect(colour="grey80"),
-#         legend.title = element_blank()) 
+
+base::set.seed(27)
+model_estim <- function(t_field, years, data, model_form, model_name = "no_name", cluster_level = "tech_name"){
+  df <- data.frame(data)
+  df <- filter(df, p_year %in% years & techbroad %in% t_field) 
+  model_obj <- femlm(model_form, data = df, family = "gaussian", cluster = cluster_level)
+  model_obj <- summary(model_obj, se = "cluster")
+  coef <- data.frame(model_obj$coeftable)
+  coef$term <- row.names(coef)
+  conf <- data.frame(confint(model_obj, level = 0.95, cluster = cluster_level, se = "cluster"))
+  conf$term <- row.names(conf)
+  result   <- merge(coef, conf, by = "term")
+  colnames(result) <- c("term", "estimate", "std.error", "statistic", "p.value", "conf.low", "conf.high")
+  result$model     <- model_name
+  result <- as_tibble(result)
+  return(result)
+}
+
+
+dataregNoNA<-mutate(dataregNoNA, p_year=as.factor(p_year))
+left_var  <- c("world_class_90")
+right_var <- c("claims_log", "originality", "num_tot_scient_log",
+               #"f_inv", paste0(c("AT", "IL", "DK", "BE", "FI", "CA", "US", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG", "CN"), ":f_inv"),
+               paste0(c("AT", "IL", "DK", "BE", "FI", "CA", "US", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG", "CN", "REST")))
+fe        <- c("p_year + tech_name")
+m_1 <- as.formula(paste(left_var, paste(paste(c(right_var), collapse = "+"), "|", fe), sep=" ~ "))
+by_ctry <- model_estim(unique(dataregNoNA$techbroad), years = seq(1990, 2015), data = filter(dataregNoNA, (ctry_leg_owner %in% c("CH"))), model_form = m_1, model_name = "Overall")
+
+by_ctry_plot <- by_ctry %>%
+  filter(term %in% c(
+    # "domestic", "domestic and foreign", "foreign",
+    # "Size of the team", "Number of claims", "University participation",
+    paste0(c("AT", "IL", "DK", "BE", "FI", "CA", "US", "SE", "IT", "KR", "GB", "DE", "FR", "JP", "NO", "ES", "NL", "IE", "SG", "CN", "REST"))))
+
+dwplot(by_ctry_plot,
+       vline = geom_vline(xintercept = 0, colour = "grey60", linetype = 2)) + # plot line at zero _behind_ coefs
+  theme_bw() + xlab("Coefficient Estimate") + ylab("") +
+  ggtitle("") +
+  theme(plot.title = element_text(face="bold"),
+        # legend.position = "bottom",
+        legend.justification = c(0, 0),
+        legend.background = element_rect(colour="grey80"),
+        legend.title = element_blank()) 
 
 ############################
 # D. DEP VAR: CLAIMS       #
