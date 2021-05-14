@@ -1,0 +1,25 @@
+section
+  h1 Automatic Tooltips
+  p 
+    | Tooltips can be
+    span.TooltipTrigger(data-tooltips="Attached", data-position="OnTop") attached
+    |
+    | to any element. When you hover the
+    span.TooltipTrigger(
+      data-tooltips="Element to something",
+      data-position="OnBottom"
+    ) element
+    |
+    | with your mouse, the title attribute is displayed in
+    span.TooltipTrigger(
+      data-tooltips="A little box to something to make it longer",
+      data-position="OnLeft"
+    ) a little box
+    |
+    | next to the element, just like a native tooltip. But as it's not a native tooltip, it can be styled. Any themes built with
+    span.TooltipTrigger(
+      data-tooltips="Theme Roller to something",
+      data-position="OnRight"
+    ) ThemeRoller
+    |
+    | will also style tooltips accordingly. Tooltips are also useful for form elements, to show some additional information in the context of each field.

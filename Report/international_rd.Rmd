@@ -1,6 +1,8 @@
 ---
 output:
   html_document:
+    includes:
+     after_body: footer.html
     title: "International Collaboration"
     self_contained: false
     theme: null
