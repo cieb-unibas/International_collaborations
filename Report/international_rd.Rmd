@@ -36,8 +36,9 @@ output:
 ## **International collaborations and quality of innovations: With whom you partner matters!**
 <br>
 
-*May 2021* by <a href="https://cieb.unibas.ch/en/team/" target = "_blank">Dragan Filimonovic</a> and <a data-placement="right" data-toggle="tooltip"  data-html="true" title="<img src='Christian Rutzer_small.jpg'> <a href='https://cieb.unibas.ch/en/team/' target = '_blank'>Christian Rutzer</a>
-<br>Head Innoscape">Christian Rutzer</a>
+*May 2021* by <a data-placement="right" data-toggle="tooltip"  data-html="true" title="<img src='DF_picture.jpg'> <a href='https://cieb.unibas.ch/en/team/' target = '_blank'>Dr. Dragan Filimonovic</a>
+<br>Project Collaborator">Dragan Filimonovic</a> and <a data-placement="right" data-toggle="tooltip"  data-html="true" title="<img src='Christian Rutzer_small.jpg'> <a href='https://cieb.unibas.ch/en/team/' target = '_blank'>Christian Rutzer
+<br>Head Innoscape<br>PhD in Economics</a>">Christian Rutzer</a>
 <br>
 
 
