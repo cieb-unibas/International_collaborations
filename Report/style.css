@@ -211,9 +211,19 @@ summary {
 }
 
 
+.tooltip {
+  top: 100%;
+  left:50%;
+  margin-top: 0px;
+  min-width: 240px;
+    opacity: 1.0;
+filter: alpha(opacity=100);
+}
+
 
 .tooltip img{
-  top: 5%;
+  top: 100%;
+  left:50%;
   margin-top: 0px;
   background: rgba(255,255,255,0.85);
   border-top-width: 0;

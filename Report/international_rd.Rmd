@@ -36,9 +36,7 @@ output:
 ## **International collaborations and quality of innovations: With whom you partner matters!**
 <br>
 
-*May 2021* by <a data-placement="right" data-toggle="tooltip"  data-html="true" title="<img src='DF_picture.jpg'> <a href='https://cieb.unibas.ch/en/team/' target = '_blank'>Dr. Dragan Filimonovic</a>
-<br>Project Collaborator">Dragan Filimonovic</a> and <a data-placement="right" data-toggle="tooltip"  data-html="true" title="<img src='Christian Rutzer_small.jpg'> <a href='https://cieb.unibas.ch/en/team/' target = '_blank'>Christian Rutzer
-<br>Head Innoscape<br>PhD in Economics</a>">Christian Rutzer</a>
+*May 2021* by <a href="#" data-placement="bottom" data-toggle="tooltip"  data-html="true" title="<img src='DF_picture.jpg'><b>Dragan Filimonovic</b> is a project collaborator. He holds a PhD in economics from the University of Basel. He is specialized in applying methods for causal inference to evaluate public policies. Dragan is passionate about working with big data and is always in pursuit of finding creative solutions to interesting economic riddles.">Dragan Filimonovic</a> and <a href="#" data-placement="bottom" data-toggle="tooltip"  data-html="true" title="<img src='Christian Rutzer_small.jpg'> <b>Christian Rutzer</b> is the chief scientist and operational manager of the project. He holds a PhD in economics from the University of Basel in international trade and innovation. He has a broad spectrum of methodological skills, ranging from classical panel data econometrics to current machine learning. Christian likes to apply new methods from data science to analyze economic questions.">Christian Rutzer</a>
 <br>
 
 
@@ -52,16 +50,11 @@ output:
 <div class=bloc_div>
 <blockquote><i>”The amplitude of cross-border / overseas R&D operations has dramatically increased over the last two decades. Indeed, products embody a growing number of technologies and components, and are thus becoming increasingly reliant upon an expanding number of specialized fields of knowledge. Therefore, in order to remain competitive, firms must master innovations across a wide range of technology fields and this often requires tapping into different centers of excellence around the world. 
 
-<a href= https://core.ac.uk/download/pdf/192762856.pdf target = “_blank” data-toggle="tooltip" data-html="true" data-original-title="<b>Title:</b> Drivers and Impacts in the Globalization of Corporate R&D <br> <br> <b>Authors:</b> <br> <br> <b>Abstract:</b> An Introduction Based on the European Experience*
-The globalization of R&D activities has continued its growth path as companies are
-increasingly trying to capture knowledge and market opportunities internationally. The rapid
-evolution of national economies and the ways to conduct knowledge-intensive businesses
-has led researchers and analysts to pursue a deeper understanding of the globalization of
-corporate R&D and the related driving factors and impacts. This introduction to the Special
-Section: “Globalization and Corporate R&D” forthcoming in Industrial and Corporate Change
-(vol. 20 (2), April 2011) provides an update of trends in the globalization of corporate R&D. It
-reviews the literature on the main drivers and impacts of the process under investigation,
-introduces the papers for this Special Section, and offers some concluding remarks. ">(Moncada-Paternò-Castello et al., 2011, p.2)</a>
+<a href= https://core.ac.uk/download/pdf/192762856.pdf target = “_blank” data-placement="bottom" data-toggle="tooltip" data-html="true" data-original-title="<b>Authors:</b> Moncada-Paternò-Castello, Pietro and Vivarelli, Marco and Voigt, Peter (2011)</b> <br> <br>
+<b>Title:</b> Drivers and Impacts in the Globalization of Corporate R&D: An Introduction Based on the European Experience <br> <br>
+<b> Journal: </b> Industrial and Corporate Change 20(2), 585-603 <br> <br> 
+<b>Abstract:</b> 
+The globalization of R&D activities has continued its growth path as companies are increasingly trying to capture knowledge and market opportunities internationally. The rapid evolution of national economies and the ways to conduct knowledge-intensive businesses has led researchers and analysts to pursue a deeper understanding of the globalization of corporate R&D and the related driving factors and impacts. This introductory chapter provides an update of trends in the globalization of corporate R&D. It reviews the literature on the main drivers and impacts of the process under investigation, introduces the papers for this special section, and offers some concluding remarks.">(Moncada-Paternò-Castello et al., 2011, p.2)</a>
 </i></blockquote>
 </div> 
 
@@ -154,6 +147,9 @@ For instance, the fact that Great Britain left the EU and that Swiss R&D-coopera
 <br>
 
 **Are you interested in** how countries have specialized in different innovations over time? Then check out our Dashboard <a href=https://innoscape.ch/en/publications/rnd-specialization target=”_blank”>R&D Specialization</a>. Or on cross-border commuting and inventions "Made in Switzerland"? Then click <a href=https://innoscape.ch/en/publications/cross-border-commuting-and-inventions-made-in-switzerland target=”_blank”>here</a>.
+
+<a href= https://innoscape.ch/en/publications/rnd-specialization target = “_blank” data-toggle="tooltip" data-html="true" 
+data-original-title="Switzerland is primarily specialized in Pharmaceuticals or Medtech. But what about other countries like China or the US? And how have global R&D patterns changed over time? Take a look at our dashboard and derive your own conclusions!">R&D Specialization</a>
 
 <br>
 
