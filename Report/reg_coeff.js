@@ -122,7 +122,7 @@ if( /Android|webOS|iPhone|iPad|Mac|Macintosh|iPod|BlackBerry|IEMobile|Opera Mini
 
 } else{ 
   var margin_left = 280,
-      tick_y_axis = 18,
+      tick_y_axis = 14,
       text_right = "<b>Better</b><br>(compared to only domestic)",
       text_left = "<b>Worse</b><br>(compared to only domestic)";
       y_axis_text = currentmodel;
@@ -210,7 +210,7 @@ var layout = {
              categoryorder: "array",
             categoryarry: currentmodel, 
             tickfont: {size: tick_y_axis, width: 2},
-            title: {text: '<b></b>'}}
+            title: {text: '<b>Partner country          \n\n</b>', font: {size: 14}}}
 
   
 };
