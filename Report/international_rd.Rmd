@@ -103,7 +103,7 @@ Now that we have an impression with which locations it seems most beneficial to 
 <iframe width="100%" height="540" scrolling="no" frameBorder="0" style="overflow: hidden" src=" https://cieb.shinyapps.io/ch_locations_graph" id="geo_plot">
 <p>Your browser does not support iframes</p>
 </iframe>
-<span style="font-size:0.8em">*Source: CIEB’s own calculations based on data from the <a href=https://www.patentsview.org target = “_blank”>USPTO</a>. The figure shows the number of inventors of the respective partner country to the total number of inventors for Swiss firms.*</span>
+<span style="font-size:0.8em">*Source: CIEB’s own calculations based on data from the <a href=https://www.patentsview.org target = “_blank”>USPTO</a>. The figure shows the number of inventors of the respective partner country to the total number of inventors for Swiss-based firms.*</span>
 
 <br>
 

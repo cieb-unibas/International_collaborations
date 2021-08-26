@@ -79,7 +79,8 @@ server <- function(input, output,session) {
                  tickvals = dr()$location,
                  gridwith = 1),
     paper_bgcolor = 'white',
-    plot_bgcolor = 'white') %>%
+    plot_bgcolor = 'white',
+    margin = list(r = 25)) %>%
   animation_opts(
     1200, redraw = FALSE
   ) %>%
