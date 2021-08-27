@@ -32,8 +32,15 @@ output:
 ## **International collaboration and the quality of innovations: It matters whom you partner with!**
 <br>
 
-*September 2021* by <a href="#" data-placement="bottom" data-toggle="tooltip"  data-html="true" title="<img src='https://innoscape.de/authors/DF_picture.jpg'><b>Dragan Filimonovic</b> is project collaborator. He holds a PhD in Economics from the University of Basel and is specialized in applying methods for causal inference to evaluate public policies. Dragan is passionate about working with big data and is always in pursuit of finding creative solutions to interesting economic riddles.<br><a href='mailto:dragan.filimonovic@unibas.ch'>dragan.filimonovic@unibas.ch</a>">Dragan Filimonovic</a> and <a href="#" data-placement="bottom" data-toggle="tooltip"  data-html="true" title="<img src='https://innoscape.de/authors/Christian Rutzer_small.jpg'> <b>Christian Rutzer</b> is chief scientist and operational manager of the project. He holds a PhD in Economics from the University of Basel in international trade and innovation. Christian likes to apply new methods from data science to analyze economic questions.<br><a href='mailto:christian.rutzer@unibas.ch'>christian.rutzer@unibas.ch</a>">Christian Rutzer</a>
-
+*September 2021* by <a href="#" data-placement="bottom" data-toggle="tooltip"  data-html="true" title="<img src='https://innoscape.de/authors/DF_picture.jpg'><b>Dragan Filimonovic</b> is project collaborator. He holds a PhD in Economics from the University of Basel and is specialized in applying methods for causal inference to evaluate public policies. Dragan is passionate about working with big data and is always in pursuit of finding creative solutions to interesting economic riddles.
+<br>
+<a href='https://www.linkedin.com/in/dragan-filimonovic-39303b47'>LinkedIn</a> 
+<br>
+<a href='mailto:dragan.filimonovic@unibas.ch'>dragan.filimonovic@unibas.ch</a>">Dragan Filimonovic</a> and <a href="#" data-placement="bottom" data-toggle="tooltip"  data-html="true" title="<img src='https://innoscape.de/authors/Christian Rutzer_small.jpg'> <b>Christian Rutzer</b> is chief scientist and operational manager of the project. He holds a PhD in Economics from the University of Basel in international trade and innovation. Christian likes to apply new methods from data science to analyze economic questions.
+<br>
+<a href='https://www.linkedin.com/in/christian-rutzer-38978392'>LinkedIn</a> 
+<br>
+<a href='mailto:christian.rutzer@unibas.ch'>christian.rutzer@unibas.ch</a>">Christian Rutzer</a>
 <br>
 
 ![](title_new.jpg){width=100%} 
