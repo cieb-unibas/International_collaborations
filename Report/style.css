@@ -235,3 +235,15 @@ filter: alpha(opacity=100);
 }
 
 .tooltip.in{opacity:1!important;}
+
+.br_mobile br {
+   @media screen and (min-width: 700px) {
+    display: none;}
+}
+
+
+.br_desktop br {
+   @media screen and (max-width: 700px) {
+    display: none;}
+}
+

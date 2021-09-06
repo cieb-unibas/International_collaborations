@@ -2,7 +2,7 @@
 output:
   html_document:
     includes:
-     after_body: footer.html
+     after_body: "https://innoscape.de/general_stuff/footer.html"
     title: "International Collaboration"
     self_contained: false
     theme: null
@@ -12,6 +12,7 @@ output:
 ---
 <head>
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-71167447-1"></script>
+
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
@@ -26,22 +27,38 @@ output:
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 <div class="container-fluid main-container">
+
+<meta property='og:title' content='International collaborations and quality of innovations'/>
+<meta property='og:image' content='https://innoscape.de/internat_collab/title_new.jpg'/>
+<meta property='og:description' content='As part of our #Innoscape Project, we investigate how partnering with different locations affects the quality of innovations. In short, collaborating with research sites in the USA and Great Britain has the greatest effect on the quality of innovation.'/>
+<meta property='og:url' content='https://innoscape.ch/en/publications/international-rd'/>
+
 </head>
 <!-- START with text -->
 
-## **International collaboration and the quality of innovations: It matters whom you partner with!**
-<br>
+### **International collaboration and the quality of innovations: It matters whom you partner with!**
 
+
+<p style="text-align: left; line-height: 100%;">
 *September 2021* by <a href="#" data-placement="bottom" data-toggle="tooltip"  data-html="true" title="<img src='https://innoscape.de/authors/DF_picture.jpg'><b>Dragan Filimonovic</b> is project collaborator. He holds a PhD in Economics from the University of Basel and is specialized in applying methods for causal inference to evaluate public policies. Dragan is passionate about working with big data and is always in pursuit of finding creative solutions to interesting economic riddles.
 <br>
 <a href='https://www.linkedin.com/in/dragan-filimonovic-39303b47'>LinkedIn</a> 
 <br>
-<a href='mailto:dragan.filimonovic@unibas.ch'>dragan.filimonovic@unibas.ch</a>">Dragan Filimonovic</a> and <a href="#" data-placement="bottom" data-toggle="tooltip"  data-html="true" title="<img src='https://innoscape.de/authors/Christian Rutzer_small.jpg'> <b>Christian Rutzer</b> is chief scientist and operational manager of the project. He holds a PhD in Economics from the University of Basel in international trade and innovation. Christian likes to apply new methods from data science to analyze economic questions.
+<a href='mailto:dragan.filimonovic@unibas.ch'>dragan.filimonovic@unibas.ch</a>">*Dragan Filimonovic*</a> *and* <a href="#" data-placement="bottom" data-toggle="tooltip"  data-html="true" title="<img src='https://innoscape.de/authors/Christian Rutzer_small.jpg'> <b>Christian Rutzer</b> is chief scientist and operational manager of the project. He holds a PhD in Economics from the University of Basel in international trade and innovation. Christian likes to apply new methods from data science to analyze economic questions.
 <br>
 <a href='https://www.linkedin.com/in/christian-rutzer-38978392'>LinkedIn</a> 
 <br>
-<a href='mailto:christian.rutzer@unibas.ch'>christian.rutzer@unibas.ch</a>">Christian Rutzer</a>
-<br>
+<a href='mailto:christian.rutzer@unibas.ch'>christian.rutzer@unibas.ch</a>">*Christian Rutzer*</a>
+
+</p>
+
+<p style="text-align: left; line-height: 150%;">
+*Share this article:* 
+&nbsp;
+<a href='https://www.linkedin.com/sharing/share-offsite/?url=https://www.linkedin.com/feed/update/urn%3Ali%3Aactivity%3A6838804469455577088/?actorCompanyId=685023090' class="fa fa-linkedin" style='color:black;text-decoration: none;' target='_blank'></a>
+&nbsp;
+<a href='https://twitter.com/cieb_unibas/status/1433007915175235586' class="fa fa-twitter" style='color:black;text-decoration: none;' target='_blank'></a>
+</p>
 
 ![](title_new.jpg){width=100%} 
 
@@ -160,7 +177,6 @@ For instance, the fact that Great Britain left the EU and that Swiss R&D-coopera
 viewer?embedded=true&url=https://innoscape.de/internat_collab/Appendix_International_Collaboration.pdf" width="100%" height="600">
 </details>
 
-<br>
 
 <div>
 <iframe id="slider" width=100%" height="400" scrolling="no" frameBorder="0" style="overflow: hidden" src="https://innoscape.de/general_stuff/teaser/internat_collab_teaser.html">
@@ -168,9 +184,9 @@ viewer?embedded=true&url=https://innoscape.de/internat_collab/Appendix_Internati
 </div>
 
 
-<br>
+<br class='br_desktop'>
 
-<span style="font-size:0.8em">*This report was written using <a href = https://rmarkdown.rstudio.com/ target = “_blank”>R Markdown</a>, <a href=https://shiny.rstudio.com/ target = “_blank”>R shiny</a> and <a href=https://plotly.com/javascript/ target = “_blank”>Plotly</a>. We thank Matthias Niggli for valuable feedback and Monty Sufrin for excellent proof-reading.*</span>
+<span style="font-size:0.8em">*This article was written using <a href = https://rmarkdown.rstudio.com/ target = “_blank”>R Markdown</a>, <a href=https://shiny.rstudio.com/ target = “_blank”>R shiny</a> and <a href=https://plotly.com/javascript/ target = “_blank”>Plotly</a>. We thank Matthias Niggli for valuable feedback and Monty Sufrin for excellent proof-reading.*</span>
 <br>
 <br>
 <script>
