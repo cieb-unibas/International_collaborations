@@ -63,7 +63,7 @@ server <- function(input, output,session) {
   layout(
     title="Foreign collaboration and citation",
     
-    yaxis = list(title = '% of inventors',
+    yaxis = list(title = '% of inventors\n of Swiss-based firms',
                  gridcolor = 'white',
                  
                  range=c(0,20),

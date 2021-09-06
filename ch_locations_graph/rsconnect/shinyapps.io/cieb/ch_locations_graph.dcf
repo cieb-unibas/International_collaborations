@@ -5,8 +5,8 @@ account: cieb
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 4012075
-bundleId: 4966796
+bundleId: 5003964
 url: https://cieb.shinyapps.io/ch_locations_graph/
-when: 1629970145.29991
+when: 1630914350.58729
 asMultiple: FALSE
 asStatic: FALSE
