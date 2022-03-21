@@ -112,10 +112,15 @@ Our goal is to discover whether international R&D collaboration is associated wi
 ```{r, echo=FALSE}
 htmltools::includeHTML("coeff_plot.html")
 ```
-
+<details> 
+<summary><b>Sources and notes</b></summary> 
 <br>
+<span style="font-size:0.8em">
+*CIEB’s own calculations based on data from the <a href = https://www.patentsview.org target = “_blank”>USPTO</a>. The horizontal bar plots show the corresponding 95% confidence interval. If the lower bound is above zero, the corresponding coefficient is significantly positive at the 95% level or higher. If the upper bound is below zero, the coefficient is significantly negative at the 95% level or higher. A positive coefficient means that partnering with the respective country is associated with innovations of better quality than solely domestic innovations. A negative coefficient means the opposite.<br>The selectable technology groups are based on <a href = https://www.wipo.int/export/sites/www/ipstats/en/statistics/patents/pdf/wipo_ipc_technology.pdf target = “_blank”>Schmoch et al. (2008)</a> and contain the following fields: <br>Overall: All technology fields.<br>Chemistry: Biotechnology, Chemistry, Pharmaceuticals.<br>Electrical engineering: Audio-visual technology, Computer technology, Digital communication, Electrical machinery, Semiconductors, Telecommunications.<br>Instruments: Control, Measurement, Medical technology, Optics.<br>Mechanical engineering: Engines, Handling, Machine tools, Mechanical elements, Textile and paper machines, Transport.<br>Other fields: Furniture, Games and Civil engineering. *
+</span>
+<hr>
+</details> 
 
-<span style="font-size:0.8em">*Source and notes: CIEB’s own calculations based on data from the <a href = https://www.patentsview.org target = “_blank”>USPTO</a>. The horizontal bar plots show the corresponding 95% confidence interval. If the lower bound is above zero, the corresponding coefficient is significantly positive at the 95% level or higher. If the upper bound is below zero, the coefficient is significantly negative at the 95% level or higher. A positive coefficient means that partnering with the respective country is associated with innovations of better quality than solely domestic innovations. A negative coefficient means the opposite.*</span>
 
 <br>
 
